@@ -20,9 +20,9 @@ public class MetaCanvas : SingletonMonoBehaviour<MetaCanvas>
 	{
 		get
 		{
-			if (!((Component)_button_1).gameObject.activeInHierarchy)
+			if (!_button_1.gameObject.activeInHierarchy)
 			{
-				return ((Component)_button_2).gameObject.activeInHierarchy;
+				return _button_2.gameObject.activeInHierarchy;
 			}
 			return true;
 		}
@@ -33,13 +33,13 @@ public class MetaCanvas : SingletonMonoBehaviour<MetaCanvas>
 		get
 		{
 			List<GameObject> list = new List<GameObject>();
-			if (((Component)_button_1).gameObject.activeInHierarchy)
+			if (_button_1.gameObject.activeInHierarchy)
 			{
-				list.Add(((Component)_button_1).gameObject);
+				list.Add(_button_1.gameObject);
 			}
-			if (((Component)_button_2).gameObject.activeInHierarchy)
+			if (_button_2.gameObject.activeInHierarchy)
 			{
-				list.Add(((Component)_button_2).gameObject);
+				list.Add(_button_2.gameObject);
 			}
 			return list;
 		}

@@ -1,186 +1,10 @@
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using NGO;
 
 namespace ngov3;
 
 public class Ending_kyouso_haishin : LiveScenario
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CStartScenario_003Ed__1 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public Ending_kyouso_haishin _003C_003E4__this;
-
-		private Awaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0099: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0103: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0108: Unknown result type (might be due to invalid IL or missing references)
-			//IL_010f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01d8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01dd: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01e4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0239: Unknown result type (might be due to invalid IL or missing references)
-			//IL_023e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0245: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-			//IL_005e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0066: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00cd: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0201: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0206: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0209: Unknown result type (might be due to invalid IL or missing references)
-			//IL_020e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_007a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e9: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00ea: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0153: Unknown result type (might be due to invalid IL or missing references)
-			//IL_019d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01a2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01a5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01aa: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0222: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0223: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01be: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01bf: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			Ending_kyouso_haishin ending_kyouso_haishin = _003C_003E4__this;
-			try
-			{
-				UniTask val2;
-				Awaiter val;
-				switch (num)
-				{
-				default:
-					PostEffectManager.Instance.SetShader(EffectType.Kakusei);
-					PostEffectManager.Instance.SetShaderWeight(1f);
-					SingletonMonoBehaviour<EventManager>.Instance.ObiActive(onoff: false);
-					AudioManager.Instance.PlayBgmByType(SoundType.BGM_event_emo, isLoop: true);
-					val2 = ((LiveScenario)ending_kyouso_haishin).StartScenario();
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__1>(ref val, ref this);
-						return;
-					}
-					goto IL_00af;
-				case 0:
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-					goto IL_00af;
-				case 1:
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-					goto IL_011e;
-				case 2:
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-					goto IL_01f3;
-				case 3:
-					{
-						val = _003C_003Eu__1;
-						_003C_003Eu__1 = default(Awaiter);
-						num = (_003C_003E1__state = -1);
-						break;
-					}
-					IL_011e:
-					((Awaiter)(ref val)).GetResult();
-					ImageViewerHelper.OpenImageViewer(ImageViewerHelper.LoadResourcesList().Find((ResourceLocal r) => r.FileName == "kyouso_ending").FileName);
-					SingletonMonoBehaviour<Settings>.Instance.addImage("kyouso_ending");
-					SingletonMonoBehaviour<WindowManager>.Instance.GetWindowFromApp(AppType.ImageViewer).Maximize();
-					SingletonMonoBehaviour<WindowManager>.Instance.GetWindowFromApp(AppType.ImageViewer).UnMovable();
-					val2 = UniTask.Delay(Constants.SLOW, false, (PlayerLoopTiming)8, default(CancellationToken), false);
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 2);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__1>(ref val, ref this);
-						return;
-					}
-					goto IL_01f3;
-					IL_00af:
-					((Awaiter)(ref val)).GetResult();
-					val2 = UniTask.Delay(Constants.MIDDLE, false, (PlayerLoopTiming)8, default(CancellationToken), false);
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 1);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__1>(ref val, ref this);
-						return;
-					}
-					goto IL_011e;
-					IL_01f3:
-					((Awaiter)(ref val)).GetResult();
-					val2 = NgoEvent.DelaySkippable(Constants.SLOW * 5);
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 3);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__1>(ref val, ref this);
-						return;
-					}
-					break;
-				}
-				((Awaiter)(ref val)).GetResult();
-				SingletonMonoBehaviour<NotificationManager>.Instance.osimai();
-				AchievementStatsUpdater.UpdateStats("Ending_Kyouso");
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	protected override void Awake()
 	{
 		base.Awake();
@@ -354,17 +178,21 @@ public class Ending_kyouso_haishin : LiveScenario
 		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso152", _lang)));
 	}
 
-	[AsyncStateMachine(typeof(_003CStartScenario_003Ed__1))]
-	public override UniTask StartScenario()
+	public override async UniTask StartScenario()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CStartScenario_003Ed__1 _003CStartScenario_003Ed__2 = default(_003CStartScenario_003Ed__1);
-		_003CStartScenario_003Ed__2._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CStartScenario_003Ed__2._003C_003E4__this = this;
-		_003CStartScenario_003Ed__2._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CStartScenario_003Ed__2._003C_003Et__builder)).Start<_003CStartScenario_003Ed__1>(ref _003CStartScenario_003Ed__2);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CStartScenario_003Ed__2._003C_003Et__builder)).Task;
+		PostEffectManager.Instance.SetShader(EffectType.Kakusei);
+		PostEffectManager.Instance.SetShaderWeight(1f);
+		SingletonMonoBehaviour<EventManager>.Instance.ObiActive(onoff: false);
+		AudioManager.Instance.PlayBgmByType(SoundType.BGM_event_emo, isLoop: true);
+		await base.StartScenario();
+		await UniTask.Delay(Constants.MIDDLE);
+		ImageViewerHelper.OpenImageViewer(ImageViewerHelper.LoadResourcesList().Find((ResourceLocal r) => r.FileName == "kyouso_ending").FileName);
+		SingletonMonoBehaviour<Settings>.Instance.addImage("kyouso_ending");
+		SingletonMonoBehaviour<WindowManager>.Instance.GetWindowFromApp(AppType.ImageViewer).Maximize();
+		SingletonMonoBehaviour<WindowManager>.Instance.GetWindowFromApp(AppType.ImageViewer).UnMovable();
+		await UniTask.Delay(Constants.SLOW);
+		await NgoEvent.DelaySkippable(Constants.SLOW * 5);
+		SingletonMonoBehaviour<NotificationManager>.Instance.osimai();
+		AchievementStatsUpdater.UpdateStats("Ending_Kyouso");
 	}
 }

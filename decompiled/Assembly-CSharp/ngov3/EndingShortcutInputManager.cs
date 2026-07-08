@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Rewired;
 using UniRx;
 using UniRx.Triggers;
@@ -25,11 +23,15 @@ public class EndingShortcutInputManager : SingletonMonoBehaviour<EndingShortcutI
 
 	private void Start()
 	{
-		ObservableExtensions.Subscribe<Unit>(Observable.Where<Unit>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, bool>)((Unit _) => _player.GetButtonDown("Item Select Prev"))), (Action<Unit>)delegate
+		(from _ in this.UpdateAsObservable()
+			where _player.GetButtonDown("Item Select Prev")
+			select _).Subscribe(delegate
 		{
 			ItemSelectPrev();
 		});
-		ObservableExtensions.Subscribe<Unit>(Observable.Where<Unit>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, bool>)((Unit _) => _player.GetButtonDown("Item Select Next"))), (Action<Unit>)delegate
+		(from _ in this.UpdateAsObservable()
+			where _player.GetButtonDown("Item Select Next")
+			select _).Subscribe(delegate
 		{
 			ItemSelectNext();
 		});
@@ -37,19 +39,11 @@ public class EndingShortcutInputManager : SingletonMonoBehaviour<EndingShortcutI
 
 	private void ItemSelectPrev()
 	{
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ba: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c9: Unknown result type (might be due to invalid IL or missing references)
-		UniTaskVoid val;
 		if (!_omake.ChoosingZip)
 		{
 			if (_omake.ContinueObj.activeInHierarchy)
 			{
-				val = SingletonMonoBehaviour<CursorManager>.Instance.MoveToAsync(_omake.ContinueObj.transform.position, 0.1f);
-				((UniTaskVoid)(ref val)).Forget();
+				SingletonMonoBehaviour<CursorManager>.Instance.MoveToAsync(_omake.ContinueObj.transform.position, 0.1f).Forget();
 			}
 			return;
 		}
@@ -64,26 +58,17 @@ public class EndingShortcutInputManager : SingletonMonoBehaviour<EndingShortcutI
 			{
 				_selectIndex = selectableObjects.Count - 1;
 			}
-			val = SingletonMonoBehaviour<CursorManager>.Instance.MoveToAsync(selectableObjects[_selectIndex].transform.position, 0.1f);
-			((UniTaskVoid)(ref val)).Forget();
+			SingletonMonoBehaviour<CursorManager>.Instance.MoveToAsync(selectableObjects[_selectIndex].transform.position, 0.1f).Forget();
 		}
 	}
 
 	private void ItemSelectNext()
 	{
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00aa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b9: Unknown result type (might be due to invalid IL or missing references)
-		UniTaskVoid val;
 		if (!_omake.ChoosingZip)
 		{
 			if (_omake.ContinueObj.activeInHierarchy)
 			{
-				val = SingletonMonoBehaviour<CursorManager>.Instance.MoveToAsync(_omake.ContinueObj.transform.position, 0.1f);
-				((UniTaskVoid)(ref val)).Forget();
+				SingletonMonoBehaviour<CursorManager>.Instance.MoveToAsync(_omake.ContinueObj.transform.position, 0.1f).Forget();
 			}
 			return;
 		}
@@ -98,8 +83,7 @@ public class EndingShortcutInputManager : SingletonMonoBehaviour<EndingShortcutI
 			{
 				_selectIndex = 0;
 			}
-			val = SingletonMonoBehaviour<CursorManager>.Instance.MoveToAsync(selectableObjects[_selectIndex].transform.position, 0.1f);
-			((UniTaskVoid)(ref val)).Forget();
+			SingletonMonoBehaviour<CursorManager>.Instance.MoveToAsync(selectableObjects[_selectIndex].transform.position, 0.1f).Forget();
 		}
 	}
 }

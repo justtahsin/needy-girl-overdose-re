@@ -58,7 +58,7 @@ public class Window_NoInteractive : MonoBehaviour, IWindow, IScalable, IOpenable
 
 	public Transform GameObjectTransform => _transform;
 
-	public GameObject UnityGameObject => ((Component)this).gameObject;
+	public GameObject UnityGameObject => base.gameObject;
 
 	public int OrderInLayer => _canvas.sortingOrder;
 
@@ -70,9 +70,9 @@ public class Window_NoInteractive : MonoBehaviour, IWindow, IScalable, IOpenable
 
 	public void Awake()
 	{
-		rect = ((Component)this).GetComponent<RectTransform>();
-		_wakuImage = ((Component)this).GetComponent<Image>();
-		_transform = ((Component)this).transform;
+		rect = GetComponent<RectTransform>();
+		_wakuImage = GetComponent<Image>();
+		_transform = base.transform;
 		if (_firstPosx == 0f && _firstPosy == 0f)
 		{
 			setRandomPosition();
@@ -81,22 +81,10 @@ public class Window_NoInteractive : MonoBehaviour, IWindow, IScalable, IOpenable
 
 	public void setRandomPosition()
 	{
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0051: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0062: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0086: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008b: Unknown result type (might be due to invalid IL or missing references)
-		Transform transform = ((Component)((Transform)rect).parent).transform;
-		RectTransform val = (RectTransform)(object)((transform is RectTransform) ? transform : null);
-		Rect val2 = val.rect;
-		_firstPosx = Random.Range(0f, ((Rect)(ref val2)).width - rect.sizeDelta.x);
-		float num = 0f + rect.sizeDelta.y;
-		val2 = val.rect;
-		_firstPosy = Random.Range(num, ((Rect)(ref val2)).height);
-		((Transform)rect).localPosition = Vector2.op_Implicit(new Vector2(_firstPosx, _firstPosy));
+		RectTransform rectTransform = rect.parent.transform as RectTransform;
+		_firstPosx = UnityEngine.Random.Range(0f, rectTransform.rect.width - rect.sizeDelta.x);
+		_firstPosy = UnityEngine.Random.Range(0f + rect.sizeDelta.y, rectTransform.rect.height);
+		rect.localPosition = new Vector2(_firstPosx, _firstPosy);
 	}
 
 	public void SetName(string name)
@@ -110,85 +98,80 @@ public class Window_NoInteractive : MonoBehaviour, IWindow, IScalable, IOpenable
 		appType = a.appType;
 		data = a;
 		SetContent(a);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageUpdated();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	public void SetCachedApp(AppTypeToData a)
 	{
 		appType = a.appType;
 		data = a;
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageUpdated();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void SetContent(AppTypeToData a)
 	{
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0051: Unknown result type (might be due to invalid IL or missing references)
 		OnLanguageUpdated();
-		((Transform)rect).localPosition = new Vector3(a.FirstPosX, a.FirstPosY, 0f);
+		rect.localPosition = new Vector3(a.FirstPosX, a.FirstPosY, 0f);
 		firstWidth = a.FirstWidth;
 		firstHeight = a.FirstHeight;
 		rect.sizeDelta = new Vector2(a.FirstWidth, a.FirstHeight);
-		if ((Object)(object)a.InnerContent != (Object)null)
+		if (a.InnerContent != null)
 		{
-			GameObject val = Object.Instantiate<GameObject>(a.InnerContent, _nakamiParent);
-			nakamiApp = val;
+			GameObject gameObject = UnityEngine.Object.Instantiate(a.InnerContent, _nakamiParent);
+			nakamiApp = gameObject;
 		}
 	}
 
 	public void ResetSize()
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
 		rect.sizeDelta = new Vector2(firstWidth, firstHeight);
 	}
 
 	public void Close()
 	{
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
 		windowState = WindowState.closed;
-		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(null, new Vector2(0f, 0f), (CursorMode)0);
-		Object.Destroy((Object)(object)((Component)this).gameObject);
+		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(null, new Vector2(0f, 0f), CursorMode.Auto);
+		UnityEngine.Object.Destroy(base.gameObject);
 	}
 
 	public void Minimize()
 	{
 		windowState = WindowState.minimized;
-		((Component)this).GetComponent<RectTransform>().minimize();
+		GetComponent<RectTransform>().minimize();
 	}
 
 	public void Pop()
 	{
 		windowState = WindowState.opened;
-		((Component)this).GetComponent<RectTransform>().pop();
+		GetComponent<RectTransform>().pop();
 	}
 
 	public void Maximize()
 	{
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
 		SingletonMonoBehaviour<WindowManager>.Instance.Touched(this);
 		if (windowState == WindowState.maximized)
 		{
 			AudioManager.Instance.PlaySeByType(SoundType.SE_pirodown);
-			((Component)this).GetComponent<RectTransform>().sizeDelta = new Vector2(firstWidth, firstHeight);
+			GetComponent<RectTransform>().sizeDelta = new Vector2(firstWidth, firstHeight);
 			windowState = WindowState.opened;
 		}
 		else
 		{
 			AudioManager.Instance.PlaySeByType(SoundType.SE_kari);
 			windowState = WindowState.maximized;
-			((Component)this).GetComponent<RectTransform>().maximize();
+			GetComponent<RectTransform>().maximize();
 		}
 	}
 
 	public void Born()
 	{
-		((Component)this).GetComponent<RectTransform>().born();
+		GetComponent<RectTransform>().born();
 	}
 
 	public void Open()
@@ -234,15 +217,12 @@ public class Window_NoInteractive : MonoBehaviour, IWindow, IScalable, IOpenable
 
 	public void OnLanguageUpdated()
 	{
-		string name = NgoEx.SystemTextFromType(data.AppName, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		SetName(name);
+		string text = NgoEx.SystemTextFromType(data.AppName, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		SetName(text);
 	}
 
 	public void SetOrderInLayer(int order)
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002a: Unknown result type (might be due to invalid IL or missing references)
 		_canvas.sortingOrder = order;
 		Vector3 position = GameObjectTransform.position;
 		position.z = 100 - order;

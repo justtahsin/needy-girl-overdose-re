@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using NGO;
 using UniRx;
 using UnityEngine;
@@ -15,80 +10,6 @@ namespace ngov3;
 
 public class EventTekitouhenji : MonoBehaviour
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CstartEvent_003Ed__15 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public EventTekitouhenji _003C_003E4__this;
-
-		private void MoveNext()
-		{
-			EventTekitouhenji CS_0024_003C_003E8__locals14 = _003C_003E4__this;
-			try
-			{
-				DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>(Observable.RepeatUntilDestroy<int>(Observable.FirstOrDefault<int>(Observable.Throttle<int>(Observable.Scan<int, int>(Observable.Select<CollectionAddEvent<JineData>, int>(Observable.Where<CollectionAddEvent<JineData>>(SingletonMonoBehaviour<JineManager>.Instance.OnChangeHistory, (Func<CollectionAddEvent<JineData>, bool>)((CollectionAddEvent<JineData> x) => x.Value.responseType == ResponseType.Stamp && x.Value.user == JineUserType.pi)), (Func<CollectionAddEvent<JineData>, int>)((CollectionAddEvent<JineData> _) => 1)), 0, (Func<int, int, int>)((int element, int acc) => element + acc)), TimeSpan.FromSeconds(1.5))), (Component)(object)CS_0024_003C_003E8__locals14), (Action<int>)async delegate(int counter)
-				{
-					if (SingletonMonoBehaviour<EventManager>.Instance.nowEnding == EndingType.Ending_None && !SingletonMonoBehaviour<StatusManager>.Instance.Moved.Value && SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.Stress) < 80 && counter < 4 && SingletonMonoBehaviour<JineManager>.Instance.history.Last().responseType == ResponseType.Stamp && SingletonMonoBehaviour<JineManager>.Instance.history.Last().user == JineUserType.pi && Random.Range(0, 100) > 20)
-					{
-						List<JineData> rawdatas = SingletonMonoBehaviour<JineManager>.Instance.history.Last().stampType switch
-						{
-							StampType.OK => CS_0024_003C_003E8__locals14.ok, 
-							StampType.Saikouka => CS_0024_003C_003E8__locals14.saikouka, 
-							StampType.Pien => CS_0024_003C_003E8__locals14.pien, 
-							StampType.Waritodoudemoii => CS_0024_003C_003E8__locals14.waritodoudemoii, 
-							StampType.Gomen => CS_0024_003C_003E8__locals14.gomen, 
-							StampType.Bujisibou => CS_0024_003C_003E8__locals14.bujisibou, 
-							StampType.Love => CS_0024_003C_003E8__locals14.love, 
-							_ => CS_0024_003C_003E8__locals14.sorena, 
-						};
-						rawdatas.AddRange(CS_0024_003C_003E8__locals14.amestamps);
-						await UniTask.Delay(400, false, (PlayerLoopTiming)8, default(CancellationToken), false);
-						SingletonMonoBehaviour<JineManager>.Instance.AddJineHistory(rawdatas[Random.Range(0, rawdatas.Count)]);
-					}
-				}), ((Component)CS_0024_003C_003E8__locals14).gameObject);
-				DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>(Observable.RepeatUntilDestroy<int>(Observable.FirstOrDefault<int>(Observable.Throttle<int>(Observable.Scan<int, int>(Observable.Select<CollectionAddEvent<JineData>, int>(Observable.Where<CollectionAddEvent<JineData>>(SingletonMonoBehaviour<JineManager>.Instance.OnChangeHistory, (Func<CollectionAddEvent<JineData>, bool>)((CollectionAddEvent<JineData> x) => x.Value.responseType == ResponseType.Stamp && x.Value.user == JineUserType.pi)), (Func<CollectionAddEvent<JineData>, int>)((CollectionAddEvent<JineData> _) => 1)), 0, (Func<int, int, int>)((int element, int acc) => element + acc)), TimeSpan.FromSeconds(1.5))), (Component)(object)CS_0024_003C_003E8__locals14), (Action<int>)async delegate(int counter)
-				{
-					if (SingletonMonoBehaviour<EventManager>.Instance.nowEnding == EndingType.Ending_None && SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.Stress) < 80 && counter >= 4)
-					{
-						await UniTask.Delay(1000, false, (PlayerLoopTiming)8, default(CancellationToken), false);
-						List<JineData> rendasuruna = CS_0024_003C_003E8__locals14.rendasuruna;
-						SingletonMonoBehaviour<JineManager>.Instance.AddJineHistory(rendasuruna[Random.Range(0, rendasuruna.Count)]);
-					}
-				}), ((Component)CS_0024_003C_003E8__locals14).gameObject);
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	private const int AMERESPONSEPERCENTAGE = 20;
 
 	private const int AMERESPONSEMILLISECOND = 400;
@@ -272,21 +193,49 @@ public class EventTekitouhenji : MonoBehaviour
 
 	private void Awake()
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		UniTaskExtensions.Forget(startEvent());
+		startEvent().Forget();
 	}
 
-	[AsyncStateMachine(typeof(_003CstartEvent_003Ed__15))]
-	private UniTask startEvent()
+	private async UniTask startEvent()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CstartEvent_003Ed__15 _003CstartEvent_003Ed__16 = default(_003CstartEvent_003Ed__15);
-		_003CstartEvent_003Ed__16._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CstartEvent_003Ed__16._003C_003E4__this = this;
-		_003CstartEvent_003Ed__16._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CstartEvent_003Ed__16._003C_003Et__builder)).Start<_003CstartEvent_003Ed__15>(ref _003CstartEvent_003Ed__16);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CstartEvent_003Ed__16._003C_003Et__builder)).Task;
+		(from _ in SingletonMonoBehaviour<JineManager>.Instance.OnChangeHistory
+			where _.Value.responseType == ResponseType.Stamp && _.Value.user == JineUserType.pi
+			select 1).Scan(0, (int element, int acc) => element + acc).Throttle(TimeSpan.FromSeconds(1.5)).FirstOrDefault()
+			.RepeatUntilDestroy(this)
+			.Subscribe(async delegate(int counter)
+			{
+				if (SingletonMonoBehaviour<EventManager>.Instance.nowEnding == EndingType.Ending_None && !SingletonMonoBehaviour<StatusManager>.Instance.Moved.Value && SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.Stress) < 80 && counter < 4 && SingletonMonoBehaviour<JineManager>.Instance.history.Last().responseType == ResponseType.Stamp && SingletonMonoBehaviour<JineManager>.Instance.history.Last().user == JineUserType.pi && UnityEngine.Random.Range(0, 100) > 20)
+				{
+					List<JineData> rawdatas = SingletonMonoBehaviour<JineManager>.Instance.history.Last().stampType switch
+					{
+						StampType.OK => ok, 
+						StampType.Saikouka => saikouka, 
+						StampType.Pien => pien, 
+						StampType.Waritodoudemoii => waritodoudemoii, 
+						StampType.Gomen => gomen, 
+						StampType.Bujisibou => bujisibou, 
+						StampType.Love => love, 
+						_ => sorena, 
+					};
+					rawdatas.AddRange(amestamps);
+					await UniTask.Delay(400);
+					SingletonMonoBehaviour<JineManager>.Instance.AddJineHistory(rawdatas[UnityEngine.Random.Range(0, rawdatas.Count)]);
+				}
+			})
+			.AddTo(base.gameObject);
+		(from _ in SingletonMonoBehaviour<JineManager>.Instance.OnChangeHistory
+			where _.Value.responseType == ResponseType.Stamp && _.Value.user == JineUserType.pi
+			select 1).Scan(0, (int element, int acc) => element + acc).Throttle(TimeSpan.FromSeconds(1.5)).FirstOrDefault()
+			.RepeatUntilDestroy(this)
+			.Subscribe(async delegate(int counter)
+			{
+				if (SingletonMonoBehaviour<EventManager>.Instance.nowEnding == EndingType.Ending_None && SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.Stress) < 80 && counter >= 4)
+				{
+					await UniTask.Delay(1000);
+					List<JineData> list = rendasuruna;
+					SingletonMonoBehaviour<JineManager>.Instance.AddJineHistory(list[UnityEngine.Random.Range(0, list.Count)]);
+				}
+			})
+			.AddTo(base.gameObject);
 	}
 }

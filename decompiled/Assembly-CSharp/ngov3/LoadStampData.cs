@@ -8,13 +8,13 @@ public static class LoadStampData
 
 	public static Sprite ReadStampContent(StampType type, LanguageType lang)
 	{
-		if ((Object)(object)StampData == (Object)null)
+		if (StampData == null)
 		{
 			StampData = Resources.Load<StampTypeToDataAsset>("StampTypeToData");
 		}
-		if ((Object)(object)StampData != (Object)null)
+		if (StampData != null)
 		{
-			return (Sprite)(lang switch
+			return lang switch
 			{
 				LanguageType.JP => StampData.stampTypeToData.Find((StampTypeToDataAsset.StampTypeToData stamp) => stamp.type == type).JpImage, 
 				LanguageType.CN => StampData.stampTypeToData.Find((StampTypeToDataAsset.StampTypeToData stamp) => stamp.type == type).CnImage, 
@@ -27,7 +27,7 @@ public static class LoadStampData
 				LanguageType.SP => StampData.stampTypeToData.Find((StampTypeToDataAsset.StampTypeToData stamp) => stamp.type == type).SpImage, 
 				LanguageType.RU => StampData.stampTypeToData.Find((StampTypeToDataAsset.StampTypeToData stamp) => stamp.type == type).RuImage, 
 				_ => StampData.stampTypeToData.Find((StampTypeToDataAsset.StampTypeToData stamp) => stamp.type == type).EnImage, 
-			});
+			};
 		}
 		return null;
 	}

@@ -1,7 +1,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ngov3;
@@ -12,7 +11,7 @@ public class AnimationCategoryItem : MonoBehaviour
 	private Image image;
 
 	[SerializeField]
-	private TMP_Text name;
+	private new TMP_Text name;
 
 	private AnimationCategoryVO vo;
 
@@ -21,12 +20,10 @@ public class AnimationCategoryItem : MonoBehaviour
 
 	public void Initialize(AnimationCategoryVO vo, Action<AnimationCategoryVO> action)
 	{
-		//IL_0071: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007b: Expected O, but got Unknown
 		image.sprite = vo.IconSprite;
 		name.text = NgoEx.SystemTextFromTypeString(vo.AnimationCategory.ToString(), SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		this.vo = vo;
-		((UnityEvent)button.onClick).AddListener((UnityAction)delegate
+		button.onClick.AddListener(delegate
 		{
 			action(this.vo);
 		});

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Rewired.UI.ControlMapper;
@@ -18,7 +17,7 @@ public class UIControlSet : MonoBehaviour
 
 	public void SetTitle(string text)
 	{
-		if (!((Object)(object)title == (Object)null))
+		if (!(title == null))
 		{
 			title.text = text;
 		}
@@ -32,26 +31,26 @@ public class UIControlSet : MonoBehaviour
 
 	public UISliderControl CreateSlider(GameObject prefab, Sprite icon, float minValue, float maxValue, Action<int, float> valueChangedCallback, Action<int> cancelCallback)
 	{
-		GameObject val = Object.Instantiate<GameObject>(prefab);
-		UISliderControl control = val.GetComponent<UISliderControl>();
-		if ((Object)(object)control == (Object)null)
+		GameObject gameObject = UnityEngine.Object.Instantiate(prefab);
+		UISliderControl control = gameObject.GetComponent<UISliderControl>();
+		if (control == null)
 		{
-			Object.Destroy((Object)(object)val);
-			Debug.LogError((object)"Prefab missing UISliderControl component!");
+			UnityEngine.Object.Destroy(gameObject);
+			Debug.LogError("Prefab missing UISliderControl component!");
 			return null;
 		}
-		val.transform.SetParent(((Component)this).transform, false);
-		if ((Object)(object)control.iconImage != (Object)null)
+		gameObject.transform.SetParent(base.transform, worldPositionStays: false);
+		if (control.iconImage != null)
 		{
 			control.iconImage.sprite = icon;
 		}
-		if ((Object)(object)control.slider != (Object)null)
+		if (control.slider != null)
 		{
 			control.slider.minValue = minValue;
 			control.slider.maxValue = maxValue;
 			if (valueChangedCallback != null)
 			{
-				((UnityEvent<float>)(object)control.slider.onValueChanged).AddListener((UnityAction<float>)delegate(float value)
+				control.slider.onValueChanged.AddListener(delegate(float value)
 				{
 					valueChangedCallback(control.id, value);
 				});

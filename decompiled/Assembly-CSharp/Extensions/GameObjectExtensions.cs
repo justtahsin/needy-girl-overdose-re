@@ -11,6 +11,6 @@ public static class GameObjectExtensions
 
 	public static bool HasComponent<T>(this GameObject gameObject) where T : Component
 	{
-		return (Object)(object)gameObject.GetComponent<T>() != (Object)null;
+		return gameObject.GetComponent<T>() != null;
 	}
 }

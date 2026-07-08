@@ -24,126 +24,90 @@ public class SwitchInputModule : StandaloneInputModule
 
 	public override void Process()
 	{
-		if (((BaseInputModule)this).eventSystem.isFocused || !ShouldIgnoreEventsOnNoFocus())
+		if (base.eventSystem.isFocused || !ShouldIgnoreEventsOnNoFocus())
 		{
-			((StandaloneInputModule)this).SendUpdateEventToSelectedObject();
+			SendUpdateEventToSelectedObject();
 			ProcessControllerEvent();
 		}
 	}
 
 	public void ProcessControllerEvent()
 	{
-		//IL_008b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0090: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00aa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00af: Unknown result type (might be due to invalid IL or missing references)
-		MouseState mousePointerEventData = ((PointerInputModule)this).GetMousePointerEventData();
-		MouseButtonEventData eventData = mousePointerEventData.GetButtonState((InputButton)0).eventData;
-		((StandaloneInputModule)this).ProcessMousePress(eventData);
-		((PointerInputModule)this).ProcessMove(eventData.buttonData);
-		((PointerInputModule)this).ProcessDrag(eventData.buttonData);
-		((StandaloneInputModule)this).ProcessMousePress(mousePointerEventData.GetButtonState((InputButton)1).eventData);
-		((PointerInputModule)this).ProcessDrag(mousePointerEventData.GetButtonState((InputButton)1).eventData.buttonData);
-		((StandaloneInputModule)this).ProcessMousePress(mousePointerEventData.GetButtonState((InputButton)2).eventData);
-		((PointerInputModule)this).ProcessDrag(mousePointerEventData.GetButtonState((InputButton)2).eventData.buttonData);
-		Vector2 scrollDelta = eventData.buttonData.scrollDelta;
-		if (!Mathf.Approximately(((Vector2)(ref scrollDelta)).sqrMagnitude, 0f))
+		MouseState mousePointerEventData = GetMousePointerEventData();
+		MouseButtonEventData eventData = mousePointerEventData.GetButtonState(PointerEventData.InputButton.Left).eventData;
+		ProcessMousePress(eventData);
+		ProcessMove(eventData.buttonData);
+		ProcessDrag(eventData.buttonData);
+		ProcessMousePress(mousePointerEventData.GetButtonState(PointerEventData.InputButton.Right).eventData);
+		ProcessDrag(mousePointerEventData.GetButtonState(PointerEventData.InputButton.Right).eventData.buttonData);
+		ProcessMousePress(mousePointerEventData.GetButtonState(PointerEventData.InputButton.Middle).eventData);
+		ProcessDrag(mousePointerEventData.GetButtonState(PointerEventData.InputButton.Middle).eventData.buttonData);
+		if (!Mathf.Approximately(eventData.buttonData.scrollDelta.sqrMagnitude, 0f))
 		{
-			RaycastResult pointerCurrentRaycast = eventData.buttonData.pointerCurrentRaycast;
-			ExecuteEvents.ExecuteHierarchy<IScrollHandler>(ExecuteEvents.GetEventHandler<IScrollHandler>(((RaycastResult)(ref pointerCurrentRaycast)).gameObject), (BaseEventData)(object)eventData.buttonData, ExecuteEvents.scrollHandler);
+			ExecuteEvents.ExecuteHierarchy(ExecuteEvents.GetEventHandler<IScrollHandler>(eventData.buttonData.pointerCurrentRaycast.gameObject), eventData.buttonData, ExecuteEvents.scrollHandler);
 		}
 	}
 
 	protected override MouseState GetMousePointerEventData()
 	{
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0027: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0049: Invalid comparison between Unknown and I4
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0032: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0070: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0075: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0080: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0056: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ae: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0158: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0170: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0189: Unknown result type (might be due to invalid IL or missing references)
-		PointerEventData val = default(PointerEventData);
-		bool pointerData = ((PointerInputModule)this).GetPointerData(-1, ref val, true);
-		((AbstractEventData)val).Reset();
+		PointerEventData data;
+		bool pointerData = GetPointerData(-1, out data, create: true);
+		data.Reset();
 		Vector3 position = cursorObject.transform.position;
-		Vector3 val2 = cameraMain.WorldToScreenPoint(position);
+		Vector3 vector = cameraMain.WorldToScreenPoint(position);
 		if (pointerData)
 		{
-			val.position = Vector2.op_Implicit(val2);
+			data.position = vector;
 		}
-		Vector2 val3 = Vector2.op_Implicit(val2);
-		if ((int)Cursor.lockState == 1)
+		Vector2 vector2 = vector;
+		if (Cursor.lockState == CursorLockMode.Locked)
 		{
-			val.position = new Vector2(-1f, -1f);
-			val.delta = Vector2.zero;
+			data.position = new Vector2(-1f, -1f);
+			data.delta = Vector2.zero;
 		}
 		else
 		{
-			val.delta = val3 - val.position;
-			val.position = val3;
+			data.delta = vector2 - data.position;
+			data.position = vector2;
 		}
-		Vector2 val4 = default(Vector2);
-		((Vector2)(ref val4))._002Ector(_player.GetAxis("Scroll Horizontal"), _player.GetAxis("Scroll Vertical"));
-		val.scrollDelta = val4 * scrollSpeed * Time.deltaTime;
-		val.button = (InputButton)0;
-		((BaseInputModule)this).eventSystem.RaycastAll(val, ((BaseInputModule)this).m_RaycastResultCache);
-		RaycastResult pointerCurrentRaycast = BaseInputModule.FindFirstRaycast(((BaseInputModule)this).m_RaycastResultCache);
-		val.pointerCurrentRaycast = pointerCurrentRaycast;
-		((BaseInputModule)this).m_RaycastResultCache.Clear();
-		PointerEventData val5 = default(PointerEventData);
-		((PointerInputModule)this).GetPointerData(-2, ref val5, true);
-		((AbstractEventData)val5).Reset();
-		((PointerInputModule)this).CopyFromTo(val, val5);
-		val5.button = (InputButton)1;
-		PointerEventData val6 = default(PointerEventData);
-		((PointerInputModule)this).GetPointerData(-3, ref val6, true);
-		((AbstractEventData)val6).Reset();
-		((PointerInputModule)this).CopyFromTo(val, val6);
-		val6.button = (InputButton)2;
-		_mouseState.SetButtonState((InputButton)0, StateForSwitchControllerButton("Click"), val);
-		_mouseState.SetButtonState((InputButton)1, StateForSwitchControllerButton(""), val5);
-		_mouseState.SetButtonState((InputButton)2, StateForSwitchControllerButton(""), val6);
+		Vector2 vector3 = new Vector2(_player.GetAxis("Scroll Horizontal"), _player.GetAxis("Scroll Vertical"));
+		data.scrollDelta = vector3 * scrollSpeed * Time.deltaTime;
+		data.button = PointerEventData.InputButton.Left;
+		base.eventSystem.RaycastAll(data, m_RaycastResultCache);
+		RaycastResult pointerCurrentRaycast = BaseInputModule.FindFirstRaycast(m_RaycastResultCache);
+		data.pointerCurrentRaycast = pointerCurrentRaycast;
+		m_RaycastResultCache.Clear();
+		GetPointerData(-2, out var data2, create: true);
+		data2.Reset();
+		CopyFromTo(data, data2);
+		data2.button = PointerEventData.InputButton.Right;
+		GetPointerData(-3, out var data3, create: true);
+		data3.Reset();
+		CopyFromTo(data, data3);
+		data3.button = PointerEventData.InputButton.Middle;
+		_mouseState.SetButtonState(PointerEventData.InputButton.Left, StateForSwitchControllerButton("Click"), data);
+		_mouseState.SetButtonState(PointerEventData.InputButton.Right, StateForSwitchControllerButton(""), data2);
+		_mouseState.SetButtonState(PointerEventData.InputButton.Middle, StateForSwitchControllerButton(""), data3);
 		return _mouseState;
 	}
 
-	protected FramePressState StateForSwitchControllerButton(string buttonName)
+	protected PointerEventData.FramePressState StateForSwitchControllerButton(string buttonName)
 	{
 		bool buttonDown = _player.GetButtonDown(buttonName);
 		bool buttonUp = _player.GetButtonUp(buttonName);
-		if (!(buttonDown && buttonUp))
+		if (buttonDown && buttonUp)
 		{
-			if (!buttonDown)
-			{
-				if (!buttonUp)
-				{
-					return (FramePressState)3;
-				}
-				return (FramePressState)1;
-			}
-			return (FramePressState)0;
+			return PointerEventData.FramePressState.PressedAndReleased;
 		}
-		return (FramePressState)2;
+		if (buttonDown)
+		{
+			return PointerEventData.FramePressState.Pressed;
+		}
+		if (buttonUp)
+		{
+			return PointerEventData.FramePressState.Released;
+		}
+		return PointerEventData.FramePressState.NotChanged;
 	}
 
 	private bool ShouldIgnoreEventsOnNoFocus()

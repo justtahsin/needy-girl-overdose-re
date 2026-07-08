@@ -16,7 +16,7 @@ public class UIGroup : MonoBehaviour
 	{
 		get
 		{
-			if (!((Object)(object)_label != (Object)null))
+			if (!(_label != null))
 			{
 				return string.Empty;
 			}
@@ -24,7 +24,7 @@ public class UIGroup : MonoBehaviour
 		}
 		set
 		{
-			if (!((Object)(object)_label == (Object)null))
+			if (!(_label == null))
 			{
 				_label.text = value;
 			}
@@ -35,9 +35,9 @@ public class UIGroup : MonoBehaviour
 
 	public void SetLabelActive(bool state)
 	{
-		if (!((Object)(object)_label == (Object)null))
+		if (!(_label == null))
 		{
-			((Component)_label).gameObject.SetActive(state);
+			_label.gameObject.SetActive(state);
 		}
 	}
 }

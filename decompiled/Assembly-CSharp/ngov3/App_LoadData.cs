@@ -26,11 +26,11 @@ public class App_LoadData : MonoBehaviour
 			{
 				if (mitaEnd.Exists((EndingType gotend) => gotend.ToString() == id))
 				{
-					Object.Instantiate<GameObject>(_achievedBlock, parent);
+					UnityEngine.Object.Instantiate(_achievedBlock, parent);
 				}
 				else
 				{
-					Object.Instantiate<GameObject>(_unachievedBlock, parent);
+					UnityEngine.Object.Instantiate(_unachievedBlock, parent);
 				}
 			}
 		}

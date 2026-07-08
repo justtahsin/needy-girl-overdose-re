@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -14,24 +13,20 @@ public class RectSizeSyncVerticalLayoutd2D : MonoBehaviour
 
 	private void Start()
 	{
-		rectTransform = ((Component)this).GetComponent<RectTransform>();
-		layout2D = ((Component)this).GetComponent<VerticalGridLayout2D>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(Observable.DistinctUntilChanged<float>(Observable.Select<Unit, float>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, float>)((Unit _) => layout2D.CurrentHight))), (Action<float>)delegate
+		rectTransform = GetComponent<RectTransform>();
+		layout2D = GetComponent<VerticalGridLayout2D>();
+		(from _ in this.UpdateAsObservable()
+			select layout2D.CurrentHight).DistinctUntilChanged().Subscribe(delegate
 		{
 			HightSet();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	[ContextMenu("高さを手動セット")]
 	public void HightSet()
 	{
-		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
 		rectTransform.offsetMax = new Vector2(0f, rectTransform.offsetMax.y);
-		Vector2 sizeDelta = default(Vector2);
-		((Vector2)(ref sizeDelta))._002Ector(rectTransform.sizeDelta.x, layout2D.CurrentHight);
+		Vector2 sizeDelta = new Vector2(rectTransform.sizeDelta.x, layout2D.CurrentHight);
 		rectTransform.sizeDelta = sizeDelta;
 	}
 }

@@ -1,96 +1,10 @@
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using NGO;
-using UnityEngine;
 
 namespace ngov3;
 
 public class Ending_Ideon_haishin : LiveScenario
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CStartScenario_003Ed__4 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public Ending_Ideon_haishin _003C_003E4__this;
-
-		private Awaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-			//IL_005d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0064: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0041: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			Ending_Ideon_haishin ending_Ideon_haishin = _003C_003E4__this;
-			try
-			{
-				Awaiter val2;
-				if (num != 0)
-				{
-					AudioManager.Instance.PlayBgmByType(SoundType.BGM_ending_ideon);
-					UniTask val = ((LiveScenario)ending_Ideon_haishin).StartScenario();
-					val2 = ((UniTask)(ref val)).GetAwaiter();
-					if (!((Awaiter)(ref val2)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val2;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__4>(ref val2, ref this);
-						return;
-					}
-				}
-				else
-				{
-					val2 = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-				}
-				((Awaiter)(ref val2)).GetResult();
-				PostEffectManager.Instance.SetShader(EffectType.SatujinNoise);
-				SingletonMonoBehaviour<EventManager>.Instance.AddEvent<Ending_Ideon_afterHaishin>();
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	private bool isEnd;
 
 	private int light;
@@ -99,7 +13,7 @@ public class Ending_Ideon_haishin : LiveScenario
 	{
 		base.Awake();
 		_Live.isUncontrollable = true;
-		((Component)_Live._HaisinSkip).gameObject.SetActive(false);
+		_Live._HaisinSkip.gameObject.SetActive(value: false);
 		if (SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value == LanguageType.EN)
 		{
 			_Live.Speed = 3;
@@ -108,7 +22,7 @@ public class Ending_Ideon_haishin : LiveScenario
 		{
 			_Live.Speed = 0;
 		}
-		((Component)_Live._HaisinSpeed).gameObject.SetActive(false);
+		_Live._HaisinSpeed.gameObject.SetActive(value: false);
 		_Live.SetSpeedLock(isLock: true);
 		_Live.isGuideEnable = false;
 		SingletonMonoBehaviour<ControllerGuideManager>.Instance.IsReady = false;
@@ -197,17 +111,11 @@ public class Ending_Ideon_haishin : LiveScenario
 		}
 	}
 
-	[AsyncStateMachine(typeof(_003CStartScenario_003Ed__4))]
-	public override UniTask StartScenario()
+	public override async UniTask StartScenario()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CStartScenario_003Ed__4 _003CStartScenario_003Ed__5 = default(_003CStartScenario_003Ed__4);
-		_003CStartScenario_003Ed__5._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CStartScenario_003Ed__5._003C_003E4__this = this;
-		_003CStartScenario_003Ed__5._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CStartScenario_003Ed__5._003C_003Et__builder)).Start<_003CStartScenario_003Ed__4>(ref _003CStartScenario_003Ed__5);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CStartScenario_003Ed__5._003C_003Et__builder)).Task;
+		AudioManager.Instance.PlayBgmByType(SoundType.BGM_ending_ideon);
+		await base.StartScenario();
+		PostEffectManager.Instance.SetShader(EffectType.SatujinNoise);
+		SingletonMonoBehaviour<EventManager>.Instance.AddEvent<Ending_Ideon_afterHaishin>();
 	}
 }

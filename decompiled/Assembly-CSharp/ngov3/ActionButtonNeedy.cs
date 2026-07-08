@@ -20,10 +20,10 @@ public class ActionButtonNeedy : MonoBehaviour
 
 	public void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(((Component)this).GetComponent<Button>()), (Action<Unit>)delegate
+		GetComponent<Button>().OnClickAsObservable().Subscribe(delegate
 		{
 			SingletonMonoBehaviour<EventManager>.Instance.AddEvent<Action_Needy>();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void SetLabel()

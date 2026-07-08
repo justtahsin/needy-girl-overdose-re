@@ -42,7 +42,7 @@ public class NGOMasterMergUseCase
 	public void ExportCSV(string outPutPath, List<List<string>> taretList)
 	{
 		List<Dictionary<string, string>> keyValues = CreateKeyValuePairList(taretList);
-		Debug.Log((object)("outPutPath=" + outPutPath));
+		Debug.Log("outPutPath=" + outPutPath);
 		ExportCSV(outPutPath, keyValues);
 	}
 
@@ -50,7 +50,7 @@ public class NGOMasterMergUseCase
 	{
 		if (keyValues.Count == 0)
 		{
-			Debug.LogError((object)"データが空です");
+			Debug.LogError("データが空です");
 			return;
 		}
 		IEnumerable<string> header = from keyValuePair in keyValues.FirstOrDefault()

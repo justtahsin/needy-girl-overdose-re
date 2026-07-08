@@ -1,4 +1,3 @@
-using System;
 using NGO;
 using TMPro;
 using UniRx;
@@ -16,18 +15,18 @@ public class StartButton : MonoBehaviour
 
 	private void Awake()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_startButton), (Action<Unit>)delegate
+		_startButton.OnClickAsObservable().Subscribe(delegate
 		{
 			OnStartButton.OnNext(_startButton);
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		}).AddTo(base.gameObject);
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageUpdated();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	public void OnLanguageUpdated()
 	{
-		((Component)_startButton).GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Start_Menu_Open, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		_startButton.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Start_Menu_Open, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 	}
 }

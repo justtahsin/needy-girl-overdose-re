@@ -1,16 +1,11 @@
-using System;
 using System.Text;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using NGO;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ngov3;
@@ -138,35 +133,34 @@ public class LiveComment : MonoBehaviour
 	public void Awake()
 	{
 		_live = Object.FindObjectOfType<Live>();
-		if (!((Object)(object)_live == (Object)null))
+		if (!(_live == null))
 		{
-			Transform transform = ((Component)_live.Tenchan).gameObject.transform;
-			_eizo = (RectTransform)(object)((transform is RectTransform) ? transform : null);
-			_supachaParent = ((Component)((Component)_live.Tenchan).gameObject.transform.GetChild(1)).gameObject.transform;
-			if ((Object)(object)_baseImage == (Object)null)
+			_eizo = _live.Tenchan.gameObject.transform as RectTransform;
+			_supachaParent = _live.Tenchan.gameObject.transform.GetChild(1).gameObject.transform;
+			if (_baseImage == null)
 			{
-				_baseImage = ((Component)this).GetComponent<Image>();
+				_baseImage = GetComponent<Image>();
 			}
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<PointerEventData>(ObservableTriggerExtensions.OnPointerEnterAsObservable((UIBehaviour)(object)_baseImage), (Action<PointerEventData>)delegate
+			_baseImage.OnPointerEnterAsObservable().Subscribe(delegate
 			{
 				highlighted();
 				Select();
-			}), (Component)(object)this);
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<PointerEventData>(ObservableTriggerExtensions.OnPointerExitAsObservable((UIBehaviour)(object)_baseImage), (Action<PointerEventData>)delegate
+			}).AddTo(this);
+			_baseImage.OnPointerExitAsObservable().Subscribe(delegate
 			{
 				exited();
 				Deselect();
-			}), (Component)(object)this);
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Collider2D>(ObservableTriggerExtensions.OnTriggerEnter2DAsObservable((Component)(object)this), (Action<Collider2D>)delegate
+			}).AddTo(this);
+			this.OnTriggerEnter2DAsObservable().Subscribe(delegate
 			{
 				highlighted();
 				Select();
-			}), ((Component)this).gameObject);
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Collider2D>(ObservableTriggerExtensions.OnTriggerExit2DAsObservable((Component)(object)this), (Action<Collider2D>)delegate
+			}).AddTo(base.gameObject);
+			this.OnTriggerExit2DAsObservable().Subscribe(delegate
 			{
 				exited();
 				Deselect();
-			}), ((Component)this).gameObject);
+			}).AddTo(base.gameObject);
 		}
 	}
 
@@ -177,10 +171,10 @@ public class LiveComment : MonoBehaviour
 		type = playing.diffStatusType;
 		diff = playing.delta;
 		honbunView.text = honbun;
-		await UniTask.DelayFrame(1, (PlayerLoopTiming)8, default(CancellationToken), false);
+		await UniTask.DelayFrame(1);
 		int lineCount = honbunView.GetTextInfo(honbunView.text).lineCount;
-		float num = ((playing.color == SuperchatType.White) ? (30f * (float)lineCount) : 10f);
-		((Component)this).GetComponent<RectTransform>().sizeDelta = new Vector2(380f, num);
+		float y = ((playing.color == SuperchatType.White) ? (30f * (float)lineCount) : 10f);
+		GetComponent<RectTransform>().sizeDelta = new Vector2(380f, y);
 		if (isRead)
 		{
 			return;
@@ -188,26 +182,28 @@ public class LiveComment : MonoBehaviour
 		if (playing.color != SuperchatType.White)
 		{
 			bgDefault = _superchats[(int)playing.color].Color;
-			((Graphic)_baseImage).color = bgDefault;
+			_baseImage.color = bgDefault;
 			SuperChatEffect();
 		}
 		else if (playing.henji != "" || (_live.isOiwai && Random.Range(0, 3) < 2))
 		{
-			int num2 = Random.Range(0, _superchats.Length);
-			bgDefault = _superchats[num2].Color;
-			((Graphic)_baseImage).color = bgDefault;
+			int num = Random.Range(0, _superchats.Length);
+			bgDefault = _superchats[num].Color;
+			_baseImage.color = bgDefault;
 			SuperChatEffect();
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(((Component)this).gameObject.GetComponent<Button>()), (Action<Unit>)delegate
+			base.gameObject.GetComponent<Button>().OnClickAsObservable().Subscribe(delegate
 			{
 				hirou(this.playing);
-			}), ((Component)this).gameObject);
+			})
+				.AddTo(base.gameObject);
 		}
 		else
 		{
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(((Component)this).gameObject.GetComponent<Button>()), (Action<Unit>)delegate
+			base.gameObject.GetComponent<Button>().OnClickAsObservable().Subscribe(delegate
 			{
 				sakujo(this.playing);
-			}), ((Component)this).gameObject);
+			})
+				.AddTo(base.gameObject);
 		}
 	}
 
@@ -225,15 +221,13 @@ public class LiveComment : MonoBehaviour
 
 	public void sakujo(Playing playing)
 	{
-		//IL_007d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ba: Unknown result type (might be due to invalid IL or missing references)
 		if (_live.isActiveReaction() && !isHiroizumi && (!SingletonMonoBehaviour<EventManager>.Instance.isHorror || SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.DayIndex) != 29))
 		{
 			isHiroizumi = true;
 			_live.NowPlaying.isGensoku.Value = false;
 			AdjustSpeed();
 			AudioManager.Instance.PlaySeByType(SoundType.SE_pien);
-			TweenExtensions.Play<TweenerCore<Color, Color, ColorOptions>>(ShortcutExtensionsTMPText.DOColor(honbunView, new Color(0f, 0f, 0f, 0f), 0.4f));
+			honbunView.DOColor(new Color(0f, 0f, 0f, 0f), 0.4f).Play();
 			isDeleted = true;
 			if (playing.delta != 0 && playing.diffStatusType != StatusType.Tension)
 			{
@@ -245,7 +239,6 @@ public class LiveComment : MonoBehaviour
 
 	private void highlighted()
 	{
-		//IL_00d2: Unknown result type (might be due to invalid IL or missing references)
 		if (!_live.isActiveReaction() || isHiroizumi)
 		{
 			return;
@@ -271,11 +264,11 @@ public class LiveComment : MonoBehaviour
 			AdjustSpeed();
 			if (playing.henji != "")
 			{
-				((Graphic)_baseImage).color = new Color(50f / 51f, 1f, 47f / 85f, 1f);
+				_baseImage.color = new Color(50f / 51f, 1f, 47f / 85f, 1f);
 			}
 			else
 			{
-				Scull.SetActive(true);
+				Scull.SetActive(value: true);
 			}
 		}
 	}
@@ -294,13 +287,11 @@ public class LiveComment : MonoBehaviour
 
 	private void exited()
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(null, Vector2.zero, (CursorMode)0);
+		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(null, Vector2.zero, CursorMode.Auto);
 		_live.NowPlaying.isGensoku.Value = false;
 		AdjustSpeed();
-		((Graphic)_baseImage).color = bgDefault;
-		Scull.SetActive(false);
+		_baseImage.color = bgDefault;
+		Scull.SetActive(value: false);
 		_ = isHiroizumi;
 	}
 
@@ -311,7 +302,7 @@ public class LiveComment : MonoBehaviour
 
 	private void Deselect()
 	{
-		if ((Object)(object)_live.SelectingComment == (Object)(object)this)
+		if (_live.SelectingComment == this)
 		{
 			_live.SelectingComment = null;
 		}
@@ -319,22 +310,21 @@ public class LiveComment : MonoBehaviour
 
 	private void ChangeIineColor()
 	{
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		TweenExtensions.Play<TweenerCore<Color, Color, ColorOptions>>(ShortcutExtensionsTMPText.DOColor(honbunView, new Color(77f / 85f, 0.32156864f, 0.32156864f, 1f), 0.4f));
+		honbunView.DOColor(new Color(77f / 85f, 0.32156864f, 0.32156864f, 1f), 0.4f).Play();
 	}
 
 	public void SuperChatEffect()
 	{
 		AudioManager.Instance?.PlaySeByType(SoundType.SE_haisin_superchat);
-		Transform val = _supachaParent;
+		Transform supachaParent = _supachaParent;
 		if (SingletonMonoBehaviour<EventManager>.Instance.nowEnding == EndingType.Ending_Happy)
 		{
-			val = ((Component)_live).gameObject.transform;
+			supachaParent = _live.gameObject.transform;
 		}
-		RectTransform supacha = Object.Instantiate<RectTransform>(_superchatObjects[Random.Range(0, _superchatObjects.Length)], val);
+		RectTransform supacha = Object.Instantiate(_superchatObjects[Random.Range(0, _superchatObjects.Length)], supachaParent);
 		supacha.DoSperchatMove(delegate
 		{
-			Object.Destroy((Object)(object)((Component)supacha).gameObject);
+			Object.Destroy(supacha.gameObject);
 		});
 	}
 }

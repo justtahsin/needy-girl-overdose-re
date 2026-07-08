@@ -14,11 +14,11 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IEventSystemHan
 
 	private Subject<PointerEventData> onEndDragAsObservableSubject = new Subject<PointerEventData>();
 
-	public IObservable<PointerEventData> OnBeginDragAsObservable2D => (IObservable<PointerEventData>)onBeginDragAsObservableSubject;
+	public IObservable<PointerEventData> OnBeginDragAsObservable2D => onBeginDragAsObservableSubject;
 
-	public IObservable<PointerEventData> OnDragAsObservable2D => (IObservable<PointerEventData>)onDragAsObservableSubject;
+	public IObservable<PointerEventData> OnDragAsObservable2D => onDragAsObservableSubject;
 
-	public IObservable<PointerEventData> OnEndDragAsObservable2D => (IObservable<PointerEventData>)onEndDragAsObservableSubject;
+	public IObservable<PointerEventData> OnEndDragAsObservable2D => onEndDragAsObservableSubject;
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{

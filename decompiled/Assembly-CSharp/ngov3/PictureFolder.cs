@@ -53,7 +53,7 @@ public class PictureFolder : MonoBehaviour
 			label.text = $"{NgoEx.SystemTextFromType(SystemTextType.PictureFolder, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value)} {scenarioFolderNumber - 1}";
 		}
 		isLocked = false;
-		((Selectable)button).interactable = true;
+		button.interactable = true;
 		icon.sprite = unlockedSprite;
 	}
 
@@ -62,7 +62,7 @@ public class PictureFolder : MonoBehaviour
 		this.zipNumber = zipNumber;
 		label.text = zipNumber.ToString();
 		this.isLocked = isLocked;
-		((Selectable)button).interactable = !isLocked;
+		button.interactable = !isLocked;
 		icon.sprite = (isLocked ? lockedSprite : unlockedSprite);
 	}
 }

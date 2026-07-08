@@ -42,13 +42,10 @@ public class KitsuneResView : MonoBehaviour
 
 	private void SetHeight()
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0050: Unknown result type (might be due to invalid IL or missing references)
 		Vector2 sizeDelta = _rectTr.sizeDelta;
 		float num = 34f;
 		sizeDelta.y = _honbun.preferredHeight + num;
-		if ((Object)(object)_AA != (Object)null)
+		if (_AA != null)
 		{
 			sizeDelta.y += _AA.preferredHeight;
 		}

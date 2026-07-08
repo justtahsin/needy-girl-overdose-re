@@ -12,8 +12,8 @@ public class WindowManager_boot : WindowManager
 
 	private new void Start()
 	{
-		Hint.SetActive(false);
-		controlPanel.SetActive(false);
+		Hint.SetActive(value: false);
+		controlPanel.SetActive(value: false);
 	}
 
 	public Window NewWindow(AppType appType)
@@ -21,7 +21,7 @@ public class WindowManager_boot : WindowManager
 		switch (appType)
 		{
 		case AppType.ControlPanel:
-			controlPanel.SetActive(true);
+			controlPanel.SetActive(value: true);
 			break;
 		default:
 			NewWindow(appType, true);
@@ -37,7 +37,7 @@ public class WindowManager_boot : WindowManager
 		switch (w.appType)
 		{
 		case AppType.ControlPanel:
-			controlPanel.SetActive(false);
+			controlPanel.SetActive(value: false);
 			break;
 		default:
 			Close((IWindow)w);

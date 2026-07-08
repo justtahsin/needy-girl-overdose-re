@@ -1,10 +1,5 @@
 using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,231 +8,6 @@ namespace ngov3;
 
 public class PoketterPaging2D : MonoBehaviour
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CpagingNext_003Ed__12 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public PoketterPaging2D _003C_003E4__this;
-
-		private GameObject _003Cloading_003E5__2;
-
-		private int _003CneedLoad_003E5__3;
-
-		private Awaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_0149: Unknown result type (might be due to invalid IL or missing references)
-			//IL_014e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0155: Unknown result type (might be due to invalid IL or missing references)
-			//IL_010d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0112: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0116: Unknown result type (might be due to invalid IL or missing references)
-			//IL_011b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_012f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0130: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			PoketterPaging2D poketterPaging2D = _003C_003E4__this;
-			try
-			{
-				Awaiter val;
-				if (num == 0)
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-					goto IL_0164;
-				}
-				if (poketterPaging2D._thisTrans.childCount > poketterPaging2D.MAXPOSTS && poketterPaging2D.isBacking)
-				{
-					if (poketterPaging2D.showingNewestIndex >= poketterPaging2D._thisTrans.childCount - 1)
-					{
-						poketterPaging2D.isBacking = false;
-					}
-					else if (!poketterPaging2D.isloading)
-					{
-						poketterPaging2D.isloading = true;
-						_003Cloading_003E5__2 = Object.Instantiate<GameObject>(poketterPaging2D.loadingPrefab, poketterPaging2D._thisTrans);
-						_003Cloading_003E5__2.transform.SetAsLastSibling();
-						_003CneedLoad_003E5__3 = Math.Min(poketterPaging2D.PAGINGPOSTS, poketterPaging2D.showingNewestIndex + poketterPaging2D.PAGINGPOSTS - (poketterPaging2D._thisTrans.childCount - 1));
-						poketterPaging2D.showingNewestIndex = Math.Min(poketterPaging2D.showingNewestIndex + poketterPaging2D.PAGINGPOSTS, poketterPaging2D._thisTrans.childCount - 1);
-						poketterPaging2D.showingOldestIndex = Math.Max(poketterPaging2D.showingNewestIndex - poketterPaging2D.MAXPOSTS, 0);
-						UniTask val2 = UniTask.Delay(20, false, (PlayerLoopTiming)8, default(CancellationToken), false);
-						val = ((UniTask)(ref val2)).GetAwaiter();
-						if (!((Awaiter)(ref val)).IsCompleted)
-						{
-							num = (_003C_003E1__state = 0);
-							_003C_003Eu__1 = val;
-							((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CpagingNext_003Ed__12>(ref val, ref this);
-							return;
-						}
-						goto IL_0164;
-					}
-				}
-				goto end_IL_000e;
-				IL_0164:
-				((Awaiter)(ref val)).GetResult();
-				Object.Destroy((Object)(object)_003Cloading_003E5__2);
-				poketterPaging2D.ShowRange(poketterPaging2D.showingOldestIndex, poketterPaging2D.showingNewestIndex);
-				if (_003CneedLoad_003E5__3 > 0)
-				{
-					ScrollRect scrollRect = poketterPaging2D._scrollRect;
-					scrollRect.verticalNormalizedPosition += 0.01f * (float)_003CneedLoad_003E5__3;
-				}
-				poketterPaging2D.loadAtLast = false;
-				poketterPaging2D.isloading = false;
-				end_IL_000e:;
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				_003Cloading_003E5__2 = null;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			_003Cloading_003E5__2 = null;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CpagingPrev_003Ed__13 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public PoketterPaging2D _003C_003E4__this;
-
-		private GameObject _003Cloading_003E5__2;
-
-		private int _003CneedLoad_003E5__3;
-
-		private Awaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_0122: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0127: Unknown result type (might be due to invalid IL or missing references)
-			//IL_012e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00eb: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00ef: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0108: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0109: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			PoketterPaging2D poketterPaging2D = _003C_003E4__this;
-			try
-			{
-				Awaiter val;
-				if (num == 0)
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-					goto IL_013d;
-				}
-				if (poketterPaging2D._thisTrans.childCount > poketterPaging2D.MAXPOSTS && !poketterPaging2D.isloading && !poketterPaging2D.loadAtLast)
-				{
-					poketterPaging2D.isloading = true;
-					_003Cloading_003E5__2 = Object.Instantiate<GameObject>(poketterPaging2D.loadingPrefab, poketterPaging2D._thisTrans);
-					_003Cloading_003E5__2.transform.SetAsFirstSibling();
-					poketterPaging2D.isBacking = true;
-					_003CneedLoad_003E5__3 = poketterPaging2D.showingOldestIndex - poketterPaging2D.PAGINGPOSTS;
-					if (_003CneedLoad_003E5__3 < 0)
-					{
-						poketterPaging2D.showingOldestIndex = 0;
-					}
-					else
-					{
-						poketterPaging2D.showingOldestIndex -= poketterPaging2D.PAGINGPOSTS;
-					}
-					poketterPaging2D.showingNewestIndex = Math.Min(poketterPaging2D.showingOldestIndex + poketterPaging2D.MAXPOSTS, poketterPaging2D._thisTrans.childCount - 1);
-					UniTask val2 = UniTask.Delay(20, false, (PlayerLoopTiming)8, default(CancellationToken), false);
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CpagingPrev_003Ed__13>(ref val, ref this);
-						return;
-					}
-					goto IL_013d;
-				}
-				goto end_IL_000e;
-				IL_013d:
-				((Awaiter)(ref val)).GetResult();
-				Object.Destroy((Object)(object)_003Cloading_003E5__2);
-				poketterPaging2D.ShowRange(poketterPaging2D.showingOldestIndex, poketterPaging2D.showingNewestIndex);
-				if (_003CneedLoad_003E5__3 > 0)
-				{
-					ScrollRect scrollRect = poketterPaging2D._scrollRect;
-					scrollRect.verticalNormalizedPosition -= 0.01f * (float)Math.Min(_003CneedLoad_003E5__3, poketterPaging2D.PAGINGPOSTS);
-				}
-				if (_003CneedLoad_003E5__3 < 0)
-				{
-					poketterPaging2D._poketter.LoadTweet(poketterPaging2D._thisTrans.childCount, poketterPaging2D._thisTrans.childCount - _003CneedLoad_003E5__3);
-					poketterPaging2D.loadAtLast = true;
-				}
-				poketterPaging2D.isloading = false;
-				end_IL_000e:;
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				_003Cloading_003E5__2 = null;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			_003Cloading_003E5__2 = null;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	private int MAXPOSTS = 50;
 
 	private int PAGINGPOSTS = 10;
@@ -270,47 +40,87 @@ public class PoketterPaging2D : MonoBehaviour
 	public void Awake()
 	{
 		showingNewestIndex = MAXPOSTS;
-		_thisTrans = ((Component)this).gameObject.transform;
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>(ObserveExtensions.ObserveEveryValueChanged<Transform, int>(_thisTrans, (Func<Transform, int>)((Transform _thisTrans) => _thisTrans.childCount), (FrameCountType)0, false), (Action<int>)delegate
+		_thisTrans = base.gameObject.transform;
+		_thisTrans.ObserveEveryValueChanged((Transform _thisTrans) => _thisTrans.childCount).Subscribe(delegate
 		{
 			addNewPost();
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(Observable.Where<float>(Observable.DistinctUntilChanged<float>(ObserveExtensions.ObserveEveryValueChanged<ScrollRect, float>(_scrollRect, (Func<ScrollRect, float>)((ScrollRect _scrollRect) => _scrollRect.verticalNormalizedPosition), (FrameCountType)0, false)), (Func<float, bool>)((float x) => x <= 0.01f)), (Action<float>)async delegate
+		}).AddTo(base.gameObject);
+		(from x in _scrollRect.ObserveEveryValueChanged((ScrollRect _scrollRect) => _scrollRect.verticalNormalizedPosition).DistinctUntilChanged()
+			where x <= 0.01f
+			select x).Subscribe(async delegate
 		{
 			await pagingNext();
-		}), (Component)(object)_scrollRect);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(Observable.Where<float>(Observable.DistinctUntilChanged<float>(ObserveExtensions.ObserveEveryValueChanged<ScrollRect, float>(_scrollRect, (Func<ScrollRect, float>)((ScrollRect _scrollRect) => _scrollRect.verticalNormalizedPosition), (FrameCountType)0, false)), (Func<float, bool>)((float x) => x >= 0.99f)), (Action<float>)async delegate
+		}).AddTo(_scrollRect);
+		(from x in _scrollRect.ObserveEveryValueChanged((ScrollRect _scrollRect) => _scrollRect.verticalNormalizedPosition).DistinctUntilChanged()
+			where x >= 0.99f
+			select x).Subscribe(async delegate
 		{
 			await pagingPrev();
-		}), (Component)(object)_scrollRect);
+		}).AddTo(_scrollRect);
 	}
 
-	[AsyncStateMachine(typeof(_003CpagingNext_003Ed__12))]
-	private UniTask pagingNext()
+	private async UniTask pagingNext()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CpagingNext_003Ed__12 _003CpagingNext_003Ed__13 = default(_003CpagingNext_003Ed__12);
-		_003CpagingNext_003Ed__13._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CpagingNext_003Ed__13._003C_003E4__this = this;
-		_003CpagingNext_003Ed__13._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CpagingNext_003Ed__13._003C_003Et__builder)).Start<_003CpagingNext_003Ed__12>(ref _003CpagingNext_003Ed__13);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CpagingNext_003Ed__13._003C_003Et__builder)).Task;
+		if (_thisTrans.childCount <= MAXPOSTS || !isBacking)
+		{
+			return;
+		}
+		if (showingNewestIndex >= _thisTrans.childCount - 1)
+		{
+			isBacking = false;
+		}
+		else if (!isloading)
+		{
+			isloading = true;
+			GameObject loading = UnityEngine.Object.Instantiate(loadingPrefab, _thisTrans);
+			loading.transform.SetAsLastSibling();
+			int needLoad = Math.Min(PAGINGPOSTS, showingNewestIndex + PAGINGPOSTS - (_thisTrans.childCount - 1));
+			showingNewestIndex = Math.Min(showingNewestIndex + PAGINGPOSTS, _thisTrans.childCount - 1);
+			showingOldestIndex = Math.Max(showingNewestIndex - MAXPOSTS, 0);
+			await UniTask.Delay(20);
+			UnityEngine.Object.Destroy(loading);
+			ShowRange(showingOldestIndex, showingNewestIndex);
+			if (needLoad > 0)
+			{
+				_scrollRect.verticalNormalizedPosition += 0.01f * (float)needLoad;
+			}
+			loadAtLast = false;
+			isloading = false;
+		}
 	}
 
-	[AsyncStateMachine(typeof(_003CpagingPrev_003Ed__13))]
-	private UniTask pagingPrev()
+	private async UniTask pagingPrev()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CpagingPrev_003Ed__13 _003CpagingPrev_003Ed__14 = default(_003CpagingPrev_003Ed__13);
-		_003CpagingPrev_003Ed__14._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CpagingPrev_003Ed__14._003C_003E4__this = this;
-		_003CpagingPrev_003Ed__14._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CpagingPrev_003Ed__14._003C_003Et__builder)).Start<_003CpagingPrev_003Ed__13>(ref _003CpagingPrev_003Ed__14);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CpagingPrev_003Ed__14._003C_003Et__builder)).Task;
+		if (_thisTrans.childCount > MAXPOSTS && !isloading && !loadAtLast)
+		{
+			isloading = true;
+			GameObject loading = UnityEngine.Object.Instantiate(loadingPrefab, _thisTrans);
+			loading.transform.SetAsFirstSibling();
+			isBacking = true;
+			int needLoad = showingOldestIndex - PAGINGPOSTS;
+			if (needLoad < 0)
+			{
+				showingOldestIndex = 0;
+			}
+			else
+			{
+				showingOldestIndex -= PAGINGPOSTS;
+			}
+			showingNewestIndex = Math.Min(showingOldestIndex + MAXPOSTS, _thisTrans.childCount - 1);
+			await UniTask.Delay(20);
+			UnityEngine.Object.Destroy(loading);
+			ShowRange(showingOldestIndex, showingNewestIndex);
+			if (needLoad > 0)
+			{
+				_scrollRect.verticalNormalizedPosition -= 0.01f * (float)Math.Min(needLoad, PAGINGPOSTS);
+			}
+			if (needLoad < 0)
+			{
+				_poketter.LoadTweet(_thisTrans.childCount, _thisTrans.childCount - needLoad);
+				loadAtLast = true;
+			}
+			isloading = false;
+		}
 	}
 
 	private void ShowRange(int oldIndex, int newIndex)
@@ -321,15 +131,15 @@ public class PoketterPaging2D : MonoBehaviour
 		}
 		for (int num = oldIndex; num >= 0; num--)
 		{
-			((Component)_thisTrans.GetChild(num)).gameObject.SetActive(false);
+			_thisTrans.GetChild(num).gameObject.SetActive(value: false);
 		}
 		for (int i = oldIndex; i <= newIndex; i++)
 		{
-			((Component)_thisTrans.GetChild(i)).gameObject.SetActive(true);
+			_thisTrans.GetChild(i).gameObject.SetActive(value: true);
 		}
 		for (int j = newIndex; j <= _thisTrans.childCount - 1; j++)
 		{
-			((Component)_thisTrans.GetChild(j)).gameObject.SetActive(false);
+			_thisTrans.GetChild(j).gameObject.SetActive(value: false);
 		}
 	}
 
@@ -341,14 +151,14 @@ public class PoketterPaging2D : MonoBehaviour
 		}
 		if (isBacking)
 		{
-			((Component)_thisTrans.GetChild(_thisTrans.childCount - 1)).gameObject.SetActive(false);
+			_thisTrans.GetChild(_thisTrans.childCount - 1).gameObject.SetActive(value: false);
 			return;
 		}
 		showingNewestIndex++;
 		showingOldestIndex = showingNewestIndex - MAXPOSTS;
 		for (int i = 0; i < _thisTrans.childCount - MAXPOSTS; i++)
 		{
-			((Component)_thisTrans.GetChild(i)).gameObject.SetActive(false);
+			_thisTrans.GetChild(i).gameObject.SetActive(value: false);
 		}
 	}
 }

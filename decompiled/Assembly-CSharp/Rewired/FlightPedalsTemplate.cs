@@ -12,11 +12,11 @@ public sealed class FlightPedalsTemplate : ControllerTemplate, IFlightPedalsTemp
 
 	public const int elementId_slide = 2;
 
-	IControllerTemplateAxis IFlightPedalsTemplate.leftPedal => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(0);
+	IControllerTemplateAxis IFlightPedalsTemplate.leftPedal => GetElement<IControllerTemplateAxis>(0);
 
-	IControllerTemplateAxis IFlightPedalsTemplate.rightPedal => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(1);
+	IControllerTemplateAxis IFlightPedalsTemplate.rightPedal => GetElement<IControllerTemplateAxis>(1);
 
-	IControllerTemplateAxis IFlightPedalsTemplate.slide => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(2);
+	IControllerTemplateAxis IFlightPedalsTemplate.slide => GetElement<IControllerTemplateAxis>(2);
 
 	public FlightPedalsTemplate(object payload)
 		: base(payload)

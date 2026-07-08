@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using SFB;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace CSVUtil;
@@ -34,13 +32,7 @@ public class NGOMasterMerge : MonoBehaviour
 
 	private void Start()
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Expected O, but got Unknown
-		//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0038: Expected O, but got Unknown
-		//IL_004a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0054: Expected O, but got Unknown
-		((UnityEvent)selectMergeTarget.onClick).AddListener((UnityAction)delegate
+		selectMergeTarget.onClick.AddListener(delegate
 		{
 			ExtensionFilter[] extensions = new ExtensionFilter[1]
 			{
@@ -49,7 +41,7 @@ public class NGOMasterMerge : MonoBehaviour
 			string[] array = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, multiselect: true);
 			selectMergeTargetPath.text = array[0];
 		});
-		((UnityEvent)selectMergeSideToBe.onClick).AddListener((UnityAction)delegate
+		selectMergeSideToBe.onClick.AddListener(delegate
 		{
 			ExtensionFilter[] extensions = new ExtensionFilter[1]
 			{
@@ -58,7 +50,7 @@ public class NGOMasterMerge : MonoBehaviour
 			string[] array = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, multiselect: true);
 			selectMergeSideToBePath.text = array[0];
 		});
-		((UnityEvent)mergeButton.onClick).AddListener((UnityAction)delegate
+		mergeButton.onClick.AddListener(delegate
 		{
 			string outPutPath = StandaloneFileBrowser.SaveFilePanel("保存先を選択", "", "", "csv");
 			NGOMasterMergUseCase nGOMasterMergUseCase = new NGOMasterMergUseCase();
@@ -68,8 +60,8 @@ public class NGOMasterMerge : MonoBehaviour
 			List<string> list4 = list2[0];
 			if (!list3.Contains(idCloumnName.text) || !list4.Contains(idCloumnName.text))
 			{
-				Debug.LogError((object)"CSVのHeaderにIDのカラムが含まれていません！");
-				errorDisplay.SetActive(true);
+				Debug.LogError("CSVのHeaderにIDのカラムが含まれていません！");
+				errorDisplay.SetActive(value: true);
 			}
 			else
 			{
@@ -78,9 +70,10 @@ public class NGOMasterMerge : MonoBehaviour
 				nGOMasterMergUseCase.ExportCSV(outPutPath, valueMergedCSV);
 			}
 		});
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<bool>(Observable.Select<Unit, bool>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, bool>)((Unit _) => selectMergeTargetPath.text != "" && selectMergeSideToBePath.text != "")), (Action<bool>)delegate(bool selectedCSV)
+		(from _ in this.UpdateAsObservable()
+			select selectMergeTargetPath.text != "" && selectMergeSideToBePath.text != "").Subscribe(delegate(bool selectedCSV)
 		{
-			((Selectable)mergeButton).interactable = selectedCSV;
-		}), ((Component)this).gameObject);
+			mergeButton.interactable = selectedCSV;
+		}).AddTo(base.gameObject);
 	}
 }

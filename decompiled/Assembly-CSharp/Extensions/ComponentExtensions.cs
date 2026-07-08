@@ -16,6 +16,6 @@ public static class ComponentExtensions
 
 	public static bool HasComponent<T>(this Component component) where T : Component
 	{
-		return (Object)(object)component.GetComponent<T>() != (Object)null;
+		return component.GetComponent<T>() != null;
 	}
 }

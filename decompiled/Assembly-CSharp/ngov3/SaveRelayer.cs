@@ -65,8 +65,8 @@ public static class SaveRelayer
 
 	private static void SaveSlotByPlayStation(string fileName, SlotData data)
 	{
-		string text = JsonUtility.ToJson((object)data);
-		PlayerPrefs.SetString(fileName, text);
+		string value = JsonUtility.ToJson(data);
+		PlayerPrefs.SetString(fileName, value);
 		PlayerPrefs.Save();
 	}
 
@@ -82,8 +82,8 @@ public static class SaveRelayer
 
 	private static void SaveSettingsByPlayStation(SettingData data)
 	{
-		string text = JsonUtility.ToJson((object)data);
-		PlayerPrefs.SetString(PlayStationSettingLoadKey, text);
+		string value = JsonUtility.ToJson(data);
+		PlayerPrefs.SetString(PlayStationSettingLoadKey, value);
 		PlayerPrefs.Save();
 	}
 

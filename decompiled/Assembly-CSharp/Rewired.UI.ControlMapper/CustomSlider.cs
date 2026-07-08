@@ -1,6 +1,3 @@
-using System;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
@@ -34,9 +31,6 @@ public class CustomSlider : Slider, ICustomSelectable, ICancelHandler, IEventSys
 
 	private bool isHighlightDisabled;
 
-	[CompilerGenerated]
-	private UnityAction m__CancelEvent;
-
 	public Sprite disabledHighlightedSprite
 	{
 		get
@@ -53,13 +47,10 @@ public class CustomSlider : Slider, ICustomSelectable, ICancelHandler, IEventSys
 	{
 		get
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			return _disabledHighlightedColor;
 		}
 		set
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 			_disabledHighlightedColor = value;
 		}
 	}
@@ -124,41 +115,9 @@ public class CustomSlider : Slider, ICustomSelectable, ICancelHandler, IEventSys
 		}
 	}
 
-	private bool isDisabled => !((Selectable)this).IsInteractable();
+	private bool isDisabled => !IsInteractable();
 
-	private event UnityAction _CancelEvent
-	{
-		[CompilerGenerated]
-		add
-		{
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0016: Expected O, but got Unknown
-			UnityAction val = this.m__CancelEvent;
-			UnityAction val2;
-			do
-			{
-				val2 = val;
-				UnityAction value2 = (UnityAction)Delegate.Combine((Delegate?)(object)val2, (Delegate?)(object)value);
-				val = Interlocked.CompareExchange(ref this.m__CancelEvent, value2, val2);
-			}
-			while (val != val2);
-		}
-		[CompilerGenerated]
-		remove
-		{
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0016: Expected O, but got Unknown
-			UnityAction val = this.m__CancelEvent;
-			UnityAction val2;
-			do
-			{
-				val2 = val;
-				UnityAction value2 = (UnityAction)Delegate.Remove((Delegate?)(object)val2, (Delegate?)(object)value);
-				val = Interlocked.CompareExchange(ref this.m__CancelEvent, value2, val2);
-			}
-			while (val != val2);
-		}
-	}
+	private event UnityAction _CancelEvent;
 
 	public event UnityAction CancelEvent
 	{
@@ -174,107 +133,67 @@ public class CustomSlider : Slider, ICustomSelectable, ICancelHandler, IEventSys
 
 	public override Selectable FindSelectableOnLeft()
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		Navigation navigation = ((Selectable)this).navigation;
-		if ((((Navigation)(ref navigation)).mode & 1) != 0 || _autoNavLeft)
+		if ((base.navigation.mode & Navigation.Mode.Horizontal) != Navigation.Mode.None || _autoNavLeft)
 		{
-			return UISelectionUtility.FindNextSelectable((Selectable)(object)this, ((Component)this).transform, Vector3.left);
+			return UISelectionUtility.FindNextSelectable(this, base.transform, Vector3.left);
 		}
-		return ((Slider)this).FindSelectableOnLeft();
+		return base.FindSelectableOnLeft();
 	}
 
 	public override Selectable FindSelectableOnRight()
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		Navigation navigation = ((Selectable)this).navigation;
-		if ((((Navigation)(ref navigation)).mode & 1) != 0 || _autoNavRight)
+		if ((base.navigation.mode & Navigation.Mode.Horizontal) != Navigation.Mode.None || _autoNavRight)
 		{
-			return UISelectionUtility.FindNextSelectable((Selectable)(object)this, ((Component)this).transform, Vector3.right);
+			return UISelectionUtility.FindNextSelectable(this, base.transform, Vector3.right);
 		}
-		return ((Slider)this).FindSelectableOnRight();
+		return base.FindSelectableOnRight();
 	}
 
 	public override Selectable FindSelectableOnUp()
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		Navigation navigation = ((Selectable)this).navigation;
-		if ((((Navigation)(ref navigation)).mode & 2) != 0 || _autoNavUp)
+		if ((base.navigation.mode & Navigation.Mode.Vertical) != Navigation.Mode.None || _autoNavUp)
 		{
-			return UISelectionUtility.FindNextSelectable((Selectable)(object)this, ((Component)this).transform, Vector3.up);
+			return UISelectionUtility.FindNextSelectable(this, base.transform, Vector3.up);
 		}
-		return ((Slider)this).FindSelectableOnUp();
+		return base.FindSelectableOnUp();
 	}
 
 	public override Selectable FindSelectableOnDown()
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		Navigation navigation = ((Selectable)this).navigation;
-		if ((((Navigation)(ref navigation)).mode & 2) != 0 || _autoNavDown)
+		if ((base.navigation.mode & Navigation.Mode.Vertical) != Navigation.Mode.None || _autoNavDown)
 		{
-			return UISelectionUtility.FindNextSelectable((Selectable)(object)this, ((Component)this).transform, Vector3.down);
+			return UISelectionUtility.FindNextSelectable(this, base.transform, Vector3.down);
 		}
-		return ((Slider)this).FindSelectableOnDown();
+		return base.FindSelectableOnDown();
 	}
 
 	protected override void OnCanvasGroupChanged()
 	{
-		((Selectable)this).OnCanvasGroupChanged();
-		if (!((Object)(object)EventSystem.current == (Object)null))
+		base.OnCanvasGroupChanged();
+		if (!(EventSystem.current == null))
 		{
-			EvaluateHightlightDisabled((Object)(object)EventSystem.current.currentSelectedGameObject == (Object)(object)((Component)this).gameObject);
+			EvaluateHightlightDisabled(EventSystem.current.currentSelectedGameObject == base.gameObject);
 		}
 	}
 
 	protected override void DoStateTransition(SelectionState state, bool instant)
 	{
-		//IL_0074: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0033: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0045: Expected I4, but got Unknown
-		//IL_0047: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0049: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0057: Unknown result type (might be due to invalid IL or missing references)
 		if (isHighlightDisabled)
 		{
-			Color val = _disabledHighlightedColor;
+			Color color = _disabledHighlightedColor;
 			Sprite newSprite = _disabledHighlightedSprite;
 			string triggername = _disabledHighlightedTrigger;
-			if (((Component)this).gameObject.activeInHierarchy)
+			if (base.gameObject.activeInHierarchy)
 			{
-				Transition transition = ((Selectable)this).transition;
-				switch (transition - 1)
+				switch (base.transition)
 				{
-				case 0:
-				{
-					ColorBlock colors = ((Selectable)this).colors;
-					StartColorTween(val * ((ColorBlock)(ref colors)).colorMultiplier, instant);
+				case Transition.ColorTint:
+					StartColorTween(color * base.colors.colorMultiplier, instant);
 					break;
-				}
-				case 1:
+				case Transition.SpriteSwap:
 					DoSpriteSwap(newSprite);
 					break;
-				case 2:
+				case Transition.Animation:
 					TriggerAnimation(triggername);
 					break;
 				}
@@ -282,79 +201,62 @@ public class CustomSlider : Slider, ICustomSelectable, ICancelHandler, IEventSys
 		}
 		else
 		{
-			((Selectable)this).DoStateTransition(state, instant);
+			base.DoStateTransition(state, instant);
 		}
 	}
 
 	private void StartColorTween(Color targetColor, bool instant)
 	{
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-		if (!((Object)(object)((Selectable)this).targetGraphic == (Object)null))
+		if (!(base.targetGraphic == null))
 		{
-			Graphic targetGraphic = ((Selectable)this).targetGraphic;
-			float num;
-			if (!instant)
-			{
-				ColorBlock colors = ((Selectable)this).colors;
-				num = ((ColorBlock)(ref colors)).fadeDuration;
-			}
-			else
-			{
-				num = 0f;
-			}
-			targetGraphic.CrossFadeColor(targetColor, num, true, true);
+			base.targetGraphic.CrossFadeColor(targetColor, instant ? 0f : base.colors.fadeDuration, ignoreTimeScale: true, useAlpha: true);
 		}
 	}
 
 	private void DoSpriteSwap(Sprite newSprite)
 	{
-		if (!((Object)(object)((Selectable)this).image == (Object)null))
+		if (!(base.image == null))
 		{
-			((Selectable)this).image.overrideSprite = newSprite;
+			base.image.overrideSprite = newSprite;
 		}
 	}
 
 	private void TriggerAnimation(string triggername)
 	{
-		if (!((Object)(object)((Selectable)this).animator == (Object)null) && ((Behaviour)((Selectable)this).animator).enabled && ((Behaviour)((Selectable)this).animator).isActiveAndEnabled && !((Object)(object)((Selectable)this).animator.runtimeAnimatorController == (Object)null) && !string.IsNullOrEmpty(triggername))
+		if (!(base.animator == null) && base.animator.enabled && base.animator.isActiveAndEnabled && !(base.animator.runtimeAnimatorController == null) && !string.IsNullOrEmpty(triggername))
 		{
-			((Selectable)this).animator.ResetTrigger(_disabledHighlightedTrigger);
-			((Selectable)this).animator.SetTrigger(triggername);
+			base.animator.ResetTrigger(_disabledHighlightedTrigger);
+			base.animator.SetTrigger(triggername);
 		}
 	}
 
 	public override void OnSelect(BaseEventData eventData)
 	{
-		((Selectable)this).OnSelect(eventData);
+		base.OnSelect(eventData);
 		EvaluateHightlightDisabled(isSelected: true);
 	}
 
 	public override void OnDeselect(BaseEventData eventData)
 	{
-		((Selectable)this).OnDeselect(eventData);
+		base.OnDeselect(eventData);
 		EvaluateHightlightDisabled(isSelected: false);
 	}
 
 	private void EvaluateHightlightDisabled(bool isSelected)
 	{
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0025: Unknown result type (might be due to invalid IL or missing references)
 		if (!isSelected)
 		{
 			if (isHighlightDisabled)
 			{
 				isHighlightDisabled = false;
-				SelectionState val = (SelectionState)(isDisabled ? 4 : ((int)((Selectable)this).currentSelectionState));
-				((Selectable)this).DoStateTransition(val, false);
+				SelectionState state = (isDisabled ? SelectionState.Disabled : base.currentSelectionState);
+				DoStateTransition(state, instant: false);
 			}
 		}
 		else if (isDisabled)
 		{
 			isHighlightDisabled = true;
-			((Selectable)this).DoStateTransition((SelectionState)4, false);
+			DoStateTransition(SelectionState.Disabled, instant: false);
 		}
 	}
 
@@ -362,7 +264,7 @@ public class CustomSlider : Slider, ICustomSelectable, ICancelHandler, IEventSys
 	{
 		if (this._CancelEvent != null)
 		{
-			this._CancelEvent.Invoke();
+			this._CancelEvent();
 		}
 	}
 }

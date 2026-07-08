@@ -61,10 +61,8 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 			return buttonState;
 		}
 
-		public void SetButtonState(int button, FramePressState stateForMouseButton, PlayerPointerEventData data)
+		public void SetButtonState(int button, PointerEventData.FramePressState stateForMouseButton, PlayerPointerEventData data)
 		{
-			//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000e: Unknown result type (might be due to invalid IL or missing references)
 			ButtonState buttonState = GetButtonState(button);
 			buttonState.eventData.buttonState = stateForMouseButton;
 			buttonState.eventData.buttonData = data;
@@ -73,31 +71,24 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 	public class MouseButtonEventData
 	{
-		public FramePressState buttonState;
+		public PointerEventData.FramePressState buttonState;
 
 		public PlayerPointerEventData buttonData;
 
 		public bool PressedThisFrame()
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Invalid comparison between Unknown and I4
-			if ((int)buttonState != 0)
+			if (buttonState != PointerEventData.FramePressState.Pressed)
 			{
-				return (int)buttonState == 2;
+				return buttonState == PointerEventData.FramePressState.PressedAndReleased;
 			}
 			return true;
 		}
 
 		public bool ReleasedThisFrame()
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0007: Invalid comparison between Unknown and I4
-			//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0010: Invalid comparison between Unknown and I4
-			if ((int)buttonState != 1)
+			if (buttonState != PointerEventData.FramePressState.Released)
 			{
-				return (int)buttonState == 2;
+				return buttonState == PointerEventData.FramePressState.PressedAndReleased;
 			}
 			return true;
 		}
@@ -173,10 +164,8 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		{
 			get
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000c: Invalid comparison between Unknown and I4
 				TryUpdate();
-				return (int)Cursor.lockState == 1;
+				return Cursor.lockState == CursorLockMode.Locked;
 			}
 		}
 
@@ -193,10 +182,8 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		{
 			get
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000b: Unknown result type (might be due to invalid IL or missing references)
 				TryUpdate();
-				return Vector2.op_Implicit(Input.mousePosition);
+				return Input.mousePosition;
 			}
 		}
 
@@ -204,9 +191,6 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		{
 			get
 			{
-				//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0012: Unknown result type (might be due to invalid IL or missing references)
 				TryUpdate();
 				return m_MousePosition - m_MousePositionPrev;
 			}
@@ -216,7 +200,6 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		{
 			get
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
 				TryUpdate();
 				return Input.mouseScrollDelta;
 			}
@@ -260,23 +243,17 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 		Touch ITouchInputSource.GetTouch(int index)
 		{
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
 			TryUpdate();
 			return Input.GetTouch(index);
 		}
 
 		private void TryUpdate()
 		{
-			//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0030: Unknown result type (might be due to invalid IL or missing references)
 			if (Time.frameCount != m_LastUpdatedFrame)
 			{
 				m_LastUpdatedFrame = Time.frameCount;
 				m_MousePositionPrev = m_MousePosition;
-				m_MousePosition = Vector2.op_Implicit(Input.mousePosition);
+				m_MousePosition = Input.mousePosition;
 			}
 		}
 	}
@@ -317,9 +294,9 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		}
 	}
 
-	private IMouseInputSource defaultMouseInputSource => (IMouseInputSource)(object)defaultInputSource;
+	private IMouseInputSource defaultMouseInputSource => defaultInputSource;
 
-	protected ITouchInputSource defaultTouchInputSource => (ITouchInputSource)(object)defaultInputSource;
+	protected ITouchInputSource defaultTouchInputSource => defaultInputSource;
 
 	protected virtual bool isMouseSupported
 	{
@@ -360,12 +337,12 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		int num = 0;
 		for (int i = 0; i < count; i++)
 		{
-			IMouseInputSource val = m_MouseInputSourcesList[i];
-			if (!UnityTools.IsNullOrDestroyed<IMouseInputSource>(val) && val.playerId == playerId)
+			IMouseInputSource mouseInputSource = m_MouseInputSourcesList[i];
+			if (!UnityTools.IsNullOrDestroyed(mouseInputSource) && mouseInputSource.playerId == playerId)
 			{
 				if (mouseIndex == num)
 				{
-					return val;
+					return mouseInputSource;
 				}
 				num++;
 			}
@@ -384,7 +361,7 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 	public void AddMouseInputSource(IMouseInputSource source)
 	{
-		if (UnityTools.IsNullOrDestroyed<IMouseInputSource>(source))
+		if (UnityTools.IsNullOrDestroyed(source))
 		{
 			throw new ArgumentNullException("source");
 		}
@@ -401,8 +378,8 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		int num = 0;
 		for (int i = 0; i < count; i++)
 		{
-			IMouseInputSource val = m_MouseInputSourcesList[i];
-			if (!UnityTools.IsNullOrDestroyed<IMouseInputSource>(val) && val.playerId == playerId)
+			IMouseInputSource mouseInputSource = m_MouseInputSourcesList[i];
+			if (!UnityTools.IsNullOrDestroyed(mouseInputSource) && mouseInputSource.playerId == playerId)
 			{
 				num++;
 			}
@@ -412,7 +389,7 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 	public ITouchInputSource GetTouchInputSource(int playerId, int sourceIndex)
 	{
-		if (!UnityTools.IsNullOrDestroyed<ITouchInputSource>(m_UserDefaultTouchInputSource))
+		if (!UnityTools.IsNullOrDestroyed(m_UserDefaultTouchInputSource))
 		{
 			return m_UserDefaultTouchInputSource;
 		}
@@ -433,7 +410,7 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 	public void AddTouchInputSource(ITouchInputSource source)
 	{
-		if (UnityTools.IsNullOrDestroyed<ITouchInputSource>(source))
+		if (UnityTools.IsNullOrDestroyed(source))
 		{
 			throw new ArgumentNullException("source");
 		}
@@ -496,14 +473,13 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 	private PlayerPointerEventData CreatePointerEventData(int playerId, int pointerIndex, int pointerTypeId, PointerEventType pointerEventType)
 	{
-		PlayerPointerEventData obj = new PlayerPointerEventData(((BaseInputModule)this).eventSystem)
+		PlayerPointerEventData playerPointerEventData = new PlayerPointerEventData(base.eventSystem)
 		{
 			playerId = playerId,
-			inputSourceIndex = pointerIndex
+			inputSourceIndex = pointerIndex,
+			pointerId = pointerTypeId,
+			sourceType = pointerEventType
 		};
-		((PointerEventData)obj).pointerId = pointerTypeId;
-		obj.sourceType = pointerEventType;
-		PlayerPointerEventData playerPointerEventData = obj;
 		switch (pointerEventType)
 		{
 		case PointerEventType.Mouse:
@@ -536,72 +512,40 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 	{
 		if (m_PlayerPointerData.TryGetValue(data.playerId, out var value) && (uint)data.inputSourceIndex < (uint)value.Length)
 		{
-			value[data.inputSourceIndex].Remove(((PointerEventData)data).pointerId);
+			value[data.inputSourceIndex].Remove(data.pointerId);
 		}
 	}
 
 	protected PlayerPointerEventData GetTouchPointerEventData(int playerId, int touchDeviceIndex, Touch input, out bool pressed, out bool released)
 	{
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0027: Invalid comparison between Unknown and I4
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Invalid comparison between Unknown and I4
-		//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0041: Invalid comparison between Unknown and I4
-		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0072: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0077: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0084: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ad: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
 		PlayerPointerEventData data;
-		bool pointerData = GetPointerData(playerId, touchDeviceIndex, ((Touch)(ref input)).fingerId, out data, create: true, PointerEventType.Touch);
-		((AbstractEventData)data).Reset();
-		pressed = pointerData || (int)((Touch)(ref input)).phase == 0;
-		released = (int)((Touch)(ref input)).phase == 4 || (int)((Touch)(ref input)).phase == 3;
+		bool pointerData = GetPointerData(playerId, touchDeviceIndex, input.fingerId, out data, create: true, PointerEventType.Touch);
+		data.Reset();
+		pressed = pointerData || input.phase == TouchPhase.Began;
+		released = input.phase == TouchPhase.Canceled || input.phase == TouchPhase.Ended;
 		if (pointerData)
 		{
-			((PointerEventData)data).position = ((Touch)(ref input)).position;
+			data.position = input.position;
 		}
 		if (pressed)
 		{
-			((PointerEventData)data).delta = Vector2.zero;
+			data.delta = Vector2.zero;
 		}
 		else
 		{
-			((PointerEventData)data).delta = ((Touch)(ref input)).position - ((PointerEventData)data).position;
+			data.delta = input.position - data.position;
 		}
-		((PointerEventData)data).position = ((Touch)(ref input)).position;
-		((PointerEventData)data).button = (InputButton)0;
-		((BaseInputModule)this).eventSystem.RaycastAll((PointerEventData)(object)data, base.m_RaycastResultCache);
-		RaycastResult pointerCurrentRaycast = BaseInputModule.FindFirstRaycast(base.m_RaycastResultCache);
-		((PointerEventData)data).pointerCurrentRaycast = pointerCurrentRaycast;
-		base.m_RaycastResultCache.Clear();
+		data.position = input.position;
+		data.button = PointerEventData.InputButton.Left;
+		base.eventSystem.RaycastAll(data, m_RaycastResultCache);
+		RaycastResult pointerCurrentRaycast = BaseInputModule.FindFirstRaycast(m_RaycastResultCache);
+		data.pointerCurrentRaycast = pointerCurrentRaycast;
+		m_RaycastResultCache.Clear();
 		return data;
 	}
 
 	protected virtual MouseState GetMousePointerEventData(int playerId, int mouseIndex)
 	{
-		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0035: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0051: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0083: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ac: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0069: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0070: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_014a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0160: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0177: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01aa: Unknown result type (might be due to invalid IL or missing references)
 		IMouseInputSource mouseInputSource = GetMouseInputSource(playerId, mouseIndex);
 		if (mouseInputSource == null)
 		{
@@ -609,39 +553,39 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		}
 		PlayerPointerEventData data;
 		bool pointerData = GetPointerData(playerId, mouseIndex, -1, out data, create: true, PointerEventType.Mouse);
-		((AbstractEventData)data).Reset();
+		data.Reset();
 		if (pointerData)
 		{
-			((PointerEventData)data).position = mouseInputSource.screenPosition;
+			data.position = mouseInputSource.screenPosition;
 		}
 		Vector2 screenPosition = mouseInputSource.screenPosition;
 		if (mouseInputSource.locked || !mouseInputSource.enabled)
 		{
-			((PointerEventData)data).position = new Vector2(-1f, -1f);
-			((PointerEventData)data).delta = Vector2.zero;
+			data.position = new Vector2(-1f, -1f);
+			data.delta = Vector2.zero;
 		}
 		else
 		{
-			((PointerEventData)data).delta = screenPosition - ((PointerEventData)data).position;
-			((PointerEventData)data).position = screenPosition;
+			data.delta = screenPosition - data.position;
+			data.position = screenPosition;
 		}
-		((PointerEventData)data).scrollDelta = mouseInputSource.wheelDelta;
-		((PointerEventData)data).button = (InputButton)0;
-		((BaseInputModule)this).eventSystem.RaycastAll((PointerEventData)(object)data, base.m_RaycastResultCache);
-		RaycastResult pointerCurrentRaycast = BaseInputModule.FindFirstRaycast(base.m_RaycastResultCache);
-		((PointerEventData)data).pointerCurrentRaycast = pointerCurrentRaycast;
-		base.m_RaycastResultCache.Clear();
+		data.scrollDelta = mouseInputSource.wheelDelta;
+		data.button = PointerEventData.InputButton.Left;
+		base.eventSystem.RaycastAll(data, m_RaycastResultCache);
+		RaycastResult pointerCurrentRaycast = BaseInputModule.FindFirstRaycast(m_RaycastResultCache);
+		data.pointerCurrentRaycast = pointerCurrentRaycast;
+		m_RaycastResultCache.Clear();
 		GetPointerData(playerId, mouseIndex, -2, out var data2, create: true, PointerEventType.Mouse);
-		CopyFromTo((PointerEventData)(object)data, (PointerEventData)(object)data2);
-		((PointerEventData)data2).button = (InputButton)1;
+		CopyFromTo(data, data2);
+		data2.button = PointerEventData.InputButton.Right;
 		GetPointerData(playerId, mouseIndex, -3, out var data3, create: true, PointerEventType.Mouse);
-		CopyFromTo((PointerEventData)(object)data, (PointerEventData)(object)data3);
-		((PointerEventData)data3).button = (InputButton)2;
+		CopyFromTo(data, data3);
+		data3.button = PointerEventData.InputButton.Middle;
 		for (int i = 3; i < mouseInputSource.buttonCount; i++)
 		{
 			GetPointerData(playerId, mouseIndex, -2147483520 + i, out var data4, create: true, PointerEventType.Mouse);
-			CopyFromTo((PointerEventData)(object)data, (PointerEventData)(object)data4);
-			((PointerEventData)data4).button = (InputButton)(-1);
+			CopyFromTo(data, data4);
+			data4.button = (PointerEventData.InputButton)(-1);
 		}
 		m_MouseState.SetButtonState(0, StateForMouseButton(playerId, mouseIndex, 0), data);
 		m_MouseState.SetButtonState(1, StateForMouseButton(playerId, mouseIndex, 1), data2);
@@ -681,47 +625,20 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 	private static bool ShouldStartDrag(Vector2 pressPos, Vector2 currentPos, float threshold, bool useDragThreshold)
 	{
-		//IL_0005: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
 		if (!useDragThreshold)
 		{
 			return true;
 		}
-		Vector2 val = pressPos - currentPos;
-		return ((Vector2)(ref val)).sqrMagnitude >= threshold * threshold;
+		return (pressPos - currentPos).sqrMagnitude >= threshold * threshold;
 	}
 
 	protected virtual void ProcessMove(PlayerPointerEventData pointerEvent)
 	{
-		//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0055: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-		RaycastResult pointerCurrentRaycast;
-		GameObject val;
+		GameObject newEnterTarget;
 		if (pointerEvent.sourceType == PointerEventType.Mouse)
 		{
 			IMouseInputSource mouseInputSource = GetMouseInputSource(pointerEvent.playerId, pointerEvent.inputSourceIndex);
-			if (mouseInputSource != null)
-			{
-				object obj;
-				if (mouseInputSource.enabled && !mouseInputSource.locked)
-				{
-					pointerCurrentRaycast = ((PointerEventData)pointerEvent).pointerCurrentRaycast;
-					obj = ((RaycastResult)(ref pointerCurrentRaycast)).gameObject;
-				}
-				else
-				{
-					obj = null;
-				}
-				val = (GameObject)obj;
-			}
-			else
-			{
-				val = null;
-			}
+			newEnterTarget = ((mouseInputSource == null) ? null : ((!mouseInputSource.enabled || mouseInputSource.locked) ? null : pointerEvent.pointerCurrentRaycast.gameObject));
 		}
 		else
 		{
@@ -729,17 +646,14 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 			{
 				throw new NotImplementedException();
 			}
-			pointerCurrentRaycast = ((PointerEventData)pointerEvent).pointerCurrentRaycast;
-			val = ((RaycastResult)(ref pointerCurrentRaycast)).gameObject;
+			newEnterTarget = pointerEvent.pointerCurrentRaycast.gameObject;
 		}
-		((BaseInputModule)this).HandlePointerExitAndEnter((PointerEventData)(object)pointerEvent, val);
+		HandlePointerExitAndEnter(pointerEvent, newEnterTarget);
 	}
 
 	protected virtual void ProcessDrag(PlayerPointerEventData pointerEvent)
 	{
-		//IL_004f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0055: Unknown result type (might be due to invalid IL or missing references)
-		if (!((PointerEventData)pointerEvent).IsPointerMoving() || (Object)(object)((PointerEventData)pointerEvent).pointerDrag == (Object)null)
+		if (!pointerEvent.IsPointerMoving() || pointerEvent.pointerDrag == null)
 		{
 			return;
 		}
@@ -751,21 +665,21 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 				return;
 			}
 		}
-		if (!((PointerEventData)pointerEvent).dragging && ShouldStartDrag(((PointerEventData)pointerEvent).pressPosition, ((PointerEventData)pointerEvent).position, ((BaseInputModule)this).eventSystem.pixelDragThreshold, ((PointerEventData)pointerEvent).useDragThreshold))
+		if (!pointerEvent.dragging && ShouldStartDrag(pointerEvent.pressPosition, pointerEvent.position, base.eventSystem.pixelDragThreshold, pointerEvent.useDragThreshold))
 		{
-			ExecuteEvents.Execute<IBeginDragHandler>(((PointerEventData)pointerEvent).pointerDrag, (BaseEventData)(object)pointerEvent, ExecuteEvents.beginDragHandler);
-			((PointerEventData)pointerEvent).dragging = true;
+			ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.beginDragHandler);
+			pointerEvent.dragging = true;
 		}
-		if (((PointerEventData)pointerEvent).dragging)
+		if (pointerEvent.dragging)
 		{
-			if ((Object)(object)((PointerEventData)pointerEvent).pointerPress != (Object)(object)((PointerEventData)pointerEvent).pointerDrag)
+			if (pointerEvent.pointerPress != pointerEvent.pointerDrag)
 			{
-				ExecuteEvents.Execute<IPointerUpHandler>(((PointerEventData)pointerEvent).pointerPress, (BaseEventData)(object)pointerEvent, ExecuteEvents.pointerUpHandler);
-				((PointerEventData)pointerEvent).eligibleForClick = false;
-				((PointerEventData)pointerEvent).pointerPress = null;
-				((PointerEventData)pointerEvent).rawPointerPress = null;
+				ExecuteEvents.Execute(pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerUpHandler);
+				pointerEvent.eligibleForClick = false;
+				pointerEvent.pointerPress = null;
+				pointerEvent.rawPointerPress = null;
 			}
-			ExecuteEvents.Execute<IDragHandler>(((PointerEventData)pointerEvent).pointerDrag, (BaseEventData)(object)pointerEvent, ExecuteEvents.dragHandler);
+			ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.dragHandler);
 		}
 	}
 
@@ -776,7 +690,7 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 			Dictionary<int, PlayerPointerEventData>[] value = playerPointerDatum.Value;
 			for (int i = 0; i < value.Length; i++)
 			{
-				if (value[i].TryGetValue(pointerTypeId, out var value2) && (Object)(object)((PointerEventData)value2).pointerEnter != (Object)null)
+				if (value[i].TryGetValue(pointerTypeId, out var value2) && value2.pointerEnter != null)
 				{
 					return true;
 				}
@@ -787,7 +701,7 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 	protected void ClearSelection()
 	{
-		BaseEventData baseEventData = ((BaseInputModule)this).GetBaseEventData();
+		BaseEventData baseEventData = GetBaseEventData();
 		foreach (KeyValuePair<int, Dictionary<int, PlayerPointerEventData>[]> playerPointerDatum in m_PlayerPointerData)
 		{
 			Dictionary<int, PlayerPointerEventData>[] value = playerPointerDatum.Value;
@@ -795,17 +709,17 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 			{
 				foreach (KeyValuePair<int, PlayerPointerEventData> item in value[i])
 				{
-					((BaseInputModule)this).HandlePointerExitAndEnter((PointerEventData)(object)item.Value, (GameObject)null);
+					HandlePointerExitAndEnter(item.Value, null);
 				}
 				value[i].Clear();
 			}
 		}
-		((BaseInputModule)this).eventSystem.SetSelectedGameObject((GameObject)null, baseEventData);
+		base.eventSystem.SetSelectedGameObject(null, baseEventData);
 	}
 
 	public override string ToString()
 	{
-		StringBuilder stringBuilder = new StringBuilder("<b>Pointer Input Module of type: </b>" + ((object)this).GetType());
+		StringBuilder stringBuilder = new StringBuilder("<b>Pointer Input Module of type: </b>" + GetType());
 		stringBuilder.AppendLine();
 		foreach (KeyValuePair<int, Dictionary<int, PlayerPointerEventData>[]> playerPointerDatum in m_PlayerPointerData)
 		{
@@ -817,7 +731,7 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 				foreach (KeyValuePair<int, PlayerPointerEventData> item in value[i])
 				{
 					stringBuilder.AppendLine("<B>Button Id:</b> " + item.Key);
-					stringBuilder.AppendLine(((object)item.Value).ToString());
+					stringBuilder.AppendLine(item.Value.ToString());
 				}
 			}
 		}
@@ -826,18 +740,14 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 
 	protected void DeselectIfSelectionChanged(GameObject currentOverGo, BaseEventData pointerEvent)
 	{
-		if ((Object)(object)ExecuteEvents.GetEventHandler<ISelectHandler>(currentOverGo) != (Object)(object)((BaseInputModule)this).eventSystem.currentSelectedGameObject)
+		if (ExecuteEvents.GetEventHandler<ISelectHandler>(currentOverGo) != base.eventSystem.currentSelectedGameObject)
 		{
-			((BaseInputModule)this).eventSystem.SetSelectedGameObject((GameObject)null, pointerEvent);
+			base.eventSystem.SetSelectedGameObject(null, pointerEvent);
 		}
 	}
 
 	protected void CopyFromTo(PointerEventData from, PointerEventData to)
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
 		to.position = from.position;
 		to.delta = from.delta;
 		to.scrollDelta = from.scrollDelta;
@@ -845,27 +755,27 @@ public abstract class RewiredPointerInputModule : BaseInputModule
 		to.pointerEnter = from.pointerEnter;
 	}
 
-	protected FramePressState StateForMouseButton(int playerId, int mouseIndex, int buttonId)
+	protected PointerEventData.FramePressState StateForMouseButton(int playerId, int mouseIndex, int buttonId)
 	{
 		IMouseInputSource mouseInputSource = GetMouseInputSource(playerId, mouseIndex);
-		if (mouseInputSource != null)
+		if (mouseInputSource == null)
 		{
-			bool buttonDown = mouseInputSource.GetButtonDown(buttonId);
-			bool buttonUp = mouseInputSource.GetButtonUp(buttonId);
-			if (!(buttonDown && buttonUp))
-			{
-				if (!buttonDown)
-				{
-					if (!buttonUp)
-					{
-						return (FramePressState)3;
-					}
-					return (FramePressState)1;
-				}
-				return (FramePressState)0;
-			}
-			return (FramePressState)2;
+			return PointerEventData.FramePressState.NotChanged;
 		}
-		return (FramePressState)3;
+		bool buttonDown = mouseInputSource.GetButtonDown(buttonId);
+		bool buttonUp = mouseInputSource.GetButtonUp(buttonId);
+		if (buttonDown && buttonUp)
+		{
+			return PointerEventData.FramePressState.PressedAndReleased;
+		}
+		if (buttonDown)
+		{
+			return PointerEventData.FramePressState.Pressed;
+		}
+		if (buttonUp)
+		{
+			return PointerEventData.FramePressState.Released;
+		}
+		return PointerEventData.FramePressState.NotChanged;
 	}
 }

@@ -12,18 +12,18 @@ public sealed class DebugUtilities : MonoBehaviour
 
 	public async void Initialize()
 	{
-		((MonoBehaviour)this).StartCoroutine(FpsAsync());
+		StartCoroutine(FpsAsync());
 	}
 
 	private IEnumerator FpsAsync()
 	{
 		while (true)
 		{
-			if (Input.GetKeyDown((KeyCode)115) && Time.timeScale == 1f)
+			if (Input.GetKeyDown(KeyCode.S) && Time.timeScale == 1f)
 			{
 				Time.timeScale = 10f;
 			}
-			if (Input.GetKeyUp((KeyCode)115) && Time.timeScale == 10f)
+			if (Input.GetKeyUp(KeyCode.S) && Time.timeScale == 10f)
 			{
 				Time.timeScale = 1f;
 			}

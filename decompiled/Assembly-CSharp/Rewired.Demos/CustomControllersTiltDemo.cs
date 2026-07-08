@@ -15,44 +15,30 @@ public class CustomControllersTiltDemo : MonoBehaviour
 
 	private void Awake()
 	{
-		//IL_0040: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004a: Expected O, but got Unknown
-		Screen.orientation = (ScreenOrientation)3;
+		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		player = ReInput.players.GetPlayer(0);
 		ReInput.InputSourceUpdateEvent += OnInputUpdate;
-		controller = (CustomController)player.controllers.GetControllerWithTag((ControllerType)20, "TiltController");
+		controller = (CustomController)player.controllers.GetControllerWithTag(ControllerType.Custom, "TiltController");
 	}
 
 	private void Update()
 	{
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0063: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0071: Unknown result type (might be due to invalid IL or missing references)
-		if (!((Object)(object)target == (Object)null))
+		if (!(target == null))
 		{
-			Vector3 val = Vector3.zero;
-			val.y = player.GetAxis("Tilt Vertical");
-			val.x = player.GetAxis("Tilt Horizontal");
-			if (((Vector3)(ref val)).sqrMagnitude > 1f)
+			Vector3 zero = Vector3.zero;
+			zero.y = player.GetAxis("Tilt Vertical");
+			zero.x = player.GetAxis("Tilt Horizontal");
+			if (zero.sqrMagnitude > 1f)
 			{
-				((Vector3)(ref val)).Normalize();
+				zero.Normalize();
 			}
-			val *= Time.deltaTime;
-			target.Translate(val * speed);
+			zero *= Time.deltaTime;
+			target.Translate(zero * speed);
 		}
 	}
 
 	private void OnInputUpdate()
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0005: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
 		Vector3 acceleration = Input.acceleration;
 		controller.SetAxisValue(0, acceleration.x);
 		controller.SetAxisValue(1, acceleration.y);

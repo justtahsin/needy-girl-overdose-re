@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UniRx;
@@ -30,42 +29,40 @@ public class TMPStencilSetter : MonoBehaviour
 
 	public void SetStencil()
 	{
-		//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0044: Expected O, but got Unknown
 		if (!_active)
 		{
 			_subMeshSubscribe?.Dispose();
 			_matInstances = new List<Material>();
-			_tmpText = ((Component)this).GetComponent<TMP_Text>();
-			Material val = new Material(_tmpText.fontMaterial);
-			val.SetFloat("_StencilComp", 3f);
-			val.SetFloat("_Stencil", (float)_stencil);
-			_tmpText.fontSharedMaterial = val;
-			_matInstances.Add(val);
-			_subMeshSubscribe = DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>(ObserveExtensions.ObserveEveryValueChanged<Transform, int>(((Component)this).transform, (Func<Transform, int>)((Transform x) => x.childCount), (FrameCountType)0, false), (Action<int>)delegate
+			_tmpText = GetComponent<TMP_Text>();
+			Material material = new Material(_tmpText.fontMaterial);
+			material.SetFloat("_StencilComp", 3f);
+			material.SetFloat("_Stencil", _stencil);
+			_tmpText.fontSharedMaterial = material;
+			_matInstances.Add(material);
+			_subMeshSubscribe = base.transform.ObserveEveryValueChanged((Transform x) => x.childCount).Subscribe(delegate
 			{
 				SetSubmeshMaterial();
-			}), (Component)(object)this);
+			}).AddTo(this);
 		}
 	}
 
 	private async void SetSubmeshMaterial()
 	{
-		await UniTask.DelayFrame(1, (PlayerLoopTiming)8, default(CancellationToken), false);
-		MeshRenderer[] componentsInChildren = ((Component)this).GetComponentsInChildren<MeshRenderer>();
+		await UniTask.DelayFrame(1);
+		MeshRenderer[] componentsInChildren = GetComponentsInChildren<MeshRenderer>();
 		if (componentsInChildren.Length == 1)
 		{
 			return;
 		}
 		for (int i = 1; i < componentsInChildren.Length; i++)
 		{
-			if (((Renderer)componentsInChildren[i]).material.GetFloat("_Stencil") != (float)_stencil)
+			if (componentsInChildren[i].material.GetFloat("_Stencil") != (float)_stencil)
 			{
-				Material val = new Material(((Renderer)componentsInChildren[i]).material);
-				val.SetFloat("_StencilComp", 3f);
-				val.SetFloat("_Stencil", (float)_stencil);
-				((Renderer)componentsInChildren[i]).material = val;
-				_matInstances.Add(val);
+				Material material = new Material(componentsInChildren[i].material);
+				material.SetFloat("_StencilComp", 3f);
+				material.SetFloat("_Stencil", _stencil);
+				componentsInChildren[i].material = material;
+				_matInstances.Add(material);
 			}
 		}
 		_subMeshSubscribe.Dispose();
@@ -75,7 +72,7 @@ public class TMPStencilSetter : MonoBehaviour
 	{
 		foreach (Material matInstance in _matInstances)
 		{
-			Object.Destroy((Object)(object)matInstance);
+			UnityEngine.Object.Destroy(matInstance);
 		}
 	}
 }

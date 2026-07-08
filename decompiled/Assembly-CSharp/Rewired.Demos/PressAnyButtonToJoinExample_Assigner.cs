@@ -16,25 +16,24 @@ public class PressAnyButtonToJoinExample_Assigner : MonoBehaviour
 
 	private void AssignJoysticksToPlayers()
 	{
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
 		IList<Joystick> joysticks = ReInput.controllers.Joysticks;
 		for (int i = 0; i < joysticks.Count; i++)
 		{
-			Joystick val = joysticks[i];
-			if (!ReInput.controllers.IsControllerAssigned(((Controller)val).type, ((Controller)val).id) && ((Controller)val).GetAnyButtonDown())
+			Joystick joystick = joysticks[i];
+			if (!ReInput.controllers.IsControllerAssigned(joystick.type, joystick.id) && joystick.GetAnyButtonDown())
 			{
-				Player val2 = FindPlayerWithoutJoystick();
-				if (val2 == null)
+				Player player = FindPlayerWithoutJoystick();
+				if (player == null)
 				{
 					return;
 				}
-				val2.controllers.AddController((Controller)(object)val, false);
+				player.controllers.AddController(joystick, removeFromOtherPlayers: false);
 			}
 		}
 		if (DoAllPlayersHaveJoysticks())
 		{
 			ReInput.configuration.autoAssignJoysticks = true;
-			((Behaviour)this).enabled = false;
+			base.enabled = false;
 		}
 	}
 

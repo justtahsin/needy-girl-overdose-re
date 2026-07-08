@@ -1,12 +1,8 @@
-using System;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using NGO;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ngov3;
@@ -59,41 +55,41 @@ public class SliderManager : MonoBehaviour
 		ValueChangeDisp();
 		label.text = NgoEx.StatusLabelFromType(type, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		icon.sprite = LoadStatusData.ReadstatusContent(type)?.StatusIcon;
-		((UnityEvent<float>)(object)slider.onValueChanged).AddListener((UnityAction<float>)delegate
+		slider.onValueChanged.AddListener(delegate
 		{
 			ValueChangeDisp();
 		});
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)status.currentValue, (Action<int>)delegate(int x)
+		status.currentValue.Subscribe(delegate(int x)
 		{
 			NewValue(x);
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)status.maxValue, (Action<int>)delegate(int x)
+		}).AddTo(base.gameObject);
+		status.maxValue.Subscribe(delegate(int x)
 		{
 			NewMaxValue(x);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 		if (isSummingDelta)
 		{
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)status.todaysDelta, (Action<int>)delegate(int x)
+			status.todaysDelta.Subscribe(delegate(int x)
 			{
 				NewDelta(x);
-			}), ((Component)this).gameObject);
+			}).AddTo(base.gameObject);
 		}
 		else
 		{
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)status.delta, (Action<int>)delegate(int x)
+			status.delta.Subscribe(delegate(int x)
 			{
 				NewDelta(x);
-			}), ((Component)this).gameObject);
+			}).AddTo(base.gameObject);
 		}
 	}
 
 	private void NewValue(int newValue)
 	{
-		TweenExtensions.Play<TweenerCore<float, float, FloatOptions>>(TweenSettingsExtensions.SetEase<TweenerCore<float, float, FloatOptions>>(DOTween.To((DOGetter<float>)(() => slider.value), (DOSetter<float>)delegate(float x)
+		DOTween.To(() => slider.value, delegate(float x)
 		{
 			slider.value = x;
-		}, (float)newValue, 0.4f), (Ease)8));
-		TweenExtensions.Play<TweenerCore<string, string, StringOptions>>(ShortcutExtensionsTMPText.DOText(statusTopic, getTopic(status.statusType, newValue), 0.6f, true, (ScrambleMode)0, (string)null));
+		}, newValue, 0.4f).SetEase(Ease.InCubic).Play();
+		statusTopic.DOText(getTopic(status.statusType, newValue), 0.6f).Play();
 	}
 
 	private void NewMaxValue(int newValue)
@@ -103,26 +99,22 @@ public class SliderManager : MonoBehaviour
 
 	private void NewDelta(int newValue)
 	{
-		//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0060: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0065: Unknown result type (might be due to invalid IL or missing references)
 		if (newValue == 0)
 		{
-			((Component)icon).gameObject.SetActive(true);
-			((Component)diffText).gameObject.SetActive(false);
+			icon.gameObject.SetActive(value: true);
+			diffText.gameObject.SetActive(value: false);
 			return;
 		}
-		((Component)diffText).gameObject.SetActive(true);
-		((Component)icon).gameObject.SetActive(false);
+		diffText.gameObject.SetActive(value: true);
+		icon.gameObject.SetActive(value: false);
 		if (newValue > 0)
 		{
-			((Graphic)diffText).color = Color32.op_Implicit(new Color32((byte)82, (byte)124, (byte)231, byte.MaxValue));
+			diffText.color = new Color32(82, 124, 231, byte.MaxValue);
 			diffText.text = "+" + newValue;
 		}
 		else
 		{
-			((Graphic)diffText).color = Color32.op_Implicit(new Color32((byte)231, (byte)82, (byte)82, byte.MaxValue));
+			diffText.color = new Color32(231, 82, 82, byte.MaxValue);
 			diffText.text = newValue.ToString();
 		}
 	}

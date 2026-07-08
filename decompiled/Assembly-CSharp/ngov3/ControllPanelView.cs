@@ -126,38 +126,40 @@ public class ControllPanelView : MonoBehaviour
 
 	public void Start()
 	{
-		_windowSettingView.SetActive(true);
-		_vibrationSettingView.SetActive(false);
-		IObservable<float> observable = Observable.Share<float>(UnityUIComponentExtensions.OnValueChangedAsObservable(_bgmValueSlider));
-		IObservable<float> observable2 = Observable.Share<float>(UnityUIComponentExtensions.OnValueChangedAsObservable(_seValueSlider));
+		_windowSettingView.SetActive(value: true);
+		_vibrationSettingView.SetActive(value: false);
+		IObservable<float> source = _bgmValueSlider.OnValueChangedAsObservable().Share();
+		IObservable<float> source2 = _seValueSlider.OnValueChangedAsObservable().Share();
 		initialBgmVolume = SingletonMonoBehaviour<Settings>.Instance.BgmVolume;
 		initialSeVolume = SingletonMonoBehaviour<Settings>.Instance.SeVolume;
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(Observable.Select<float, float>(observable, (Func<float, float>)((float v) => v)), (Action<float>)delegate(float v)
+		source.Select((float v) => v).Subscribe(delegate(float v)
 		{
 			float value = Mathf.Floor(v) * 0.01f;
 			_audioManager.ChangeVolume(SoundCategory.BGM, value);
 			_audioManager.ChangeVolume(SoundCategory.BANK, value);
 			_bgmValueText.text = Mathf.FloorToInt(v).ToString();
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(Observable.Select<float, float>(observable2, (Func<float, float>)((float v) => v * 0.01f)), (Action<float>)delegate(float v)
+		}).AddTo(base.gameObject);
+		source2.Select((float v) => v * 0.01f).Subscribe(delegate(float v)
 		{
 			_audioManager.ChangeSeVolume(v);
 			_seValueText.text = Mathf.FloorToInt(v * 100f).ToString();
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(Observable.Skip<float>(Observable.ThrottleFrame<float>(Observable.Distinct<float>(observable2), 100, (FrameCountType)0), 1), (Action<float>)delegate
-		{
-			_audioManager.PlaySeByType(SoundType.SE_per);
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_dismissButton), (Action<Unit>)delegate
+		}).AddTo(base.gameObject);
+		source2.Distinct().ThrottleFrame(100).Skip(1)
+			.Subscribe(delegate
+			{
+				_audioManager.PlaySeByType(SoundType.SE_per);
+			})
+			.AddTo(base.gameObject);
+		_dismissButton.OnClickAsObservable().Subscribe(delegate
 		{
 			ResetVolume();
 			Close();
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_submitButton), (Action<Unit>)delegate
+		}).AddTo(base.gameObject);
+		_submitButton.OnClickAsObservable().Subscribe(delegate
 		{
 			OnSubmit();
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate(LanguageType v)
+		}).AddTo(base.gameObject);
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate(LanguageType v)
 		{
 			switch (v)
 			{
@@ -195,8 +197,8 @@ public class ControllPanelView : MonoBehaviour
 				_ru.isOn = true;
 				break;
 			}
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<ResolutionType>((IObservable<ResolutionType>)SingletonMonoBehaviour<Settings>.Instance.Resolution, (Action<ResolutionType>)delegate(ResolutionType v)
+		}).AddTo(base.gameObject);
+		SingletonMonoBehaviour<Settings>.Instance.Resolution.Subscribe(delegate(ResolutionType v)
 		{
 			switch (v)
 			{
@@ -210,11 +212,11 @@ public class ControllPanelView : MonoBehaviour
 				_windowed.isOn = true;
 				break;
 			}
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 		_bgmValueSlider.value = SingletonMonoBehaviour<Settings>.Instance.BgmVolume * 100f;
 		_seValueSlider.value = SingletonMonoBehaviour<Settings>.Instance.SeVolume * 100f;
 		OnLanguageChanged();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<VibrationType>((IObservable<VibrationType>)SingletonMonoBehaviour<Settings>.Instance.VibrationType, (Action<VibrationType>)delegate(VibrationType v)
+		SingletonMonoBehaviour<Settings>.Instance.VibrationType.Subscribe(delegate(VibrationType v)
 		{
 			switch (v)
 			{
@@ -225,11 +227,11 @@ public class ControllPanelView : MonoBehaviour
 				_vibrationOff.isOn = true;
 				break;
 			}
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(((Component)this).GetComponentInParent<IWindow>()._close), (Action<Unit>)delegate
+		}).AddTo(base.gameObject);
+		GetComponentInParent<IWindow>()._close.OnClickAsObservable().Subscribe(delegate
 		{
 			ResetVolume();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void Close()
@@ -318,8 +320,8 @@ public class ControllPanelView : MonoBehaviour
 		_bgmText.text = NgoEx.SystemTextFromType(SystemTextType.Config_BGM, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		_seText.text = NgoEx.SystemTextFromType(SystemTextType.Config_SE, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		_languageTitle.text = NgoEx.SystemTextFromType(SystemTextType.Config_Language, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		((Component)_submitButton).GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		((Component)_dismissButton).GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_Cancell, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		_submitButton.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		_dismissButton.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_Cancell, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		_vibrationTitle.text = NgoEx.SystemTextFromType(SystemTextType.System_Vibration, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 	}
 
@@ -330,23 +332,23 @@ public class ControllPanelView : MonoBehaviour
 			return _selectableObjects;
 		}
 		_selectableObjects = new List<GameObject>();
-		_selectableObjects.Add(((Component)_bgmValueSlider.handleRect).gameObject);
-		_selectableObjects.Add(((Component)_seValueSlider.handleRect).gameObject);
-		_selectableObjects.Add(((Component)_jp.graphic).gameObject);
-		_selectableObjects.Add(((Component)_en.graphic).gameObject);
-		_selectableObjects.Add(((Component)_cn.graphic).gameObject);
-		_selectableObjects.Add(((Component)_ko.graphic).gameObject);
-		_selectableObjects.Add(((Component)_tw.graphic).gameObject);
-		_selectableObjects.Add(((Component)_vn.graphic).gameObject);
-		_selectableObjects.Add(((Component)_fr.graphic).gameObject);
-		_selectableObjects.Add(((Component)_it.graphic).gameObject);
-		_selectableObjects.Add(((Component)_ge.graphic).gameObject);
-		_selectableObjects.Add(((Component)_sp.graphic).gameObject);
-		_selectableObjects.Add(((Component)_max.graphic).gameObject);
-		_selectableObjects.Add(((Component)_equal.graphic).gameObject);
-		_selectableObjects.Add(((Component)_windowed.graphic).gameObject);
-		_selectableObjects.Add(((Component)_dismissButton).gameObject);
-		_selectableObjects.Add(((Component)_submitButton).gameObject);
+		_selectableObjects.Add(_bgmValueSlider.handleRect.gameObject);
+		_selectableObjects.Add(_seValueSlider.handleRect.gameObject);
+		_selectableObjects.Add(_jp.graphic.gameObject);
+		_selectableObjects.Add(_en.graphic.gameObject);
+		_selectableObjects.Add(_cn.graphic.gameObject);
+		_selectableObjects.Add(_ko.graphic.gameObject);
+		_selectableObjects.Add(_tw.graphic.gameObject);
+		_selectableObjects.Add(_vn.graphic.gameObject);
+		_selectableObjects.Add(_fr.graphic.gameObject);
+		_selectableObjects.Add(_it.graphic.gameObject);
+		_selectableObjects.Add(_ge.graphic.gameObject);
+		_selectableObjects.Add(_sp.graphic.gameObject);
+		_selectableObjects.Add(_max.graphic.gameObject);
+		_selectableObjects.Add(_equal.graphic.gameObject);
+		_selectableObjects.Add(_windowed.graphic.gameObject);
+		_selectableObjects.Add(_dismissButton.gameObject);
+		_selectableObjects.Add(_submitButton.gameObject);
 		return _selectableObjects;
 	}
 }

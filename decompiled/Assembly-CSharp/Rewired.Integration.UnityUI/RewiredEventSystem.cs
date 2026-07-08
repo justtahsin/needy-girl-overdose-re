@@ -26,24 +26,24 @@ public class RewiredEventSystem : EventSystem
 	{
 		if (alwaysUpdate)
 		{
-			EventSystem current = EventSystem.current;
-			if ((Object)(object)current != (Object)(object)this)
+			EventSystem eventSystem = EventSystem.current;
+			if (eventSystem != this)
 			{
-				EventSystem.current = (EventSystem)(object)this;
+				EventSystem.current = this;
 			}
 			try
 			{
-				((EventSystem)this).Update();
+				base.Update();
 				return;
 			}
 			finally
 			{
-				if ((Object)(object)current != (Object)(object)this)
+				if (eventSystem != this)
 				{
-					EventSystem.current = current;
+					EventSystem.current = eventSystem;
 				}
 			}
 		}
-		((EventSystem)this).Update();
+		base.Update();
 	}
 }

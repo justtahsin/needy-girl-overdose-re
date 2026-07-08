@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace ngov3;
@@ -32,6 +31,6 @@ public class FPSCounter : MonoBehaviour
 
 	private void OnGUI()
 	{
-		GUILayout.Label("FPS: " + m_fps.ToString("f2"), Array.Empty<GUILayoutOption>());
+		GUILayout.Label("FPS: " + m_fps.ToString("f2"));
 	}
 }

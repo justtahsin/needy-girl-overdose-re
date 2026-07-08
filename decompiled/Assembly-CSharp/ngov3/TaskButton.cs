@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UniRx;
@@ -28,23 +27,23 @@ public class TaskButton : MonoBehaviour
 
 	private void Awake()
 	{
-		bg = ((Component)this).GetComponent<Image>();
-		button = ((Component)this).GetComponent<Button>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(button), (Action<Unit>)delegate
+		bg = GetComponent<Image>();
+		button = GetComponent<Button>();
+		button.OnClickAsObservable().Subscribe(delegate
 		{
 			Touched();
-		}), (Component)(object)button);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)async delegate
+		}).AddTo(button);
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(async delegate
 		{
-			await UniTask.Delay(3, false, (PlayerLoopTiming)8, default(CancellationToken), false);
+			await UniTask.Delay(3);
 			SetName(window);
-		}), (Component)(object)button);
-		if ((Object)(object)SingletonMonoBehaviour<TaskbarManager>.Instance != (Object)null)
+		}).AddTo(button);
+		if (SingletonMonoBehaviour<TaskbarManager>.Instance != null)
 		{
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<bool>(ObserveExtensions.ObserveEveryValueChanged<CanvasGroup, bool>(SingletonMonoBehaviour<TaskbarManager>.Instance.TaskBarGroup, (Func<CanvasGroup, bool>)((CanvasGroup x) => x.interactable), (FrameCountType)0, false), (Action<bool>)delegate(bool x)
+			SingletonMonoBehaviour<TaskbarManager>.Instance.TaskBarGroup.ObserveEveryValueChanged((CanvasGroup x) => x.interactable).Subscribe(delegate(bool x)
 			{
 				ChangeButtonColor(x);
-			}), (Component)(object)this);
+			}).AddTo(this);
 		}
 	}
 
@@ -62,7 +61,7 @@ public class TaskButton : MonoBehaviour
 
 	public void Close()
 	{
-		Object.Destroy((Object)(object)((Component)this).gameObject);
+		UnityEngine.Object.Destroy(base.gameObject);
 	}
 
 	public void Minimize()
@@ -89,24 +88,13 @@ public class TaskButton : MonoBehaviour
 
 	private void ChangeButtonColor(bool isEnabled)
 	{
-		//IL_0038: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0040: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-		ColorBlock colors;
 		if (isEnabled)
 		{
-			Image image = ((Selectable)button).image;
-			colors = ((Selectable)button).colors;
-			((Graphic)image).color = ((ColorBlock)(ref colors)).normalColor;
+			button.image.color = button.colors.normalColor;
 		}
 		else
 		{
-			Image image2 = ((Selectable)button).image;
-			colors = ((Selectable)button).colors;
-			((Graphic)image2).color = ((ColorBlock)(ref colors)).disabledColor;
+			button.image.color = button.colors.disabledColor;
 		}
 	}
 }

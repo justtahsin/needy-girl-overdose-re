@@ -9,13 +9,13 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
 	{
 		get
 		{
-			if ((Object)(object)instance == (Object)null)
+			if (instance == null)
 			{
 				Type typeFromHandle = typeof(T);
-				instance = (T)(object)Object.FindObjectOfType(typeFromHandle);
-				if ((Object)(object)instance == (Object)null)
+				instance = (T)UnityEngine.Object.FindObjectOfType(typeFromHandle);
+				if (instance == null)
 				{
-					Debug.Log((object)(typeFromHandle?.ToString() + " をアタッチしているGameObjectはありません"));
+					Debug.Log(typeFromHandle?.ToString() + " をアタッチしているGameObjectはありません");
 				}
 			}
 			return instance;
@@ -29,24 +29,24 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
 
 	protected bool CheckInstance()
 	{
-		if ((Object)(object)instance == (Object)null)
+		if (instance == null)
 		{
-			instance = (T)(object)((this is T) ? this : null);
+			instance = this as T;
 			return true;
 		}
-		if ((Object)(object)Instance == (Object)(object)this)
+		if (Instance == this)
 		{
 			return true;
 		}
-		Object.Destroy((Object)(object)this);
+		UnityEngine.Object.Destroy(this);
 		return false;
 	}
 
 	protected virtual void OnDestroy()
 	{
-		if ((Object)(object)this == (Object)(object)instance)
+		if (this == instance)
 		{
-			instance = default(T);
+			instance = null;
 		}
 	}
 }

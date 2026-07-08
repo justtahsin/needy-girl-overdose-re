@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using NGO;
 using UnityEngine;
@@ -52,7 +51,7 @@ public class EventChooser : MonoBehaviour
 
 	private void Start()
 	{
-		ddtmp = ((Component)this).GetComponent<Dropdown>();
+		ddtmp = GetComponent<Dropdown>();
 		ddtmp.AddOptions(events);
 	}
 
@@ -62,7 +61,7 @@ public class EventChooser : MonoBehaviour
 
 	public async void OnSelected()
 	{
-		Dropdown component = ((Component)this).GetComponent<Dropdown>();
+		Dropdown component = GetComponent<Dropdown>();
 		string text = component.options[component.value].text;
 		if (text == "入力IDのPoketter表示")
 		{
@@ -80,7 +79,7 @@ public class EventChooser : MonoBehaviour
 		if (text == "入力IDのJine表示")
 		{
 			Enum.TryParse<JineType>(inputValue.text, out var result2);
-			UniTaskExtensions.Forget(SingletonMonoBehaviour<JineManager>.Instance.AddJineHistory(result2));
+			SingletonMonoBehaviour<JineManager>.Instance.AddJineHistory(result2).Forget();
 		}
 		switch (text)
 		{
@@ -108,17 +107,17 @@ public class EventChooser : MonoBehaviour
 		}
 		if (text == "あめちゃんのストレスを１０増やす")
 		{
-			UniTaskExtensions.Forget(SingletonMonoBehaviour<StatusManager>.Instance.UpdateStatus(StatusType.Stress, 10));
+			SingletonMonoBehaviour<StatusManager>.Instance.UpdateStatus(StatusType.Stress, 10).Forget();
 			ResetSelect();
 		}
 		if (text == "あめちゃんのストレスを１０減らす")
 		{
-			UniTaskExtensions.Forget(SingletonMonoBehaviour<StatusManager>.Instance.UpdateStatus(StatusType.Stress, -10));
+			SingletonMonoBehaviour<StatusManager>.Instance.UpdateStatus(StatusType.Stress, -10).Forget();
 			ResetSelect();
 		}
 		if (text == "フォロワーを１００００増やす")
 		{
-			UniTaskExtensions.Forget(SingletonMonoBehaviour<StatusManager>.Instance.UpdateStatus(StatusType.Follower, 10000));
+			SingletonMonoBehaviour<StatusManager>.Instance.UpdateStatus(StatusType.Follower, 10000).Forget();
 			ResetSelect();
 		}
 		if (text == "Scenario_horror_day1_day")
@@ -151,7 +150,7 @@ public class EventChooser : MonoBehaviour
 			List<Status> newStatus5 = GetNewStatus(29);
 			SingletonMonoBehaviour<StatusManager>.Instance.setNewStatusList(newStatus5);
 		}
-		Debug.Log((object)("デバッグEventが選択された：" + text));
+		Debug.Log("デバッグEventが選択された：" + text);
 		SingletonMonoBehaviour<EventManager>.Instance.ForceEventFlagOff();
 		SingletonMonoBehaviour<EventManager>.Instance.ClearEventQueue();
 		SingletonMonoBehaviour<EventManager>.Instance.AddEvent(text);
@@ -160,11 +159,11 @@ public class EventChooser : MonoBehaviour
 
 	private async void ResetSelect()
 	{
-		((Selectable)ddtmp).Select();
+		ddtmp.Select();
 		ddtmp.value = 0;
-		((Component)ddtmp).gameObject.SetActive(false);
-		await UniTask.DelayFrame(1, (PlayerLoopTiming)8, default(CancellationToken), false);
-		((Component)ddtmp).gameObject.SetActive(true);
+		ddtmp.gameObject.SetActive(value: false);
+		await UniTask.DelayFrame(1);
+		ddtmp.gameObject.SetActive(value: true);
 	}
 
 	private List<Status> GetNewStatus(int dayIndex)

@@ -41,7 +41,7 @@ public class TooltipCaller : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 	{
 		get
 		{
-			if ((Object)(object)parentCanvas == (Object)null)
+			if (parentCanvas == null)
 			{
 				return true;
 			}
@@ -51,7 +51,7 @@ public class TooltipCaller : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 
 	private void Start()
 	{
-		parentCanvas = ((Component)((Component)this).transform.parent).GetComponent<CanvasGroup>();
+		parentCanvas = base.transform.parent.GetComponent<CanvasGroup>();
 	}
 
 	public void OnPointerEnter(PointerEventData e)
@@ -102,33 +102,25 @@ public class TooltipCaller : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 
 	public void Show()
 	{
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-		SingletonMonoBehaviour<TooltipManager>.Instance.Show(((Component)target).transform.localPosition, type, isHoming, textNakami);
+		SingletonMonoBehaviour<TooltipManager>.Instance.Show(target.transform.localPosition, type, isHoming, textNakami);
 	}
 
 	private void Show(TooltipType type, bool isHoming, string textNakami = "")
 	{
-		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0032: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0055: Unknown result type (might be due to invalid IL or missing references)
 		if (isHoming)
 		{
 			pos = new Vector3(SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition.x - 242f, SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition.y, 0f);
 		}
 		else
 		{
-			pos = ((Component)target).transform.localPosition;
+			pos = target.transform.localPosition;
 		}
 		SingletonMonoBehaviour<TooltipManager>.Instance.Show(pos, type, isHoming, textNakami);
 	}
 
 	public void Hide()
 	{
-		if (!((Object)(object)SingletonMonoBehaviour<TooltipManager>.Instance == (Object)null))
+		if (!(SingletonMonoBehaviour<TooltipManager>.Instance == null))
 		{
 			SingletonMonoBehaviour<TooltipManager>.Instance.Hide();
 		}

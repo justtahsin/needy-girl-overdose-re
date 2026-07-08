@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -20,37 +19,34 @@ public class StartMenuButtonSwitcher : MonoBehaviour, IPointerEnterHandler, IEve
 	[SerializeField]
 	private Sprite _highlightedSprite;
 
-	private Color _pinkWhite = Color32.op_Implicit(new Color32(byte.MaxValue, (byte)248, byte.MaxValue, byte.MaxValue));
+	private Color _pinkWhite = new Color32(byte.MaxValue, 248, byte.MaxValue, byte.MaxValue);
 
-	private Color _blueBlack = Color32.op_Implicit(new Color32((byte)77, (byte)35, (byte)207, byte.MaxValue));
+	private Color _blueBlack = new Color32(77, 35, 207, byte.MaxValue);
 
 	private void Awake()
 	{
-		_buttonBg = ((Component)this).GetComponent<Image>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(((Component)this).GetComponent<Button>()), (Action<Unit>)delegate
+		_buttonBg = GetComponent<Image>();
+		GetComponent<Button>().OnClickAsObservable().Subscribe(delegate
 		{
 			OnSubmitted();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void OnSubmitted()
 	{
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
 		_buttonBg.sprite = _highlightedSprite;
-		((Graphic)_label).color = _pinkWhite;
+		_label.color = _pinkWhite;
 	}
 
 	public void OnPointerEnter(PointerEventData e)
 	{
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
 		_buttonBg.sprite = _highlightedSprite;
-		((Graphic)_label).color = _pinkWhite;
+		_label.color = _pinkWhite;
 	}
 
 	public void OnPointerExit(PointerEventData e)
 	{
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
 		_buttonBg.sprite = _defaultSprite;
-		((Graphic)_label).color = _blueBlack;
+		_label.color = _blueBlack;
 	}
 }

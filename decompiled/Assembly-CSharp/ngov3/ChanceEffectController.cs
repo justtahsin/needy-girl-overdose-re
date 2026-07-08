@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
@@ -30,22 +29,22 @@ public sealed class ChanceEffectController : SingletonMonoBehaviour<ChanceEffect
 
 	private void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<ChanceEffectType>(ReactivePropertyExtensions.SkipLatestValueOnSubscribe<ChanceEffectType>((IReadOnlyReactiveProperty<ChanceEffectType>)(object)_current), (Action<ChanceEffectType>)delegate(ChanceEffectType effect)
+		_current.SkipLatestValueOnSubscribe().Subscribe(delegate(ChanceEffectType effect)
 		{
 			foreach (ChanceEffect chanceEffect in _chanceEffects)
 			{
 				bool flag = chanceEffect.Type == effect;
-				((Component)chanceEffect.Anim).gameObject.SetActive(flag);
+				chanceEffect.Anim.gameObject.SetActive(flag);
 				if (flag)
 				{
 					_currentEffect = chanceEffect;
 				}
 			}
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<string>(ReactivePropertyExtensions.SkipLatestValueOnSubscribe<string>((IReadOnlyReactiveProperty<string>)(object)_anim), (Action<string>)delegate(string anim)
+		}).AddTo(base.gameObject);
+		_anim.SkipLatestValueOnSubscribe().Subscribe(delegate(string anim)
 		{
 			_currentEffect.Anim.Play(anim);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	public void OnReach(ChanceEffectType type)

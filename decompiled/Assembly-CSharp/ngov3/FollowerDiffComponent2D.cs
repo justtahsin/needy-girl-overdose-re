@@ -82,7 +82,7 @@ public class FollowerDiffComponent2D : MonoBehaviour
 			num++;
 			bonusInstance8.SetData(NgoEx.StatusLabelFromType(StatusType.Harumagedo, value), (float)(-SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.Harumagedo)) / 100f + 1f);
 		}
-		((LayoutGroup)_layout).SetLayoutVertical();
+		_layout.SetLayoutVertical();
 	}
 
 	private BonusComponent2D GetBonusInstance(int bonusNum)
@@ -91,11 +91,11 @@ public class FollowerDiffComponent2D : MonoBehaviour
 		if (bonusNum < _bonusInstances.Count)
 		{
 			bonusComponent2D = _bonusInstances[bonusNum];
-			((Component)bonusComponent2D).gameObject.SetActive(true);
+			bonusComponent2D.gameObject.SetActive(value: true);
 		}
 		else
 		{
-			bonusComponent2D = Object.Instantiate<BonusComponent2D>(_bonusPrefab, _diffParent);
+			bonusComponent2D = Object.Instantiate(_bonusPrefab, _diffParent);
 			_bonusInstances.Add(bonusComponent2D);
 		}
 		return bonusComponent2D;
@@ -105,7 +105,7 @@ public class FollowerDiffComponent2D : MonoBehaviour
 	{
 		foreach (BonusComponent2D bonusInstance in _bonusInstances)
 		{
-			((Component)bonusInstance).gameObject.SetActive(false);
+			bonusInstance.gameObject.SetActive(value: false);
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -38,18 +37,18 @@ public sealed class DayView : MonoBehaviour
 	{
 		dayIndex = SingletonMonoBehaviour<StatusManager>.Instance.statuses.Find((Status s) => s.statusType == StatusType.DayIndex);
 		dayPart = SingletonMonoBehaviour<StatusManager>.Instance.statuses.Find((Status s) => s.statusType == StatusType.DayPart);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)dayIndex.currentValue, (Action<int>)delegate(int d)
+		dayIndex.currentValue.Subscribe(delegate(int d)
 		{
 			UpdateDay(d);
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)dayPart.currentValue, (Action<int>)delegate(int p)
+		}).AddTo(this);
+		dayPart.currentValue.Subscribe(delegate(int p)
 		{
 			UpdateIcon(p);
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		}).AddTo(this);
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageUpdated();
-		}), (Component)(object)this);
+		}).AddTo(this);
 		UpdateDay(dayIndex.currentValue.Value);
 		UpdateIcon(dayPart.currentValue.Value);
 	}

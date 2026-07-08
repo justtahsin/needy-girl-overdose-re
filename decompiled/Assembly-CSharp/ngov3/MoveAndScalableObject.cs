@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -55,73 +54,65 @@ public class MoveAndScalableObject : MovableObject
 
 	public override void Awake()
 	{
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
 		base.Awake();
-		rect.sizeDelta = new Vector2((float)_firstWidth, (float)_firstHeight);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector3>(Observable.RepeatUntilDestroy<Vector3>(Observable.Select<PointerEventData, Vector3>(Observable.TakeWhile<PointerEventData>(Observable.TakeUntil<PointerEventData, PointerEventData>(Observable.SelectMany<PointerEventData, PointerEventData>(ObservableTriggerExtensions.OnBeginDragAsObservable((UIBehaviour)(object)_BottomEdge), ObservableTriggerExtensions.OnDragAsObservable((UIBehaviour)(object)_BottomEdge)), ObservableTriggerExtensions.OnEndDragAsObservable((UIBehaviour)(object)_BottomEdge)), (Func<PointerEventData, bool>)((PointerEventData e) => Object.op_Implicit((Object)(object)_BottomEdge))), (Func<PointerEventData, Vector3>)((PointerEventData _) => SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition)), (Component)(object)this), (Action<Vector3>)delegate(Vector3 p)
+		rect.sizeDelta = new Vector2(_firstWidth, _firstHeight);
+		(from _ in _BottomEdge.OnBeginDragAsObservable().SelectMany(_BottomEdge.OnDragAsObservable()).TakeUntil(_BottomEdge.OnEndDragAsObservable())
+				.TakeWhile((PointerEventData e) => _BottomEdge)
+			select SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition).RepeatUntilDestroy(this).Subscribe(delegate(Vector3 p)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			OnResize(p, isHorizontal: false, isVertical: true);
-		}), (Component)(object)_BottomEdge);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector3>(Observable.RepeatUntilDestroy<Vector3>(Observable.Select<PointerEventData, Vector3>(Observable.TakeWhile<PointerEventData>(Observable.TakeUntil<PointerEventData, PointerEventData>(Observable.SelectMany<PointerEventData, PointerEventData>(ObservableTriggerExtensions.OnBeginDragAsObservable((UIBehaviour)(object)_TopEdge), ObservableTriggerExtensions.OnDragAsObservable((UIBehaviour)(object)_TopEdge)), ObservableTriggerExtensions.OnEndDragAsObservable((UIBehaviour)(object)_TopEdge)), (Func<PointerEventData, bool>)((PointerEventData e) => Object.op_Implicit((Object)(object)_TopEdge))), (Func<PointerEventData, Vector3>)((PointerEventData _) => SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition)), (Component)(object)this), (Action<Vector3>)delegate(Vector3 p)
+		}).AddTo(_BottomEdge);
+		(from _ in _TopEdge.OnBeginDragAsObservable().SelectMany(_TopEdge.OnDragAsObservable()).TakeUntil(_TopEdge.OnEndDragAsObservable())
+				.TakeWhile((PointerEventData e) => _TopEdge)
+			select SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition).RepeatUntilDestroy(this).Subscribe(delegate(Vector3 p)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			OnResize(p, isHorizontal: false, isVertical: true, isRight: true, isBottom: false);
-		}), (Component)(object)_TopEdge);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector3>(Observable.RepeatUntilDestroy<Vector3>(Observable.Select<PointerEventData, Vector3>(Observable.TakeWhile<PointerEventData>(Observable.TakeUntil<PointerEventData, PointerEventData>(Observable.SelectMany<PointerEventData, PointerEventData>(ObservableTriggerExtensions.OnBeginDragAsObservable((UIBehaviour)(object)_RightEdge), ObservableTriggerExtensions.OnDragAsObservable((UIBehaviour)(object)_RightEdge)), ObservableTriggerExtensions.OnEndDragAsObservable((UIBehaviour)(object)_RightEdge)), (Func<PointerEventData, bool>)((PointerEventData e) => Object.op_Implicit((Object)(object)_RightEdge))), (Func<PointerEventData, Vector3>)((PointerEventData _) => SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition)), (Component)(object)this), (Action<Vector3>)delegate(Vector3 p)
+		}).AddTo(_TopEdge);
+		(from _ in _RightEdge.OnBeginDragAsObservable().SelectMany(_RightEdge.OnDragAsObservable()).TakeUntil(_RightEdge.OnEndDragAsObservable())
+				.TakeWhile((PointerEventData e) => _RightEdge)
+			select SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition).RepeatUntilDestroy(this).Subscribe(delegate(Vector3 p)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			OnResize(p, isHorizontal: true, isVertical: false);
-		}), (Component)(object)_RightEdge);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector3>(Observable.RepeatUntilDestroy<Vector3>(Observable.Select<PointerEventData, Vector3>(Observable.TakeWhile<PointerEventData>(Observable.TakeUntil<PointerEventData, PointerEventData>(Observable.SelectMany<PointerEventData, PointerEventData>(ObservableTriggerExtensions.OnBeginDragAsObservable((UIBehaviour)(object)_LeftEdge), ObservableTriggerExtensions.OnDragAsObservable((UIBehaviour)(object)_LeftEdge)), ObservableTriggerExtensions.OnEndDragAsObservable((UIBehaviour)(object)_LeftEdge)), (Func<PointerEventData, bool>)((PointerEventData e) => Object.op_Implicit((Object)(object)_LeftEdge))), (Func<PointerEventData, Vector3>)((PointerEventData _) => SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition)), (Component)(object)this), (Action<Vector3>)delegate(Vector3 p)
+		}).AddTo(_RightEdge);
+		(from _ in _LeftEdge.OnBeginDragAsObservable().SelectMany(_LeftEdge.OnDragAsObservable()).TakeUntil(_LeftEdge.OnEndDragAsObservable())
+				.TakeWhile((PointerEventData e) => _LeftEdge)
+			select SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition).RepeatUntilDestroy(this).Subscribe(delegate(Vector3 p)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			OnResize(p, isHorizontal: true, isVertical: false, isRight: false);
-		}), (Component)(object)_LeftEdge);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector3>(Observable.RepeatUntilDestroy<Vector3>(Observable.Select<PointerEventData, Vector3>(Observable.TakeWhile<PointerEventData>(Observable.TakeUntil<PointerEventData, PointerEventData>(Observable.SelectMany<PointerEventData, PointerEventData>(ObservableTriggerExtensions.OnBeginDragAsObservable((UIBehaviour)(object)_rightBottomPoint), ObservableTriggerExtensions.OnDragAsObservable((UIBehaviour)(object)_rightBottomPoint)), ObservableTriggerExtensions.OnEndDragAsObservable((UIBehaviour)(object)_rightBottomPoint)), (Func<PointerEventData, bool>)((PointerEventData e) => Object.op_Implicit((Object)(object)_rightBottomPoint))), (Func<PointerEventData, Vector3>)((PointerEventData _) => SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition)), (Component)(object)this), (Action<Vector3>)delegate(Vector3 p)
+		}).AddTo(_LeftEdge);
+		(from _ in _rightBottomPoint.OnBeginDragAsObservable().SelectMany(_rightBottomPoint.OnDragAsObservable()).TakeUntil(_rightBottomPoint.OnEndDragAsObservable())
+				.TakeWhile((PointerEventData e) => _rightBottomPoint)
+			select SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition).RepeatUntilDestroy(this).Subscribe(delegate(Vector3 p)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			OnResize(p, isHorizontal: true, isVertical: true);
-		}), (Component)(object)_rightBottomPoint);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector3>(Observable.RepeatUntilDestroy<Vector3>(Observable.Select<PointerEventData, Vector3>(Observable.TakeWhile<PointerEventData>(Observable.TakeUntil<PointerEventData, PointerEventData>(Observable.SelectMany<PointerEventData, PointerEventData>(ObservableTriggerExtensions.OnBeginDragAsObservable((UIBehaviour)(object)_leftBottomPoint), ObservableTriggerExtensions.OnDragAsObservable((UIBehaviour)(object)_leftBottomPoint)), ObservableTriggerExtensions.OnEndDragAsObservable((UIBehaviour)(object)_leftBottomPoint)), (Func<PointerEventData, bool>)((PointerEventData e) => Object.op_Implicit((Object)(object)_leftBottomPoint))), (Func<PointerEventData, Vector3>)((PointerEventData _) => SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition)), (Component)(object)this), (Action<Vector3>)delegate(Vector3 p)
+		}).AddTo(_rightBottomPoint);
+		(from _ in _leftBottomPoint.OnBeginDragAsObservable().SelectMany(_leftBottomPoint.OnDragAsObservable()).TakeUntil(_leftBottomPoint.OnEndDragAsObservable())
+				.TakeWhile((PointerEventData e) => _leftBottomPoint)
+			select SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition).RepeatUntilDestroy(this).Subscribe(delegate(Vector3 p)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			OnResize(p, isHorizontal: true, isVertical: true, isRight: false);
-		}), (Component)(object)_leftBottomPoint);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector3>(Observable.RepeatUntilDestroy<Vector3>(Observable.Select<PointerEventData, Vector3>(Observable.TakeWhile<PointerEventData>(Observable.TakeUntil<PointerEventData, PointerEventData>(Observable.SelectMany<PointerEventData, PointerEventData>(ObservableTriggerExtensions.OnBeginDragAsObservable((UIBehaviour)(object)_rightTopPoint), ObservableTriggerExtensions.OnDragAsObservable((UIBehaviour)(object)_rightTopPoint)), ObservableTriggerExtensions.OnEndDragAsObservable((UIBehaviour)(object)_rightTopPoint)), (Func<PointerEventData, bool>)((PointerEventData e) => Object.op_Implicit((Object)(object)_rightTopPoint))), (Func<PointerEventData, Vector3>)((PointerEventData _) => SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition)), (Component)(object)this), (Action<Vector3>)delegate(Vector3 p)
+		}).AddTo(_leftBottomPoint);
+		(from _ in _rightTopPoint.OnBeginDragAsObservable().SelectMany(_rightTopPoint.OnDragAsObservable()).TakeUntil(_rightTopPoint.OnEndDragAsObservable())
+				.TakeWhile((PointerEventData e) => _rightTopPoint)
+			select SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition).RepeatUntilDestroy(this).Subscribe(delegate(Vector3 p)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			OnResize(p, isHorizontal: true, isVertical: true, isRight: true, isBottom: false);
-		}), (Component)(object)_rightTopPoint);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector3>(Observable.RepeatUntilDestroy<Vector3>(Observable.Select<PointerEventData, Vector3>(Observable.TakeWhile<PointerEventData>(Observable.TakeUntil<PointerEventData, PointerEventData>(Observable.SelectMany<PointerEventData, PointerEventData>(ObservableTriggerExtensions.OnBeginDragAsObservable((UIBehaviour)(object)_leftTopPoint), ObservableTriggerExtensions.OnDragAsObservable((UIBehaviour)(object)_leftTopPoint)), ObservableTriggerExtensions.OnEndDragAsObservable((UIBehaviour)(object)_leftTopPoint)), (Func<PointerEventData, bool>)((PointerEventData e) => Object.op_Implicit((Object)(object)_leftTopPoint))), (Func<PointerEventData, Vector3>)((PointerEventData _) => SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition)), (Component)(object)this), (Action<Vector3>)delegate(Vector3 p)
+		}).AddTo(_rightTopPoint);
+		(from _ in _leftTopPoint.OnBeginDragAsObservable().SelectMany(_leftTopPoint.OnDragAsObservable()).TakeUntil(_leftTopPoint.OnEndDragAsObservable())
+				.TakeWhile((PointerEventData e) => _leftTopPoint)
+			select SingletonMonoBehaviour<CursorManager>.Instance.CursorPosition).RepeatUntilDestroy(this).Subscribe(delegate(Vector3 p)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 			OnResize(p, isHorizontal: true, isVertical: true, isRight: false, isBottom: false);
-		}), (Component)(object)_leftTopPoint);
+		}).AddTo(_leftTopPoint);
 	}
 
 	public float AreaSize()
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
 		return rect.sizeDelta.x * rect.sizeDelta.y;
 	}
 
 	public void OnResize(Vector3 position, bool isHorizontal, bool isVertical, bool isRight = true, bool isBottom = true)
 	{
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0078: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0143: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0131: Unknown result type (might be due to invalid IL or missing references)
-		//IL_010f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_017b: Unknown result type (might be due to invalid IL or missing references)
 		if (_isMovable)
 		{
 			float x = position.x;

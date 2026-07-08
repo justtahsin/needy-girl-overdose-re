@@ -17,16 +17,14 @@ public class SpriteStencilSetter : MonoBehaviour
 
 	private void Awake()
 	{
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Expected O, but got Unknown
-		_rend = ((Component)this).GetComponent<SpriteRenderer>();
+		_rend = GetComponent<SpriteRenderer>();
 		_matInstance = new Material(_stencilMaskedMaterial);
-		((Renderer)_rend).material = _matInstance;
-		((Renderer)_rend).material.SetFloat("_Stencil", (float)_stencil);
+		_rend.material = _matInstance;
+		_rend.material.SetFloat("_Stencil", _stencil);
 	}
 
 	private void OnDestroy()
 	{
-		Object.Destroy((Object)(object)_matInstance);
+		Object.Destroy(_matInstance);
 	}
 }

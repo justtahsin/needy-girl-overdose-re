@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using NGO;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ngov3;
@@ -31,64 +29,62 @@ public class Shortcut : MonoBehaviour
 
 	public void Awake()
 	{
-		_shortcut = ((Component)this).GetComponent<Button>();
-		_tooltip = ((Component)this).GetComponent<TooltipCaller>();
+		_shortcut = GetComponent<Button>();
+		_tooltip = GetComponent<TooltipCaller>();
 	}
 
 	public void Start()
 	{
-		//IL_00a4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ae: Expected O, but got Unknown
-		if ((Object)(object)SingletonMonoBehaviour<StatusManager>.Instance != (Object)null)
+		if (SingletonMonoBehaviour<StatusManager>.Instance != null)
 		{
 			_dayPart = SingletonMonoBehaviour<StatusManager>.Instance.GetStatusObservable(StatusType.DayPart);
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)_dayPart, (Action<int>)delegate
+			_dayPart.Subscribe(delegate
 			{
 				AddHint();
-			}), ((Component)this).gameObject);
+			}).AddTo(base.gameObject);
 			AddHint();
 		}
 		if (appType == AppType.NetaChoose)
 		{
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)_dayPart, (Action<int>)delegate(int v)
+			_dayPart.Subscribe(delegate(int v)
 			{
 				if (SingletonMonoBehaviour<EventManager>.Instance.isTestScene)
 				{
-					((Selectable)_shortcut).interactable = true;
+					_shortcut.interactable = true;
 					_tooltip.isShowTooltip = false;
 				}
 				else if (SingletonMonoBehaviour<EventManager>.Instance.kyuusiCount > 0)
 				{
-					((Selectable)_shortcut).interactable = false;
+					_shortcut.interactable = false;
 					_tooltip.isShowTooltip = true;
 					_tooltip.type = TooltipType.tooltip_kyuusi;
 				}
 				else if (v == 2)
 				{
-					((Selectable)_shortcut).interactable = true;
+					_shortcut.interactable = true;
 					_tooltip.isShowTooltip = false;
 				}
 				else
 				{
-					((Selectable)_shortcut).interactable = false;
+					_shortcut.interactable = false;
 					_tooltip.isShowTooltip = true;
 					tooltipTextType = SystemTextType.System_CollectNeta;
 					SetTooltipText(tooltipTextType);
 				}
-			}), ((Component)this).gameObject);
+			}).AddTo(base.gameObject);
 		}
 		if (appType == AppType.None)
 		{
 			return;
 		}
-		((UnityEventBase)_shortcut.onClick).RemoveAllListeners();
-		((UnityEvent)_shortcut.onClick).AddListener((UnityAction)delegate
+		_shortcut.onClick.RemoveAllListeners();
+		_shortcut.onClick.AddListener(delegate
 		{
 			if (appType == AppType.Pills)
 			{
 				if (SingletonMonoBehaviour<NetaManager>.Instance.usedAlpha.Exists((AlphaLevel al) => al.alphaType == AlphaType.Angel && al.level == 5))
 				{
-					((Selectable)_shortcut).interactable = false;
+					_shortcut.interactable = false;
 					_tooltip.isShowTooltip = true;
 					_tooltip.type = TooltipType.Tooltip_Angel;
 				}
@@ -109,17 +105,17 @@ public class Shortcut : MonoBehaviour
 				}
 			}
 		});
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			AddLabel();
 			SetTooltipText(tooltipTextType);
-		}), (Component)(object)_shortcut);
+		}).AddTo(_shortcut);
 		AddLabel();
 	}
 
 	private void AddLabel()
 	{
-		if (appType != AppType.None && !((Object)(object)label == (Object)null))
+		if (appType != AppType.None && !(label == null))
 		{
 			_ = LoadAppData.ReadAppContent(appType).AppName;
 			label.text = NgoEx.SystemTextFromType(LoadAppData.ReadAppContent(appType).AppName, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
@@ -132,11 +128,11 @@ public class Shortcut : MonoBehaviour
 
 	private void AddHint()
 	{
-		if ((Object)(object)Hint == (Object)null)
+		if (Hint == null)
 		{
 			return;
 		}
-		Hint.SetActive(false);
+		Hint.SetActive(value: false);
 		_tooltip.isShowTooltip = false;
 		if (appType == AppType.Pills)
 		{
@@ -146,7 +142,7 @@ public class Shortcut : MonoBehaviour
 		{
 			if (SingletonMonoBehaviour<CommandManager>.Instance.isHinted(action))
 			{
-				Hint.SetActive(true);
+				Hint.SetActive(value: true);
 				_tooltip.isShowTooltip = true;
 				tooltipTextType = SystemTextType.System_NewNeta;
 				SetTooltipText(tooltipTextType);
@@ -157,7 +153,7 @@ public class Shortcut : MonoBehaviour
 
 	private void SetTooltipText(SystemTextType textType)
 	{
-		if ((Object)(object)_tooltip != (Object)null)
+		if (_tooltip != null)
 		{
 			_tooltip.textNakami = NgoEx.SystemTextFromType(tooltipTextType, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		}

@@ -1,15 +1,7 @@
-using System;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using NGO;
 using TMPro;
 using UniRx;
@@ -20,130 +12,6 @@ namespace ngov3;
 
 public class PoketterCellStatic : MonoBehaviour
 {
-	[CompilerGenerated]
-	private sealed class _003C_003Ec__DisplayClass25_0
-	{
-		public string imageId;
-
-		public ResourceLocal resource;
-
-		internal bool _003CFetchTweetImage_003Eb__0(ResourceLocal r)
-		{
-			return r.FileName == imageId;
-		}
-
-		internal void _003CFetchTweetImage_003Eb__1(Unit _)
-		{
-			//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-			ImageViewerHelper.OpenImageViewer(resource.FileName);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CFetchTweetImage_003Ed__25 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskVoidMethodBuilder _003C_003Et__builder;
-
-		public PoketterCellStatic _003C_003E4__this;
-
-		private _003C_003Ec__DisplayClass25_0 _003C_003E8__1;
-
-		private Image _003C_003E7__wrap1;
-
-		private Awaiter<Sprite> _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_0131: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0136: Unknown result type (might be due to invalid IL or missing references)
-			//IL_013e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f3: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00fc: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0101: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0116: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0118: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			PoketterCellStatic poketterCellStatic = _003C_003E4__this;
-			try
-			{
-				Awaiter<Sprite> val;
-				if (num == 0)
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter<Sprite>);
-					num = (_003C_003E1__state = -1);
-					goto IL_014d;
-				}
-				bool flag = poketterCellStatic.tweetDrawable.ImageId.IsNotEmpty();
-				((Component)poketterCellStatic._image).gameObject.SetActive(flag);
-				if (flag)
-				{
-					_003C_003E8__1 = new _003C_003Ec__DisplayClass25_0();
-					_003C_003E8__1.imageId = poketterCellStatic.tweetDrawable.ImageId;
-					_003C_003E8__1.resource = poketterCellStatic._resourceMaster.ResourceList.FirstOrDefault((ResourceLocal r) => r.FileName == _003C_003E8__1.imageId);
-					SingletonMonoBehaviour<Settings>.Instance.addImage(_003C_003E8__1.imageId);
-					if (_003C_003E8__1.resource == null)
-					{
-						Debug.LogError((object)("TWEET MASTER: " + _003C_003E8__1.imageId + " の 画像Id がなかったよ " + _003C_003E8__1.imageId));
-					}
-					_003C_003E7__wrap1 = poketterCellStatic._image;
-					val = LoadPictures.LoadPictureAsync(_003C_003E8__1.resource.FileName, LoadPictures.PictureType.Poketter).GetAwaiter();
-					if (!val.IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskVoidMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter<Sprite>, _003CFetchTweetImage_003Ed__25>(ref val, ref this);
-						return;
-					}
-					goto IL_014d;
-				}
-				goto end_IL_000e;
-				IL_014d:
-				Sprite result = val.GetResult();
-				_003C_003E7__wrap1.sprite = result;
-				_003C_003E7__wrap1 = null;
-				Button component = ((Component)poketterCellStatic._image).gameObject.GetComponent<Button>();
-				DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(component), (Action<Unit>)delegate
-				{
-					//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-					ImageViewerHelper.OpenImageViewer(_003C_003E8__1.resource.FileName);
-				}), ((Component)component).gameObject);
-				_003C_003E8__1 = null;
-				end_IL_000e:;
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskVoidMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskVoidMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskVoidMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	[SerializeField]
 	private TweetType tweetType = TweetType.None;
 
@@ -202,16 +70,15 @@ public class PoketterCellStatic : MonoBehaviour
 	public void Awake()
 	{
 		SetData(new TweetDrawable(new TweetData(tweetType, isOmote: true)));
-		_baseCanvasGroup = ((Component)this).GetComponent<CanvasGroup>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		_baseCanvasGroup = GetComponent<CanvasGroup>();
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageUpdated();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	public void SetData(TweetDrawable nakami)
 	{
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
 		tweetDrawable = nakami;
 		SetUserIcon();
 		SetUserName();
@@ -221,7 +88,6 @@ public class PoketterCellStatic : MonoBehaviour
 
 	public void SetDataStatic(TweetDrawable nakami)
 	{
-		//IL_006b: Unknown result type (might be due to invalid IL or missing references)
 		tweetDrawable = nakami;
 		SetUserIcon();
 		SetUserName();
@@ -242,7 +108,7 @@ public class PoketterCellStatic : MonoBehaviour
 	protected virtual bool SetUserIcon()
 	{
 		_userIcon.sprite = (tweetDrawable.IsOmote ? _omoteIcon : _uraIcon);
-		return (Object)(object)_userIcon.sprite != (Object)null;
+		return _userIcon.sprite != null;
 	}
 
 	protected virtual bool SetUserName()
@@ -291,28 +157,36 @@ public class PoketterCellStatic : MonoBehaviour
 		}
 	}
 
-	[AsyncStateMachine(typeof(_003CFetchTweetImage_003Ed__25))]
-	private UniTaskVoid FetchTweetImage()
+	private async UniTaskVoid FetchTweetImage()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CFetchTweetImage_003Ed__25 _003CFetchTweetImage_003Ed__26 = default(_003CFetchTweetImage_003Ed__25);
-		_003CFetchTweetImage_003Ed__26._003C_003Et__builder = AsyncUniTaskVoidMethodBuilder.Create();
-		_003CFetchTweetImage_003Ed__26._003C_003E4__this = this;
-		_003CFetchTweetImage_003Ed__26._003C_003E1__state = -1;
-		((AsyncUniTaskVoidMethodBuilder)(ref _003CFetchTweetImage_003Ed__26._003C_003Et__builder)).Start<_003CFetchTweetImage_003Ed__25>(ref _003CFetchTweetImage_003Ed__26);
-		return ((AsyncUniTaskVoidMethodBuilder)(ref _003CFetchTweetImage_003Ed__26._003C_003Et__builder)).Task;
+		bool flag = tweetDrawable.ImageId.IsNotEmpty();
+		_image.gameObject.SetActive(flag);
+		if (flag)
+		{
+			string imageId = tweetDrawable.ImageId;
+			ResourceLocal resource = _resourceMaster.ResourceList.FirstOrDefault((ResourceLocal r) => r.FileName == imageId);
+			SingletonMonoBehaviour<Settings>.Instance.addImage(imageId);
+			if (resource == null)
+			{
+				Debug.LogError("TWEET MASTER: " + imageId + " の 画像Id がなかったよ " + imageId);
+			}
+			Image image = _image;
+			image.sprite = await LoadPictures.LoadPictureAsync(resource.FileName, LoadPictures.PictureType.Poketter);
+			Button component = _image.gameObject.GetComponent<Button>();
+			component.OnClickAsObservable().Subscribe(delegate
+			{
+				ImageViewerHelper.OpenImageViewer(resource.FileName);
+			}).AddTo(component.gameObject);
+		}
 	}
 
 	private void Show()
 	{
-		//IL_004f: Unknown result type (might be due to invalid IL or missing references)
 		_baseCanvasGroup.alpha = 0f;
 		_ = (float)_scrollMillisecond / 1000f;
-		float num = (float)_fadeMillisecond / 1000f;
-		CancellationToken cancellationTokenOnDestroy = UniTaskCancellationExtensions.GetCancellationTokenOnDestroy(((Component)this).gameObject);
-		DOTweenAsyncExtensions.WithCancellation((Tween)(object)TweenExtensions.Play<TweenerCore<float, float, FloatOptions>>(DOTweenModuleUI.DOFade(_baseCanvasGroup, 1f, num)), cancellationTokenOnDestroy);
+		float duration = (float)_fadeMillisecond / 1000f;
+		CancellationToken cancellationTokenOnDestroy = base.gameObject.GetCancellationTokenOnDestroy();
+		_baseCanvasGroup.DOFade(1f, duration).Play().WithCancellation(cancellationTokenOnDestroy);
 	}
 
 	private string ConvertGigaNumber(int number)
@@ -334,28 +208,24 @@ public class PoketterCellStatic : MonoBehaviour
 
 	private void FavRtMove()
 	{
-		//IL_004b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0055: Expected O, but got Unknown
-		//IL_008a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0094: Expected O, but got Unknown
 		if (!tweetDrawable.IsOmote)
 		{
 			return;
 		}
-		float num = (float)_buzzMillisecond / 1000f;
+		float duration = (float)_buzzMillisecond / 1000f;
 		if (tweetDrawable.RtNumber > 0)
 		{
-			TweenExtensions.Play<TweenerCore<int, int, NoOptions>>(TweenSettingsExtensions.OnComplete<TweenerCore<int, int, NoOptions>>(ShortcutExtensionsTMPText.DOCounter(_rtText, 0, tweetDrawable.RtNumber, num, true, (CultureInfo)null), (TweenCallback)delegate
+			_rtText.DOCounter(0, tweetDrawable.RtNumber, duration).OnComplete(delegate
 			{
 				_rtText.text = ConvertGigaNumber(tweetDrawable.RtNumber);
-			}));
+			}).Play();
 		}
 		if (tweetDrawable.FavNumber > 0)
 		{
-			TweenExtensions.Play<TweenerCore<int, int, NoOptions>>(TweenSettingsExtensions.OnComplete<TweenerCore<int, int, NoOptions>>(ShortcutExtensionsTMPText.DOCounter(_favText, 0, tweetDrawable.FavNumber, num, true, (CultureInfo)null), (TweenCallback)delegate
+			_favText.DOCounter(0, tweetDrawable.FavNumber, duration).OnComplete(delegate
 			{
 				_favText.text = ConvertGigaNumber(tweetDrawable.FavNumber);
-			}));
+			}).Play();
 		}
 	}
 
@@ -363,7 +233,7 @@ public class PoketterCellStatic : MonoBehaviour
 	{
 		foreach (KusoRepDrawable kusoRep in tweetDrawable.kusoReps)
 		{
-			Object.Instantiate<KusoRepView>(_kusoRepPrefab, ((Component)_kusoRepRoot).transform).SetData(kusoRep);
+			Object.Instantiate(_kusoRepPrefab, _kusoRepRoot.transform).SetData(kusoRep);
 		}
 	}
 
@@ -371,7 +241,7 @@ public class PoketterCellStatic : MonoBehaviour
 	{
 		foreach (KusoRepDrawable kusoRep in tweetDrawable.kusoReps)
 		{
-			KusoRepView kusoRepView = Object.Instantiate<KusoRepView>(_kusoRepPrefab, ((Component)_kusoRepRoot).transform);
+			KusoRepView kusoRepView = Object.Instantiate(_kusoRepPrefab, _kusoRepRoot.transform);
 			kusoRepView.SetData(kusoRep);
 			kusoRepView.ShowPosted();
 		}
@@ -379,9 +249,9 @@ public class PoketterCellStatic : MonoBehaviour
 
 	private async void ShowKusoReps()
 	{
-		for (int i = 0; i < ((Transform)_kusoRepRoot).childCount; i++)
+		for (int i = 0; i < _kusoRepRoot.childCount; i++)
 		{
-			await ((Component)((Transform)_kusoRepRoot).GetChild(i)).GetComponent<KusoRepView>().Show();
+			await _kusoRepRoot.GetChild(i).GetComponent<KusoRepView>().Show();
 		}
 	}
 

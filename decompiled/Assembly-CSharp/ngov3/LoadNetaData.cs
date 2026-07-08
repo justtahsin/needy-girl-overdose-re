@@ -8,12 +8,12 @@ public static class LoadNetaData
 
 	public static AlphaTypeToData ReadNetaContent(AlphaType NetaType, int level = 0)
 	{
-		string text = "AlphaNetas";
-		if ((Object)(object)NetaData == (Object)null)
+		string path = "AlphaNetas";
+		if (NetaData == null)
 		{
-			NetaData = Resources.Load<AlphaTypeToDataAsset>(text);
+			NetaData = Resources.Load<AlphaTypeToDataAsset>(path);
 		}
-		if (Object.op_Implicit((Object)(object)NetaData))
+		if ((bool)NetaData)
 		{
 			return NetaData.NetaList.Find((AlphaTypeToData Neta) => Neta.NetaType == NetaType && Neta.level == level);
 		}

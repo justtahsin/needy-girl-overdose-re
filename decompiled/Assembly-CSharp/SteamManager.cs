@@ -19,8 +19,7 @@ public class SteamManager : MonoBehaviour
 	{
 		get
 		{
-			//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-			if ((Object)(object)s_instance == (Object)null)
+			if (s_instance == null)
 			{
 				return new GameObject("SteamManager").AddComponent<SteamManager>();
 			}
@@ -33,10 +32,10 @@ public class SteamManager : MonoBehaviour
 	[MonoPInvokeCallback(typeof(SteamAPIWarningMessageHook_t))]
 	protected static void SteamAPIDebugTextHook(int nSeverity, StringBuilder pchDebugText)
 	{
-		Debug.LogWarning((object)pchDebugText);
+		Debug.LogWarning(pchDebugText);
 	}
 
-	[RuntimeInitializeOnLoadMethod(/*Could not decode attribute arguments.*/)]
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 	private static void InitOnPlayMode()
 	{
 		s_EverInitialized = false;
@@ -45,10 +44,9 @@ public class SteamManager : MonoBehaviour
 
 	protected virtual void Awake()
 	{
-		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-		if ((Object)(object)s_instance != (Object)null)
+		if (s_instance != null)
 		{
-			Object.Destroy((Object)(object)((Component)this).gameObject);
+			UnityEngine.Object.Destroy(base.gameObject);
 			return;
 		}
 		s_instance = this;
@@ -56,34 +54,34 @@ public class SteamManager : MonoBehaviour
 		{
 			throw new Exception("Tried to Initialize the SteamAPI twice in one session!");
 		}
-		Object.DontDestroyOnLoad((Object)(object)((Component)this).gameObject);
+		UnityEngine.Object.DontDestroyOnLoad(base.gameObject);
 		if (!Packsize.Test())
 		{
-			Debug.LogError((object)"[Steamworks.NET] Packsize Test returned false, the wrong version of Steamworks.NET is being run in this platform.", (Object)(object)this);
+			Debug.LogError("[Steamworks.NET] Packsize Test returned false, the wrong version of Steamworks.NET is being run in this platform.", this);
 		}
 		if (!DllCheck.Test())
 		{
-			Debug.LogError((object)"[Steamworks.NET] DllCheck Test returned false, One or more of the Steamworks binaries seems to be the wrong version.", (Object)(object)this);
+			Debug.LogError("[Steamworks.NET] DllCheck Test returned false, One or more of the Steamworks binaries seems to be the wrong version.", this);
 		}
 		try
 		{
 			if (SteamAPI.RestartAppIfNecessary(AppId_t.Invalid))
 			{
-				Debug.Log((object)"[Steamworks.NET] Shutting down because RestartAppIfNecessary returned true. Steam will restart the application.");
+				Debug.Log("[Steamworks.NET] Shutting down because RestartAppIfNecessary returned true. Steam will restart the application.");
 				Application.Quit();
 				return;
 			}
 		}
 		catch (DllNotFoundException ex)
 		{
-			Debug.LogError((object)("[Steamworks.NET] Could not load [lib]steam_api.dll/so/dylib. It's likely not in the correct location. Refer to the README for more details.\n" + ex), (Object)(object)this);
+			Debug.LogError("[Steamworks.NET] Could not load [lib]steam_api.dll/so/dylib. It's likely not in the correct location. Refer to the README for more details.\n" + ex, this);
 			Application.Quit();
 			return;
 		}
 		m_bInitialized = SteamAPI.Init();
 		if (!m_bInitialized)
 		{
-			Debug.LogError((object)"[Steamworks.NET] SteamAPI_Init() failed. Refer to Valve's documentation or the comment above this line for more information.", (Object)(object)this);
+			Debug.LogError("[Steamworks.NET] SteamAPI_Init() failed. Refer to Valve's documentation or the comment above this line for more information.", this);
 		}
 		else
 		{
@@ -93,22 +91,20 @@ public class SteamManager : MonoBehaviour
 
 	protected virtual void OnEnable()
 	{
-		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0036: Expected O, but got Unknown
-		if ((Object)(object)s_instance == (Object)null)
+		if (s_instance == null)
 		{
 			s_instance = this;
 		}
 		if (m_bInitialized && m_SteamAPIWarningMessageHook == null)
 		{
-			m_SteamAPIWarningMessageHook = new SteamAPIWarningMessageHook_t(SteamAPIDebugTextHook);
+			m_SteamAPIWarningMessageHook = SteamAPIDebugTextHook;
 			SteamClient.SetWarningMessageHook(m_SteamAPIWarningMessageHook);
 		}
 	}
 
 	protected virtual void OnDestroy()
 	{
-		if (!((Object)(object)s_instance != (Object)(object)this))
+		if (!(s_instance != this))
 		{
 			s_instance = null;
 			if (m_bInitialized)

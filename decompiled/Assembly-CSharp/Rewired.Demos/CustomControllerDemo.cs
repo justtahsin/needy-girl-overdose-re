@@ -31,16 +31,10 @@ public class CustomControllerDemo : MonoBehaviour
 
 	private void Awake()
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0008: Invalid comparison between Unknown and I4
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		ScreenOrientation val = (ScreenOrientation)3;
-		if ((int)SystemInfo.deviceType == 1 && Screen.orientation != val)
+		ScreenOrientation screenOrientation = ScreenOrientation.LandscapeLeft;
+		if (SystemInfo.deviceType == DeviceType.Handheld && Screen.orientation != screenOrientation)
 		{
-			Screen.orientation = val;
+			Screen.orientation = screenOrientation;
 		}
 		Initialize();
 	}
@@ -48,8 +42,8 @@ public class CustomControllerDemo : MonoBehaviour
 	private void Initialize()
 	{
 		ReInput.InputSourceUpdateEvent += OnInputSourceUpdate;
-		joysticks = ((Component)this).GetComponentsInChildren<TouchJoystickExample>();
-		buttons = ((Component)this).GetComponentsInChildren<TouchButtonExample>();
+		joysticks = GetComponentsInChildren<TouchJoystickExample>();
+		buttons = GetComponentsInChildren<TouchButtonExample>();
 		axisCount = joysticks.Length * 2;
 		buttonCount = buttons.Length;
 		axisValues = new float[axisCount];
@@ -58,16 +52,16 @@ public class CustomControllerDemo : MonoBehaviour
 		controller = player.controllers.GetControllerWithTag<CustomController>(controllerTag);
 		if (controller == null)
 		{
-			Debug.LogError((object)("A matching controller was not found for tag \"" + controllerTag + "\""));
+			Debug.LogError("A matching controller was not found for tag \"" + controllerTag + "\"");
 		}
-		if (((Controller)controller).buttonCount != buttonValues.Length || ((ControllerWithAxes)controller).axisCount != axisValues.Length)
+		if (controller.buttonCount != buttonValues.Length || controller.axisCount != axisValues.Length)
 		{
-			Debug.LogError((object)"Controller has wrong number of elements!");
+			Debug.LogError("Controller has wrong number of elements!");
 		}
 		if (useUpdateCallbacks && controller != null)
 		{
-			controller.SetAxisUpdateCallback((Func<int, float>)GetAxisValueCallback);
-			controller.SetButtonUpdateCallback((Func<int, bool>)GetButtonValueCallback);
+			controller.SetAxisUpdateCallback(GetAxisValueCallback);
+			controller.SetButtonUpdateCallback(GetButtonValueCallback);
 		}
 		initialized = true;
 	}
@@ -93,8 +87,6 @@ public class CustomControllerDemo : MonoBehaviour
 
 	private void GetSourceAxisValues()
 	{
-		//IL_0038: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
 		for (int i = 0; i < axisValues.Length; i++)
 		{
 			if (i % 2 != 0)

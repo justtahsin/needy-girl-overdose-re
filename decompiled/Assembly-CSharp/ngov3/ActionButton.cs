@@ -50,14 +50,14 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IEventSystemHan
 		_dayIndex = SingletonMonoBehaviour<StatusManager>.Instance.GetStatusObservable(StatusType.DayIndex);
 		_dayPart = SingletonMonoBehaviour<StatusManager>.Instance.GetStatusObservable(StatusType.DayPart);
 		SetLabel();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Dictionary<ActionType, ActionStatus>>((IObservable<Dictionary<ActionType, ActionStatus>>)SingletonMonoBehaviour<CommandManager>.Instance.commandStatus, (Action<Dictionary<ActionType, ActionStatus>>)delegate(Dictionary<ActionType, ActionStatus> s)
+		SingletonMonoBehaviour<CommandManager>.Instance.commandStatus.Subscribe(delegate(Dictionary<ActionType, ActionStatus> s)
 		{
 			SetStatus(s[actionType]);
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)_dayPart, (Action<int>)delegate
+		}).AddTo(this);
+		_dayPart.Subscribe(delegate
 		{
 			SetStatus();
-		}), (Component)(object)this);
+		}).AddTo(this);
 	}
 
 	public void Start()
@@ -73,11 +73,11 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IEventSystemHan
 	{
 		isHinted = SingletonMonoBehaviour<CommandManager>.Instance.isHinted(actionType);
 		_Hint.SetActive(isHinted);
-		if ((Object)(object)_tooltip != (Object)null)
+		if (_tooltip != null)
 		{
 			_tooltip.isShowTooltip = isHinted;
 		}
-		if (isHinted && (Object)(object)_tooltip != (Object)null)
+		if (isHinted && _tooltip != null)
 		{
 			_tooltip.textNakami = NgoEx.SystemTextFromType(SystemTextType.System_NewNeta, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		}
@@ -119,7 +119,7 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IEventSystemHan
 		_canvas.alpha = 1f;
 		_canvas.interactable = true;
 		_canvas.blocksRaycasts = true;
-		((Selectable)_button).interactable = false;
+		_button.interactable = false;
 	}
 
 	private void SetExecutable()
@@ -127,11 +127,13 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IEventSystemHan
 		_canvas.alpha = 1f;
 		_canvas.interactable = true;
 		_canvas.blocksRaycasts = true;
-		((Selectable)_button).interactable = true;
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(Observable.ThrottleFirst<Unit>(Observable.TakeUntilDestroy<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_button), (Component)(object)this), TimeSpan.FromMilliseconds(2000.0)), (Action<Unit>)delegate
-		{
-			OnCommand();
-		}), (Component)(object)_button);
+		_button.interactable = true;
+		_button.OnClickAsObservable().TakeUntilDestroy(this).ThrottleFirst(TimeSpan.FromMilliseconds(2000.0))
+			.Subscribe(delegate
+			{
+				OnCommand();
+			})
+			.AddTo(_button);
 	}
 
 	public void OnCommand()

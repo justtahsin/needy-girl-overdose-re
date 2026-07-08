@@ -342,181 +342,181 @@ public sealed class HOTASTemplate : ControllerTemplate, IHOTASTemplate, IControl
 
 	public const int elementId_throttleHat4 = 184;
 
-	IControllerTemplateButton IHOTASTemplate.stickTrigger => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(3);
+	IControllerTemplateButton IHOTASTemplate.stickTrigger => GetElement<IControllerTemplateButton>(3);
 
-	IControllerTemplateButton IHOTASTemplate.stickTriggerStage2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(4);
+	IControllerTemplateButton IHOTASTemplate.stickTriggerStage2 => GetElement<IControllerTemplateButton>(4);
 
-	IControllerTemplateButton IHOTASTemplate.stickPinkyButton => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(5);
+	IControllerTemplateButton IHOTASTemplate.stickPinkyButton => GetElement<IControllerTemplateButton>(5);
 
-	IControllerTemplateButton IHOTASTemplate.stickPinkyTrigger => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(154);
+	IControllerTemplateButton IHOTASTemplate.stickPinkyTrigger => GetElement<IControllerTemplateButton>(154);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(6);
+	IControllerTemplateButton IHOTASTemplate.stickButton1 => GetElement<IControllerTemplateButton>(6);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(7);
+	IControllerTemplateButton IHOTASTemplate.stickButton2 => GetElement<IControllerTemplateButton>(7);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(8);
+	IControllerTemplateButton IHOTASTemplate.stickButton3 => GetElement<IControllerTemplateButton>(8);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(9);
+	IControllerTemplateButton IHOTASTemplate.stickButton4 => GetElement<IControllerTemplateButton>(9);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(10);
+	IControllerTemplateButton IHOTASTemplate.stickButton5 => GetElement<IControllerTemplateButton>(10);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(11);
+	IControllerTemplateButton IHOTASTemplate.stickButton6 => GetElement<IControllerTemplateButton>(11);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(12);
+	IControllerTemplateButton IHOTASTemplate.stickButton7 => GetElement<IControllerTemplateButton>(12);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(13);
+	IControllerTemplateButton IHOTASTemplate.stickButton8 => GetElement<IControllerTemplateButton>(13);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton9 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(14);
+	IControllerTemplateButton IHOTASTemplate.stickButton9 => GetElement<IControllerTemplateButton>(14);
 
-	IControllerTemplateButton IHOTASTemplate.stickButton10 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(15);
+	IControllerTemplateButton IHOTASTemplate.stickButton10 => GetElement<IControllerTemplateButton>(15);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(18);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton1 => GetElement<IControllerTemplateButton>(18);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(19);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton2 => GetElement<IControllerTemplateButton>(19);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(20);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton3 => GetElement<IControllerTemplateButton>(20);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(21);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton4 => GetElement<IControllerTemplateButton>(21);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(22);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton5 => GetElement<IControllerTemplateButton>(22);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(23);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton6 => GetElement<IControllerTemplateButton>(23);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(24);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton7 => GetElement<IControllerTemplateButton>(24);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(25);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton8 => GetElement<IControllerTemplateButton>(25);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton9 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(26);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton9 => GetElement<IControllerTemplateButton>(26);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton10 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(27);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton10 => GetElement<IControllerTemplateButton>(27);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton11 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(161);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton11 => GetElement<IControllerTemplateButton>(161);
 
-	IControllerTemplateButton IHOTASTemplate.stickBaseButton12 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(162);
+	IControllerTemplateButton IHOTASTemplate.stickBaseButton12 => GetElement<IControllerTemplateButton>(162);
 
-	IControllerTemplateButton IHOTASTemplate.mode1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(44);
+	IControllerTemplateButton IHOTASTemplate.mode1 => GetElement<IControllerTemplateButton>(44);
 
-	IControllerTemplateButton IHOTASTemplate.mode2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(45);
+	IControllerTemplateButton IHOTASTemplate.mode2 => GetElement<IControllerTemplateButton>(45);
 
-	IControllerTemplateButton IHOTASTemplate.mode3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(46);
+	IControllerTemplateButton IHOTASTemplate.mode3 => GetElement<IControllerTemplateButton>(46);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(50);
+	IControllerTemplateButton IHOTASTemplate.throttleButton1 => GetElement<IControllerTemplateButton>(50);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(51);
+	IControllerTemplateButton IHOTASTemplate.throttleButton2 => GetElement<IControllerTemplateButton>(51);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(52);
+	IControllerTemplateButton IHOTASTemplate.throttleButton3 => GetElement<IControllerTemplateButton>(52);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(53);
+	IControllerTemplateButton IHOTASTemplate.throttleButton4 => GetElement<IControllerTemplateButton>(53);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(54);
+	IControllerTemplateButton IHOTASTemplate.throttleButton5 => GetElement<IControllerTemplateButton>(54);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(55);
+	IControllerTemplateButton IHOTASTemplate.throttleButton6 => GetElement<IControllerTemplateButton>(55);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(56);
+	IControllerTemplateButton IHOTASTemplate.throttleButton7 => GetElement<IControllerTemplateButton>(56);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(57);
+	IControllerTemplateButton IHOTASTemplate.throttleButton8 => GetElement<IControllerTemplateButton>(57);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton9 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(58);
+	IControllerTemplateButton IHOTASTemplate.throttleButton9 => GetElement<IControllerTemplateButton>(58);
 
-	IControllerTemplateButton IHOTASTemplate.throttleButton10 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(59);
+	IControllerTemplateButton IHOTASTemplate.throttleButton10 => GetElement<IControllerTemplateButton>(59);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(60);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton1 => GetElement<IControllerTemplateButton>(60);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(61);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton2 => GetElement<IControllerTemplateButton>(61);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(62);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton3 => GetElement<IControllerTemplateButton>(62);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(63);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton4 => GetElement<IControllerTemplateButton>(63);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(64);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton5 => GetElement<IControllerTemplateButton>(64);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(65);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton6 => GetElement<IControllerTemplateButton>(65);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(66);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton7 => GetElement<IControllerTemplateButton>(66);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(67);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton8 => GetElement<IControllerTemplateButton>(67);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton9 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(68);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton9 => GetElement<IControllerTemplateButton>(68);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton10 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(69);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton10 => GetElement<IControllerTemplateButton>(69);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton11 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(132);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton11 => GetElement<IControllerTemplateButton>(132);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton12 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(133);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton12 => GetElement<IControllerTemplateButton>(133);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton13 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(134);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton13 => GetElement<IControllerTemplateButton>(134);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton14 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(135);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton14 => GetElement<IControllerTemplateButton>(135);
 
-	IControllerTemplateButton IHOTASTemplate.throttleBaseButton15 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(136);
+	IControllerTemplateButton IHOTASTemplate.throttleBaseButton15 => GetElement<IControllerTemplateButton>(136);
 
-	IControllerTemplateAxis IHOTASTemplate.throttleSlider1 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(70);
+	IControllerTemplateAxis IHOTASTemplate.throttleSlider1 => GetElement<IControllerTemplateAxis>(70);
 
-	IControllerTemplateAxis IHOTASTemplate.throttleSlider2 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(71);
+	IControllerTemplateAxis IHOTASTemplate.throttleSlider2 => GetElement<IControllerTemplateAxis>(71);
 
-	IControllerTemplateAxis IHOTASTemplate.throttleSlider3 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(72);
+	IControllerTemplateAxis IHOTASTemplate.throttleSlider3 => GetElement<IControllerTemplateAxis>(72);
 
-	IControllerTemplateAxis IHOTASTemplate.throttleSlider4 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(73);
+	IControllerTemplateAxis IHOTASTemplate.throttleSlider4 => GetElement<IControllerTemplateAxis>(73);
 
-	IControllerTemplateAxis IHOTASTemplate.throttleDial1 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(74);
+	IControllerTemplateAxis IHOTASTemplate.throttleDial1 => GetElement<IControllerTemplateAxis>(74);
 
-	IControllerTemplateAxis IHOTASTemplate.throttleDial2 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(142);
+	IControllerTemplateAxis IHOTASTemplate.throttleDial2 => GetElement<IControllerTemplateAxis>(142);
 
-	IControllerTemplateAxis IHOTASTemplate.throttleDial3 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(143);
+	IControllerTemplateAxis IHOTASTemplate.throttleDial3 => GetElement<IControllerTemplateAxis>(143);
 
-	IControllerTemplateAxis IHOTASTemplate.throttleDial4 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(144);
+	IControllerTemplateAxis IHOTASTemplate.throttleDial4 => GetElement<IControllerTemplateAxis>(144);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel1Forward => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(145);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel1Forward => GetElement<IControllerTemplateButton>(145);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel1Back => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(146);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel1Back => GetElement<IControllerTemplateButton>(146);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel1Press => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(147);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel1Press => GetElement<IControllerTemplateButton>(147);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel2Forward => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(148);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel2Forward => GetElement<IControllerTemplateButton>(148);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel2Back => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(149);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel2Back => GetElement<IControllerTemplateButton>(149);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel2Press => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(150);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel2Press => GetElement<IControllerTemplateButton>(150);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel3Forward => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(151);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel3Forward => GetElement<IControllerTemplateButton>(151);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel3Back => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(152);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel3Back => GetElement<IControllerTemplateButton>(152);
 
-	IControllerTemplateButton IHOTASTemplate.throttleWheel3Press => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(153);
+	IControllerTemplateButton IHOTASTemplate.throttleWheel3Press => GetElement<IControllerTemplateButton>(153);
 
-	IControllerTemplateAxis IHOTASTemplate.leftPedal => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(168);
+	IControllerTemplateAxis IHOTASTemplate.leftPedal => GetElement<IControllerTemplateAxis>(168);
 
-	IControllerTemplateAxis IHOTASTemplate.rightPedal => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(169);
+	IControllerTemplateAxis IHOTASTemplate.rightPedal => GetElement<IControllerTemplateAxis>(169);
 
-	IControllerTemplateAxis IHOTASTemplate.slidePedals => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(170);
+	IControllerTemplateAxis IHOTASTemplate.slidePedals => GetElement<IControllerTemplateAxis>(170);
 
-	IControllerTemplateStick IHOTASTemplate.stick => ((ControllerTemplate)this).GetElement<IControllerTemplateStick>(171);
+	IControllerTemplateStick IHOTASTemplate.stick => GetElement<IControllerTemplateStick>(171);
 
-	IControllerTemplateThumbStick IHOTASTemplate.stickMiniStick1 => ((ControllerTemplate)this).GetElement<IControllerTemplateThumbStick>(172);
+	IControllerTemplateThumbStick IHOTASTemplate.stickMiniStick1 => GetElement<IControllerTemplateThumbStick>(172);
 
-	IControllerTemplateThumbStick IHOTASTemplate.stickMiniStick2 => ((ControllerTemplate)this).GetElement<IControllerTemplateThumbStick>(173);
+	IControllerTemplateThumbStick IHOTASTemplate.stickMiniStick2 => GetElement<IControllerTemplateThumbStick>(173);
 
-	IControllerTemplateHat IHOTASTemplate.stickHat1 => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(174);
+	IControllerTemplateHat IHOTASTemplate.stickHat1 => GetElement<IControllerTemplateHat>(174);
 
-	IControllerTemplateHat IHOTASTemplate.stickHat2 => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(175);
+	IControllerTemplateHat IHOTASTemplate.stickHat2 => GetElement<IControllerTemplateHat>(175);
 
-	IControllerTemplateHat IHOTASTemplate.stickHat3 => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(176);
+	IControllerTemplateHat IHOTASTemplate.stickHat3 => GetElement<IControllerTemplateHat>(176);
 
-	IControllerTemplateHat IHOTASTemplate.stickHat4 => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(177);
+	IControllerTemplateHat IHOTASTemplate.stickHat4 => GetElement<IControllerTemplateHat>(177);
 
-	IControllerTemplateThrottle IHOTASTemplate.throttle1 => ((ControllerTemplate)this).GetElement<IControllerTemplateThrottle>(178);
+	IControllerTemplateThrottle IHOTASTemplate.throttle1 => GetElement<IControllerTemplateThrottle>(178);
 
-	IControllerTemplateThrottle IHOTASTemplate.throttle2 => ((ControllerTemplate)this).GetElement<IControllerTemplateThrottle>(179);
+	IControllerTemplateThrottle IHOTASTemplate.throttle2 => GetElement<IControllerTemplateThrottle>(179);
 
-	IControllerTemplateThumbStick IHOTASTemplate.throttleMiniStick => ((ControllerTemplate)this).GetElement<IControllerTemplateThumbStick>(180);
+	IControllerTemplateThumbStick IHOTASTemplate.throttleMiniStick => GetElement<IControllerTemplateThumbStick>(180);
 
-	IControllerTemplateHat IHOTASTemplate.throttleHat1 => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(181);
+	IControllerTemplateHat IHOTASTemplate.throttleHat1 => GetElement<IControllerTemplateHat>(181);
 
-	IControllerTemplateHat IHOTASTemplate.throttleHat2 => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(182);
+	IControllerTemplateHat IHOTASTemplate.throttleHat2 => GetElement<IControllerTemplateHat>(182);
 
-	IControllerTemplateHat IHOTASTemplate.throttleHat3 => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(183);
+	IControllerTemplateHat IHOTASTemplate.throttleHat3 => GetElement<IControllerTemplateHat>(183);
 
-	IControllerTemplateHat IHOTASTemplate.throttleHat4 => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(184);
+	IControllerTemplateHat IHOTASTemplate.throttleHat4 => GetElement<IControllerTemplateHat>(184);
 
 	public HOTASTemplate(object payload)
 		: base(payload)

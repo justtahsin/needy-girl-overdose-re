@@ -12,7 +12,7 @@ public class TaskbarManager : SingletonMonoBehaviour<TaskbarManager>
 
 	public CanvasGroup TaskBarGroup => _taskbarGroup;
 
-	public GameObject TaskBarObj => ((Component)_taskbarGroup).gameObject;
+	public GameObject TaskBarObj => _taskbarGroup.gameObject;
 
 	public void SetTaskbarInteractive(bool interactive)
 	{
@@ -34,7 +34,6 @@ public class TaskbarManager : SingletonMonoBehaviour<TaskbarManager>
 
 	private void DisInteractive()
 	{
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
 		_taskbarGroup.interactable = false;
 		_taskbarGroup.blocksRaycasts = false;
 		SingletonMonoBehaviour<WindowManager>.Instance.CloseApp(AppType.LoadData);

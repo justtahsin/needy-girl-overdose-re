@@ -2,7 +2,6 @@ using System.IO;
 using SFB;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
@@ -14,22 +13,19 @@ public class CanvasSampleSaveFileImage : MonoBehaviour, IPointerDownHandler, IEv
 
 	private void Awake()
 	{
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0010: Expected O, but got Unknown
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
 		int num = 100;
 		int num2 = 100;
-		Texture2D val = new Texture2D(num, num2, (TextureFormat)3, false);
+		Texture2D texture2D = new Texture2D(num, num2, TextureFormat.RGB24, mipChain: false);
 		for (int i = 0; i < num; i++)
 		{
 			for (int j = 0; j < num2; j++)
 			{
-				val.SetPixel(i, j, Color.red);
+				texture2D.SetPixel(i, j, Color.red);
 			}
 		}
-		val.Apply();
-		_textureBytes = ImageConversion.EncodeToPNG(val);
-		Object.Destroy((Object)(object)val);
+		texture2D.Apply();
+		_textureBytes = texture2D.EncodeToPNG();
+		Object.Destroy(texture2D);
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -38,9 +34,7 @@ public class CanvasSampleSaveFileImage : MonoBehaviour, IPointerDownHandler, IEv
 
 	private void Start()
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Expected O, but got Unknown
-		((UnityEvent)((Component)this).GetComponent<Button>().onClick).AddListener(new UnityAction(OnClick));
+		GetComponent<Button>().onClick.AddListener(OnClick);
 	}
 
 	public void OnClick()

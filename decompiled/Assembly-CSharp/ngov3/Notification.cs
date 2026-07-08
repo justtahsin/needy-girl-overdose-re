@@ -1,6 +1,4 @@
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +34,8 @@ public class Notification : MonoBehaviour
 
 	public void Show()
 	{
-		TweenExtensions.Play<TweenerCore<Vector3, Vector3, VectorOptions>>(TweenSettingsExtensions.SetRelative<TweenerCore<Vector3, Vector3, VectorOptions>>(TweenSettingsExtensions.SetEase<TweenerCore<Vector3, Vector3, VectorOptions>>(ShortcutExtensions.DOLocalMoveX(((Component)button).transform, -320f, 0.1f, true), (Ease)6)));
+		button.transform.DOLocalMoveX(-320f, 0.1f, snapping: true).SetEase(Ease.OutQuad).SetRelative()
+			.Play();
 		SingletonMonoBehaviour<VibrationInputManager>.Instance.Vibrate(0.3f, 0.5f, 50f, 0.3f);
 	}
 

@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using NGO;
 using UnityEngine;
 
@@ -18,109 +12,6 @@ namespace ngov3;
 
 public static class NgoEx
 {
-	[CompilerGenerated]
-	private sealed class _003C_003Ec__DisplayClass6_0
-	{
-		[StructLayout(LayoutKind.Auto)]
-		private struct _003C_003CDelayNGO_003Eb__0_003Ed : IAsyncStateMachine
-		{
-			public int _003C_003E1__state;
-
-			public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-			public _003C_003Ec__DisplayClass6_0 _003C_003E4__this;
-
-			private Awaiter _003C_003Eu__1;
-
-			private void MoveNext()
-			{
-				//IL_006d: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0072: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0079: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0035: Unknown result type (might be due to invalid IL or missing references)
-				//IL_003a: Unknown result type (might be due to invalid IL or missing references)
-				//IL_003d: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0099: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0056: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0057: Unknown result type (might be due to invalid IL or missing references)
-				int num = _003C_003E1__state;
-				_003C_003Ec__DisplayClass6_0 _003C_003Ec__DisplayClass6_1 = _003C_003E4__this;
-				try
-				{
-					Awaiter val2;
-					if (num != 0)
-					{
-						SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_LOADING_CURSOR, Vector2.zero, (CursorMode)0);
-						UniTask val = UniTask.Delay(_003C_003Ec__DisplayClass6_1.milliseconds, false, (PlayerLoopTiming)8, _003C_003Ec__DisplayClass6_1.token, false);
-						val2 = ((UniTask)(ref val)).GetAwaiter();
-						if (!((Awaiter)(ref val2)).IsCompleted)
-						{
-							num = (_003C_003E1__state = 0);
-							_003C_003Eu__1 = val2;
-							((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003C_003CDelayNGO_003Eb__0_003Ed>(ref val2, ref this);
-							return;
-						}
-					}
-					else
-					{
-						val2 = _003C_003Eu__1;
-						_003C_003Eu__1 = default(Awaiter);
-						num = (_003C_003E1__state = -1);
-					}
-					((Awaiter)(ref val2)).GetResult();
-					SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_DEFAULT_CURSOR, Vector2.zero, (CursorMode)0);
-					_IS_DELAYING = false;
-				}
-				catch (Exception exception)
-				{
-					_003C_003E1__state = -2;
-					((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-					return;
-				}
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-			}
-
-			void IAsyncStateMachine.MoveNext()
-			{
-				//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-				this.MoveNext();
-			}
-
-			[DebuggerHidden]
-			private void SetStateMachine(IAsyncStateMachine stateMachine)
-			{
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-			}
-
-			void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-			{
-				//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-				this.SetStateMachine(stateMachine);
-			}
-		}
-
-		public int milliseconds;
-
-		public CancellationToken token;
-
-		[AsyncStateMachine(typeof(_003C_003CDelayNGO_003Eb__0_003Ed))]
-		internal UniTask _003CDelayNGO_003Eb__0()
-		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-			_003C_003CDelayNGO_003Eb__0_003Ed _003C_003CDelayNGO_003Eb__0_003Ed2 = default(_003C_003CDelayNGO_003Eb__0_003Ed);
-			_003C_003CDelayNGO_003Eb__0_003Ed2._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-			_003C_003CDelayNGO_003Eb__0_003Ed2._003C_003E4__this = this;
-			_003C_003CDelayNGO_003Eb__0_003Ed2._003C_003E1__state = -1;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003CDelayNGO_003Eb__0_003Ed2._003C_003Et__builder)).Start<_003C_003CDelayNGO_003Eb__0_003Ed>(ref _003C_003CDelayNGO_003Eb__0_003Ed2);
-			return ((AsyncUniTaskMethodBuilder)(ref _003C_003CDelayNGO_003Eb__0_003Ed2._003C_003Et__builder)).Task;
-		}
-	}
-
 	private static Texture2D _DEFAULT_CURSOR = null;
 
 	private static Texture2D _LOADING_CURSOR = null;
@@ -129,7 +20,7 @@ public static class NgoEx
 
 	private static bool _IS_DELAYING = false;
 
-	public static Random _R = new Random();
+	public static System.Random _R = new System.Random();
 
 	private static List<SystemTextMaster.Param> systemTexts = null;
 
@@ -758,68 +649,55 @@ public static class NgoEx
 
 	public static void ChangeCursor(bool isLoading)
 	{
-		//IL_005b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
-		if ((Object)(object)_DEFAULT_CURSOR == (Object)null)
+		if (_DEFAULT_CURSOR == null)
 		{
 			_DEFAULT_CURSOR = Resources.Load<Texture2D>("Cursor/cursor");
 		}
-		if ((Object)(object)_LOADING_CURSOR == (Object)null)
+		if (_LOADING_CURSOR == null)
 		{
 			_LOADING_CURSOR = Resources.Load<Texture2D>("Cursor/cursor_hourglass");
 		}
 		if (isLoading)
 		{
-			SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_LOADING_CURSOR, Vector2.zero, (CursorMode)0);
+			SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_LOADING_CURSOR, Vector2.zero, CursorMode.Auto);
 		}
 		else
 		{
-			SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_DEFAULT_CURSOR, Vector2.zero, (CursorMode)0);
+			SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_DEFAULT_CURSOR, Vector2.zero, CursorMode.Auto);
 		}
 	}
 
 	public static void DenyCursor()
 	{
-		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-		if ((Object)(object)_DENIED_CURSOR == (Object)null)
+		if (_DENIED_CURSOR == null)
 		{
 			_DENIED_CURSOR = Resources.Load<Texture2D>("Cursor/cursor_prohibition");
 		}
-		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_DENIED_CURSOR, Vector2.zero, (CursorMode)0);
+		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_DENIED_CURSOR, Vector2.zero, CursorMode.Auto);
 	}
 
 	public static UniTask DelayNGO(int milliseconds, CancellationToken token = default(CancellationToken))
 	{
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0072: Unknown result type (might be due to invalid IL or missing references)
-		_003C_003Ec__DisplayClass6_0 CS_0024_003C_003E8__locals4 = new _003C_003Ec__DisplayClass6_0();
-		CS_0024_003C_003E8__locals4.milliseconds = milliseconds;
-		CS_0024_003C_003E8__locals4.token = token;
 		if (_IS_DELAYING)
 		{
-			return UniTask.NextFrame(CS_0024_003C_003E8__locals4.token, false);
+			return UniTask.NextFrame(token);
 		}
 		_IS_DELAYING = true;
-		if ((Object)(object)_DEFAULT_CURSOR == (Object)null)
+		if (_DEFAULT_CURSOR == null)
 		{
 			_DEFAULT_CURSOR = Resources.Load<Texture2D>("Cursor/cursor");
 		}
-		if ((Object)(object)_LOADING_CURSOR == (Object)null)
+		if (_LOADING_CURSOR == null)
 		{
 			_LOADING_CURSOR = Resources.Load<Texture2D>("Cursor/cursor_hourglass");
 		}
-		return UniTask.Create((Func<UniTask>)([AsyncStateMachine(typeof(_003C_003Ec__DisplayClass6_0._003C_003CDelayNGO_003Eb__0_003Ed))] () =>
+		return UniTask.Create(async delegate
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-			_003C_003Ec__DisplayClass6_0._003C_003CDelayNGO_003Eb__0_003Ed _003C_003CDelayNGO_003Eb__0_003Ed = default(_003C_003Ec__DisplayClass6_0._003C_003CDelayNGO_003Eb__0_003Ed);
-			_003C_003CDelayNGO_003Eb__0_003Ed._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-			_003C_003CDelayNGO_003Eb__0_003Ed._003C_003E4__this = CS_0024_003C_003E8__locals4;
-			_003C_003CDelayNGO_003Eb__0_003Ed._003C_003E1__state = -1;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003CDelayNGO_003Eb__0_003Ed._003C_003Et__builder)).Start<_003C_003Ec__DisplayClass6_0._003C_003CDelayNGO_003Eb__0_003Ed>(ref _003C_003CDelayNGO_003Eb__0_003Ed);
-			return ((AsyncUniTaskMethodBuilder)(ref _003C_003CDelayNGO_003Eb__0_003Ed._003C_003Et__builder)).Task;
-		}));
+			SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_LOADING_CURSOR, Vector2.zero, CursorMode.Auto);
+			await UniTask.Delay(milliseconds, ignoreTimeScale: false, PlayerLoopTiming.Update, token);
+			SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_DEFAULT_CURSOR, Vector2.zero, CursorMode.Auto);
+			_IS_DELAYING = false;
+		});
 	}
 
 	public static T RandomEnumValue<T>()
@@ -830,45 +708,25 @@ public static class NgoEx
 
 	public static Sequence DoSperchatMove(this RectTransform ui, Action onCompleted = null)
 	{
-		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004f: Expected O, but got Unknown
-		//IL_00a4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0107: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0111: Expected O, but got Unknown
-		RectTransform parentRect = ((Component)((Component)ui).gameObject.transform.parent).gameObject.GetComponent<RectTransform>();
-		Sequence obj = TweenSettingsExtensions.Append(TweenSettingsExtensions.Append(TweenSettingsExtensions.Join(TweenSettingsExtensions.Append(TweenSettingsExtensions.OnStart<Sequence>(DOTween.Sequence(), (TweenCallback)delegate
+		RectTransform parentRect = ui.gameObject.transform.parent.gameObject.GetComponent<RectTransform>();
+		return DOTween.Sequence().OnStart(delegate
 		{
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
 			ui.anchoredPosition = spawnVec();
-		}), (Tween)(object)TweenSettingsExtensions.SetEase<TweenerCore<Vector3, Vector3, VectorOptions>>(ShortcutExtensions.DOLocalMoveY((Transform)(object)ui, 60f, 0.2f, false), (Ease)6)), (Tween)(object)ShortcutExtensions.DOScale((Transform)(object)ui, 0.5f, 0.4f)), (Tween)(object)ShortcutExtensions.DOShakeRotation((Transform)(object)ui, 2f, new Vector3(0f, 0f, 20f), 10, 90f, true)), (Tween)(object)ShortcutExtensions.DOScale((Transform)(object)ui, -1f, 0.4f));
-		RectTransform obj2 = ui;
-		Rect rect = parentRect.rect;
-		return TweenExtensions.Play<Sequence>(TweenSettingsExtensions.SetRelative<Sequence>(TweenSettingsExtensions.Join(obj, (Tween)(object)TweenSettingsExtensions.OnComplete<TweenerCore<Vector3, Vector3, VectorOptions>>(TweenSettingsExtensions.SetEase<TweenerCore<Vector3, Vector3, VectorOptions>>(ShortcutExtensions.DOLocalMoveY((Transform)(object)obj2, 0f - ((Rect)(ref rect)).height, 0.4f, false), (Ease)5), (TweenCallback)delegate
-		{
-			onCompleted?.Invoke();
-		}))));
+		}).Append(ui.DOLocalMoveY(60f, 0.2f).SetEase(Ease.OutQuad))
+			.Join(ui.DOScale(0.5f, 0.4f))
+			.Append(ui.DOShakeRotation(2f, new Vector3(0f, 0f, 20f)))
+			.Append(ui.DOScale(-1f, 0.4f))
+			.Join(ui.DOLocalMoveY(0f - parentRect.rect.height, 0.4f).SetEase(Ease.InQuad).OnComplete(delegate
+			{
+				onCompleted?.Invoke();
+			}))
+			.SetRelative()
+			.Play();
 		Vector2 spawnVec()
 		{
-			//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-			//IL_005d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0072: Unknown result type (might be due to invalid IL or missing references)
-			Rect rect2 = parentRect.rect;
-			float num = (0f - ((Rect)(ref rect2)).width) / 2f;
-			rect2 = parentRect.rect;
-			float num2 = Random.Range(num, ((Rect)(ref rect2)).width / 2f);
-			rect2 = parentRect.rect;
-			float num3 = (0f - ((Rect)(ref rect2)).height) / 2f;
-			rect2 = parentRect.rect;
-			float num4 = Random.Range(num3, ((Rect)(ref rect2)).height / 2f);
-			return new Vector2(num2, num4);
+			float x = UnityEngine.Random.Range((0f - parentRect.rect.width) / 2f, parentRect.rect.width / 2f);
+			float y = UnityEngine.Random.Range((0f - parentRect.rect.height) / 2f, parentRect.rect.height / 2f);
+			return new Vector2(x, y);
 		}
 	}
 
@@ -1289,7 +1147,7 @@ public static class NgoEx
 		{
 			return "";
 		}
-		EgosaMaster.Param param = list[Random.Range(0, list.Count)];
+		EgosaMaster.Param param = list[UnityEngine.Random.Range(0, list.Count)];
 		return lang switch
 		{
 			LanguageType.JP => param.BodyJp, 
@@ -1544,7 +1402,7 @@ public static class NgoEx
 
 	public static MobCommentMaster getMobs()
 	{
-		if ((Object)(object)MobData == (Object)null)
+		if (MobData == null)
 		{
 			MobData = Resources.Load<MobCommentMaster>("Master/MobComment");
 		}
@@ -1557,14 +1415,14 @@ public static class NgoEx
 		{
 			return list.FirstOrDefault();
 		}
-		int index = Random.Range(0, list.Count());
+		int index = UnityEngine.Random.Range(0, list.Count());
 		return list.ElementAtOrDefault(index);
 	}
 
 	public static string GenerateRandomCharacters(int length)
 	{
 		StringBuilder stringBuilder = new StringBuilder(length);
-		Random random = new Random();
+		System.Random random = new System.Random();
 		for (int i = 0; i < length; i++)
 		{
 			int index = random.Next(_RANDOM_CHARACTERS.Length);

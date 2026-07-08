@@ -1,4 +1,3 @@
-using System;
 using Rewired;
 using UniRx;
 using UniRx.Triggers;
@@ -27,16 +26,14 @@ public class RewiredScrollReceiver : MonoBehaviour
 	private void Awake()
 	{
 		_player = ReInput.players.GetPlayer(0);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(Observable.Where<float>(Observable.Select<Unit, float>(Observable.Where<Unit>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, bool>)((Unit _) => active)), (Func<Unit, float>)((Unit _) => _player.GetAxis("Scroll Vertical") * SCROLL_SPEED * Time.deltaTime)), (Func<float, bool>)((float value) => value != 0f)), (Action<float>)delegate(float verticalPostion)
+		(from _ in this.UpdateAsObservable()
+			where active
+			select _player.GetAxis("Scroll Vertical") * SCROLL_SPEED * Time.deltaTime into value
+			where value != 0f
+			select value).Subscribe(delegate(float verticalPostion)
 		{
-			//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0018: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-			Vector3 localPosition = ((Transform)scrollContent).localPosition;
-			((Transform)scrollContent).localPosition = Vector2.op_Implicit(new Vector2(localPosition.x, localPosition.y - verticalPostion));
-		}), ((Component)this).gameObject);
+			Vector3 localPosition = scrollContent.localPosition;
+			scrollContent.localPosition = new Vector2(localPosition.x, localPosition.y - verticalPostion);
+		}).AddTo(base.gameObject);
 	}
 }

@@ -18,11 +18,10 @@ public class PreLoadLayoutElement2D : MonoBehaviour, ILayoutElement2D
 
 	public RectTransform RectTransform => rect;
 
-	public IObservable<Unit> OnDestroyObservable => (IObservable<Unit>)onDestroySubject;
+	public IObservable<Unit> OnDestroyObservable => onDestroySubject;
 
 	private void OnDestroy()
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
 		onDestroySubject.OnNext(Unit.Default);
 		onDestroySubject.OnCompleted();
 	}

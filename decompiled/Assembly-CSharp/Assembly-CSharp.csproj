@@ -13,44 +13,110 @@
   <PropertyGroup />
   <ItemGroup />
   <ItemGroup>
-    <Reference Include="UnityEngine.CoreModule" />
-    <Reference Include="UnityEngine.UI" />
-    <Reference Include="UnityEngine.UnityWebRequestWWWModule" />
-    <Reference Include="UnityEngine.Physics2DModule" />
-    <Reference Include="Rewired_Core" />
-    <Reference Include="UniTask" />
-    <Reference Include="UniTask.DOTween" />
-    <Reference Include="com.rlabrecque.steamworks.net" />
-    <Reference Include="UnityEngine.PhysicsModule" />
-    <Reference Include="Unity.RenderPipelines.Core.Runtime" />
-    <Reference Include="Ngo.Effect.Runtime" />
-    <Reference Include="Unity.Mathematics" />
-    <Reference Include="UnityEngine.InputLegacyModule" />
-    <Reference Include="UnityEngine.TextRenderingModule" />
-    <Reference Include="UnityEngine.UIModule" />
-    <Reference Include="UnityEngine.IMGUIModule" />
-    <Reference Include="Ookii.Dialogs" />
-    <Reference Include="UniRx" />
-    <Reference Include="Unity.TextMeshPro" />
-    <Reference Include="UnityEngine.VideoModule" />
-    <Reference Include="Unity.ResourceManager" />
-    <Reference Include="DOTween" />
-    <Reference Include="UnityEngine.AnimationModule" />
-    <Reference Include="Unity.RenderPipelines.Universal.Runtime" />
-    <Reference Include="UnityEngine.UnityWebRequestModule" />
-    <Reference Include="UnityEngine.AudioModule" />
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired_Core">
+      <HintPath>../../game/Windose_Data/Managed/Rewired_Core.dll</HintPath>
+    </Reference>
+    <Reference Include="UniTask">
+      <HintPath>../../game/Windose_Data/Managed/UniTask.dll</HintPath>
+    </Reference>
+    <Reference Include="UniTask.DOTween">
+      <HintPath>../../game/Windose_Data/Managed/UniTask.DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="com.rlabrecque.steamworks.net">
+      <HintPath>../../game/Windose_Data/Managed/com.rlabrecque.steamworks.net.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>../../game/Windose_Data/Managed/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Ngo.Effect.Runtime">
+      <HintPath>../../game/Windose_Data/Managed/Ngo.Effect.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>../../game/Windose_Data/Managed/Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Ookii.Dialogs">
+      <HintPath>../../game/Windose_Data/Managed/Ookii.Dialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="UniRx">
+      <HintPath>../../game/Windose_Data/Managed/UniRx.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>../../game/Windose_Data/Managed/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.VideoModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>../../game/Windose_Data/Managed/Unity.ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween">
+      <HintPath>../../game/Windose_Data/Managed/DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+      <HintPath>../../game/Windose_Data/Managed/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core">
-      <HintPath>../../../../../usr/share/dotnet/shared/Microsoft.NETCore.App/10.0.9/System.Core.dll</HintPath>
+      <HintPath>../../game/Windose_Data/Managed/System.Core.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>samples/windose/Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>assemblies/Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule" />
-    <Reference Include="Rewired_Windows" />
-    <Reference Include="DOTweenPro.Scripts" />
-    <Reference Include="Unity.Addressables" />
-    <Reference Include="DOTween.Modules" />
-    <Reference Include="UnityEngine.JSONSerializeModule" />
-    <Reference Include="UniTask.Addressables" />
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired_Windows">
+      <HintPath>../../game/Windose_Data/Managed/Rewired_Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTweenPro.Scripts">
+      <HintPath>../../game/Windose_Data/Managed/DOTweenPro.Scripts.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>../../game/Windose_Data/Managed/Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween.Modules">
+      <HintPath>../../game/Windose_Data/Managed/DOTween.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>../../game/Windose_Data/Managed/UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UniTask.Addressables">
+      <HintPath>../../game/Windose_Data/Managed/UniTask.Addressables.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

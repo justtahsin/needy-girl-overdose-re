@@ -20,7 +20,7 @@ public class MyPictureController : MonoBehaviour
 
 	private List<MyPictureContentView> _cells = new List<MyPictureContentView>();
 
-	public IReadOnlyList<GameObject> SelectableObjects => _cells.Select((MyPictureContentView cell) => ((Component)cell).gameObject).ToList();
+	public IReadOnlyList<GameObject> SelectableObjects => _cells.Select((MyPictureContentView cell) => cell.gameObject).ToList();
 
 	protected void Start()
 	{
@@ -28,7 +28,7 @@ public class MyPictureController : MonoBehaviour
 		_gotImagePaths = GotImagePaths();
 		for (int i = 0; i < list.Count; i++)
 		{
-			MyPictureContentView component = Object.Instantiate<GameObject>(_prefab, _root).GetComponent<MyPictureContentView>();
+			MyPictureContentView component = Object.Instantiate(_prefab, _root).GetComponent<MyPictureContentView>();
 			_cells.Add(component);
 		}
 		UpdateContents();
@@ -36,7 +36,6 @@ public class MyPictureController : MonoBehaviour
 
 	private void UpdateContents()
 	{
-		//IL_0063: Unknown result type (might be due to invalid IL or missing references)
 		List<ResourceLocal> list = ImageViewerHelper.LoadResourcesList();
 		for (int i = 0; i < list.Count; i++)
 		{

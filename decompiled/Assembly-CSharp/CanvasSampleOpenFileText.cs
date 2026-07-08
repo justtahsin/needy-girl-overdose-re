@@ -3,7 +3,6 @@ using System.Collections;
 using SFB;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
@@ -17,9 +16,7 @@ public class CanvasSampleOpenFileText : MonoBehaviour, IPointerDownHandler, IEve
 
 	private void Start()
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Expected O, but got Unknown
-		((UnityEvent)((Component)this).GetComponent<Button>().onClick).AddListener(new UnityAction(OnClick));
+		GetComponent<Button>().onClick.AddListener(OnClick);
 	}
 
 	private void OnClick()
@@ -27,7 +24,7 @@ public class CanvasSampleOpenFileText : MonoBehaviour, IPointerDownHandler, IEve
 		string[] array = StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", multiselect: false);
 		if (array.Length != 0)
 		{
-			((MonoBehaviour)this).StartCoroutine(OutputRoutine(new Uri(array[0]).AbsoluteUri));
+			StartCoroutine(OutputRoutine(new Uri(array[0]).AbsoluteUri));
 		}
 	}
 

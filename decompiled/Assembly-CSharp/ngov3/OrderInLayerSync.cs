@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -16,9 +15,10 @@ public class OrderInLayerSync : MonoBehaviour
 
 	private void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>(Observable.DistinctUntilChanged<int>(Observable.Select<Unit, int>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, int>)((Unit _) => sorting.sortingOrder))), (Action<int>)delegate(int order)
+		(from _ in this.UpdateAsObservable()
+			select sorting.sortingOrder).DistinctUntilChanged().Subscribe(delegate(int order)
 		{
 			canvas.sortingOrder = order;
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 }

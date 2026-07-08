@@ -8,6 +8,6 @@ public class CanvasScalerExt : CanvasScaler
 {
 	public void ForceRefresh()
 	{
-		((CanvasScaler)this).Handle();
+		Handle();
 	}
 }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Rewired.Demos;
@@ -83,11 +82,6 @@ public class SimpleCombinedKeyboardMouseRemapping : MonoBehaviour
 
 	private void RedrawUI()
 	{
-		//IL_012d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0137: Expected O, but got Unknown
-		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0073: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
 		controllerNameUIText.text = "Keyboard/Mouse";
 		for (int i = 0; i < rows.Count; i++)
 		{
@@ -97,8 +91,8 @@ public class SimpleCombinedKeyboardMouseRemapping : MonoBehaviour
 			int actionElementMapId = -1;
 			for (int j = 0; j < 2; j++)
 			{
-				ControllerType val = (ControllerType)((j != 0) ? 1 : 0);
-				foreach (ActionElementMap item in player.controllers.maps.GetMap(val, 0, "Default", "Default").ElementMapsWithAction(action.id))
+				ControllerType controllerType = ((j != 0) ? ControllerType.Mouse : ControllerType.Keyboard);
+				foreach (ActionElementMap item in player.controllers.maps.GetMap(controllerType, 0, "Default", "Default").ElementMapsWithAction(action.id))
 				{
 					if (item.ShowInField(row.actionRange))
 					{
@@ -113,9 +107,9 @@ public class SimpleCombinedKeyboardMouseRemapping : MonoBehaviour
 				}
 			}
 			row.text.text = text;
-			((UnityEventBase)row.button.onClick).RemoveAllListeners();
+			row.button.onClick.RemoveAllListeners();
 			int index = i;
-			((UnityEvent)row.button.onClick).AddListener((UnityAction)delegate
+			row.button.onClick.AddListener(delegate
 			{
 				OnInputFieldClicked(index, actionElementMapId);
 			});
@@ -133,30 +127,25 @@ public class SimpleCombinedKeyboardMouseRemapping : MonoBehaviour
 
 	private void InitializeUI()
 	{
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0052: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0110: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0116: Invalid comparison between Unknown and I4
-		foreach (Transform item in (Transform)actionGroupTransform)
+		foreach (Transform item in actionGroupTransform)
 		{
-			Object.Destroy((Object)(object)((Component)item).gameObject);
+			Object.Destroy(item.gameObject);
 		}
-		foreach (Transform item2 in (Transform)fieldGroupTransform)
+		foreach (Transform item2 in fieldGroupTransform)
 		{
-			Object.Destroy((Object)(object)((Component)item2).gameObject);
+			Object.Destroy(item2.gameObject);
 		}
 		foreach (InputAction item3 in ReInput.mapping.ActionsInCategory("Default"))
 		{
-			if ((int)item3.type == 0)
+			if (item3.type == InputActionType.Axis)
 			{
-				CreateUIRow(item3, (AxisRange)0, item3.descriptiveName);
-				CreateUIRow(item3, (AxisRange)1, (!string.IsNullOrEmpty(item3.positiveDescriptiveName)) ? item3.positiveDescriptiveName : (item3.descriptiveName + " +"));
-				CreateUIRow(item3, (AxisRange)2, (!string.IsNullOrEmpty(item3.negativeDescriptiveName)) ? item3.negativeDescriptiveName : (item3.descriptiveName + " -"));
+				CreateUIRow(item3, AxisRange.Full, item3.descriptiveName);
+				CreateUIRow(item3, AxisRange.Positive, (!string.IsNullOrEmpty(item3.positiveDescriptiveName)) ? item3.positiveDescriptiveName : (item3.descriptiveName + " +"));
+				CreateUIRow(item3, AxisRange.Negative, (!string.IsNullOrEmpty(item3.negativeDescriptiveName)) ? item3.negativeDescriptiveName : (item3.descriptiveName + " -"));
 			}
-			else if ((int)item3.type == 1)
+			else if (item3.type == InputActionType.Button)
 			{
-				CreateUIRow(item3, (AxisRange)1, item3.descriptiveName);
+				CreateUIRow(item3, AxisRange.Positive, item3.descriptiveName);
 			}
 		}
 		RedrawUI();
@@ -164,21 +153,19 @@ public class SimpleCombinedKeyboardMouseRemapping : MonoBehaviour
 
 	private void CreateUIRow(InputAction action, AxisRange actionRange, string label)
 	{
-		//IL_006d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006e: Unknown result type (might be due to invalid IL or missing references)
-		GameObject obj = Object.Instantiate<GameObject>(textPrefab);
-		obj.transform.SetParent((Transform)(object)actionGroupTransform);
+		GameObject obj = Object.Instantiate(textPrefab);
+		obj.transform.SetParent(actionGroupTransform);
 		obj.transform.SetAsLastSibling();
 		obj.GetComponent<Text>().text = label;
-		GameObject val = Object.Instantiate<GameObject>(buttonPrefab);
-		val.transform.SetParent((Transform)(object)fieldGroupTransform);
-		val.transform.SetAsLastSibling();
+		GameObject gameObject = Object.Instantiate(buttonPrefab);
+		gameObject.transform.SetParent(fieldGroupTransform);
+		gameObject.transform.SetAsLastSibling();
 		rows.Add(new Row
 		{
 			action = action,
 			actionRange = actionRange,
-			button = val.GetComponent<Button>(),
-			text = val.GetComponentInChildren<Text>()
+			button = gameObject.GetComponent<Button>(),
+			text = gameObject.GetComponentInChildren<Text>()
 		});
 	}
 
@@ -186,40 +173,40 @@ public class SimpleCombinedKeyboardMouseRemapping : MonoBehaviour
 	{
 		if (index >= 0 && index < rows.Count)
 		{
-			ControllerMap map = player.controllers.maps.GetMap((ControllerType)0, 0, "Default", "Default");
-			ControllerMap map2 = player.controllers.maps.GetMap((ControllerType)1, 0, "Default", "Default");
+			ControllerMap map = player.controllers.maps.GetMap(ControllerType.Keyboard, 0, "Default", "Default");
+			ControllerMap map2 = player.controllers.maps.GetMap(ControllerType.Mouse, 0, "Default", "Default");
 			ControllerMap controllerMap = (map.ContainsElementMap(actionElementMapToReplaceId) ? map : ((!map2.ContainsElementMap(actionElementMapToReplaceId)) ? null : map2));
 			_replaceTargetMapping = new TargetMapping
 			{
 				actionElementMapId = actionElementMapToReplaceId,
 				controllerMap = controllerMap
 			};
-			((MonoBehaviour)this).StartCoroutine(StartListeningDelayed(index, map, map2, actionElementMapToReplaceId));
+			StartCoroutine(StartListeningDelayed(index, map, map2, actionElementMapToReplaceId));
 		}
 	}
 
 	private IEnumerator StartListeningDelayed(int index, ControllerMap keyboardMap, ControllerMap mouseMap, int actionElementMapToReplaceId)
 	{
-		yield return (object)new WaitForSeconds(0.1f);
-		inputMapper_keyboard.Start(new Context
+		yield return new WaitForSeconds(0.1f);
+		inputMapper_keyboard.Start(new InputMapper.Context
 		{
 			actionId = rows[index].action.id,
 			controllerMap = keyboardMap,
 			actionRange = rows[index].actionRange,
 			actionElementMapToReplace = keyboardMap.GetElementMap(actionElementMapToReplaceId)
 		});
-		inputMapper_mouse.Start(new Context
+		inputMapper_mouse.Start(new InputMapper.Context
 		{
 			actionId = rows[index].action.id,
 			controllerMap = mouseMap,
 			actionRange = rows[index].actionRange,
 			actionElementMapToReplace = mouseMap.GetElementMap(actionElementMapToReplaceId)
 		});
-		player.controllers.maps.SetMapsEnabled(false, "UI");
+		player.controllers.maps.SetMapsEnabled(state: false, "UI");
 		statusUIText.text = "Listening...";
 	}
 
-	private void OnInputMapped(InputMappedEventData data)
+	private void OnInputMapped(InputMapper.InputMappedEventData data)
 	{
 		inputMapper_keyboard.Stop();
 		inputMapper_mouse.Stop();
@@ -230,9 +217,9 @@ public class SimpleCombinedKeyboardMouseRemapping : MonoBehaviour
 		RedrawUI();
 	}
 
-	private void OnStopped(StoppedEventData data)
+	private void OnStopped(InputMapper.StoppedEventData data)
 	{
 		statusUIText.text = string.Empty;
-		player.controllers.maps.SetMapsEnabled(true, "UI");
+		player.controllers.maps.SetMapsEnabled(state: true, "UI");
 	}
 }

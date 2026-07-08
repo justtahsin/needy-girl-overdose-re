@@ -8,6 +8,6 @@ public class DebugEventView : MonoBehaviour
 
 	private void Awake()
 	{
-		((Component)this).gameObject.SetActive(IsDebug);
+		base.gameObject.SetActive(IsDebug);
 	}
 }

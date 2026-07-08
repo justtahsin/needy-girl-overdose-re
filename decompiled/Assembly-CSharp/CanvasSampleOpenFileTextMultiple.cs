@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using SFB;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
@@ -18,9 +17,7 @@ public class CanvasSampleOpenFileTextMultiple : MonoBehaviour, IPointerDownHandl
 
 	private void Start()
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Expected O, but got Unknown
-		((UnityEvent)((Component)this).GetComponent<Button>().onClick).AddListener(new UnityAction(OnClick));
+		GetComponent<Button>().onClick.AddListener(OnClick);
 	}
 
 	private void OnClick()
@@ -33,7 +30,7 @@ public class CanvasSampleOpenFileTextMultiple : MonoBehaviour, IPointerDownHandl
 			{
 				list.Add(new Uri(array[i]).AbsoluteUri);
 			}
-			((MonoBehaviour)this).StartCoroutine(OutputRoutine(list.ToArray()));
+			StartCoroutine(OutputRoutine(list.ToArray()));
 		}
 	}
 

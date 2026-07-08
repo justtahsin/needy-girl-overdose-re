@@ -25,9 +25,9 @@ public class UIControl : MonoBehaviour
 		}
 		set
 		{
-			if (!((Object)(object)title == (Object)null))
+			if (!(title == null))
 			{
-				((Component)title).gameObject.SetActive(value);
+				title.gameObject.SetActive(value);
 				_showTitle = value;
 			}
 		}

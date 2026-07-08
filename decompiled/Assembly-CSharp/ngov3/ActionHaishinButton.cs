@@ -75,7 +75,7 @@ public class ActionHaishinButton : MonoBehaviour, IPointerEnterHandler, IEventSy
 		_canvas.alpha = 1f;
 		_canvas.interactable = true;
 		_canvas.blocksRaycasts = true;
-		((Selectable)_button).interactable = false;
+		_button.interactable = false;
 	}
 
 	private void SetExecutable()
@@ -83,7 +83,7 @@ public class ActionHaishinButton : MonoBehaviour, IPointerEnterHandler, IEventSy
 		_canvas.alpha = 1f;
 		_canvas.interactable = true;
 		_canvas.blocksRaycasts = true;
-		((Selectable)_button).interactable = true;
+		_button.interactable = true;
 	}
 
 	public void OnPointerEnter(PointerEventData e)

@@ -14,7 +14,7 @@ public static class CSVFromGoogleSpreadSheet
 		yield return request.Send();
 		if (request.isNetworkError)
 		{
-			Debug.LogError((object)request.error);
+			Debug.LogError(request.error);
 			callBack(request.error);
 		}
 		else

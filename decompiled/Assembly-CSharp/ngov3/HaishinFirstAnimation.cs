@@ -1,117 +1,28 @@
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using NGO;
-using UnityEngine;
 
 namespace ngov3;
 
 public static class HaishinFirstAnimation
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CLoadHaishinFirstAnimation_003Ed__1 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		private Awaiter<AnimationClip> _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_00ed: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00fa: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d7: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			try
-			{
-				Awaiter<AnimationClip> val;
-				if (num == 0)
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter<AnimationClip>);
-					num = (_003C_003E1__state = -1);
-					goto IL_0109;
-				}
-				EventManager instance = SingletonMonoBehaviour<EventManager>.Instance;
-				StatusManager instance2 = SingletonMonoBehaviour<StatusManager>.Instance;
-				if (!((Object)(object)instance == (Object)null) && !((Object)(object)instance2 == (Object)null))
-				{
-					string text = ((instance.nowEnding != EndingType.Ending_None) ? GetEndingHaishinFirstAnimationKey(instance.nowEnding) : ((instance2.GetStatus(StatusType.DayIndex) == 1) ? "stream_cho_kashikoma" : ((!instance.isHorror) ? GetNormalHaishinFirstAnimationKey(instance.alpha, instance.alphaLevel) : GetHorrorHaishinFirstAnimationKey(instance2.GetStatus(StatusType.DayIndex)))));
-					if (!string.IsNullOrEmpty(text))
-					{
-						cts = new CancellationTokenSource();
-						val = LoadLiveViewData.LoadAnimation(text + ".anim", cts.Token).GetAwaiter();
-						if (!val.IsCompleted)
-						{
-							num = (_003C_003E1__state = 0);
-							_003C_003Eu__1 = val;
-							((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter<AnimationClip>, _003CLoadHaishinFirstAnimation_003Ed__1>(ref val, ref this);
-							return;
-						}
-						goto IL_0109;
-					}
-				}
-				goto end_IL_0007;
-				IL_0109:
-				val.GetResult();
-				cts.Dispose();
-				cts = null;
-				end_IL_0007:;
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	private static CancellationTokenSource cts;
 
-	[AsyncStateMachine(typeof(_003CLoadHaishinFirstAnimation_003Ed__1))]
-	public static UniTask LoadHaishinFirstAnimation()
+	public static async UniTask LoadHaishinFirstAnimation()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-		_003CLoadHaishinFirstAnimation_003Ed__1 _003CLoadHaishinFirstAnimation_003Ed__2 = default(_003CLoadHaishinFirstAnimation_003Ed__1);
-		_003CLoadHaishinFirstAnimation_003Ed__2._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CLoadHaishinFirstAnimation_003Ed__2._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CLoadHaishinFirstAnimation_003Ed__2._003C_003Et__builder)).Start<_003CLoadHaishinFirstAnimation_003Ed__1>(ref _003CLoadHaishinFirstAnimation_003Ed__2);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CLoadHaishinFirstAnimation_003Ed__2._003C_003Et__builder)).Task;
+		EventManager instance = SingletonMonoBehaviour<EventManager>.Instance;
+		StatusManager instance2 = SingletonMonoBehaviour<StatusManager>.Instance;
+		if (!(instance == null) && !(instance2 == null))
+		{
+			string text = ((instance.nowEnding != EndingType.Ending_None) ? GetEndingHaishinFirstAnimationKey(instance.nowEnding) : ((instance2.GetStatus(StatusType.DayIndex) == 1) ? "stream_cho_kashikoma" : ((!instance.isHorror) ? GetNormalHaishinFirstAnimationKey(instance.alpha, instance.alphaLevel) : GetHorrorHaishinFirstAnimationKey(instance2.GetStatus(StatusType.DayIndex)))));
+			if (!string.IsNullOrEmpty(text))
+			{
+				cts = new CancellationTokenSource();
+				await LoadLiveViewData.LoadAnimation(text + ".anim", cts.Token);
+				cts.Dispose();
+				cts = null;
+			}
+		}
 	}
 
 	public static void CancelLoading()
@@ -150,7 +61,7 @@ public static class HaishinFirstAnimation
 		{
 			EventManager instance = SingletonMonoBehaviour<EventManager>.Instance;
 			StatusManager instance2 = SingletonMonoBehaviour<StatusManager>.Instance;
-			if (!((Object)(object)instance == (Object)null) && !((Object)(object)instance2 == (Object)null))
+			if (!(instance == null) && !(instance2 == null))
 			{
 				return GetNormalHaishinFirstAnimationKey(instance.alpha, instance.alphaLevel);
 			}

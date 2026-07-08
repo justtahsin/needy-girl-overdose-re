@@ -41,9 +41,9 @@ public class ControllerUIElement : MonoBehaviour
 	{
 		get
 		{
-			if (!((Object)(object)_positiveUIEffect != (Object)null))
+			if (!(_positiveUIEffect != null))
 			{
-				return (Object)(object)_negativeUIEffect != (Object)null;
+				return _negativeUIEffect != null;
 			}
 			return true;
 		}
@@ -51,30 +51,22 @@ public class ControllerUIElement : MonoBehaviour
 
 	private void Awake()
 	{
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-		_image = ((Component)this).GetComponent<Image>();
-		_origColor = ((Graphic)_image).color;
+		_image = GetComponent<Image>();
+		_origColor = _image.color;
 		_color = _origColor;
 		ClearLabels();
 	}
 
 	public void Activate(float amount)
 	{
-		//IL_0085: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0096: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009b: Unknown result type (might be due to invalid IL or missing references)
 		amount = Mathf.Clamp(amount, -1f, 1f);
 		if (hasEffects)
 		{
-			if (amount < 0f && (Object)(object)_negativeUIEffect != (Object)null)
+			if (amount < 0f && _negativeUIEffect != null)
 			{
 				_negativeUIEffect.Activate(Mathf.Abs(amount));
 			}
-			if (amount > 0f && (Object)(object)_positiveUIEffect != (Object)null)
+			if (amount > 0f && _positiveUIEffect != null)
 			{
 				_positiveUIEffect.Activate(Mathf.Abs(amount));
 			}
@@ -96,7 +88,7 @@ public class ControllerUIElement : MonoBehaviour
 		}
 		for (int i = 0; i < _childElements.Length; i++)
 		{
-			if (!((Object)(object)_childElements[i] == (Object)null))
+			if (!(_childElements[i] == null))
 			{
 				_childElements[i].Activate(amount);
 			}
@@ -105,19 +97,17 @@ public class ControllerUIElement : MonoBehaviour
 
 	public void Deactivate()
 	{
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
 		if (!_isActive)
 		{
 			return;
 		}
 		_color = _origColor;
 		_highlightAmount = 0f;
-		if ((Object)(object)_positiveUIEffect != (Object)null)
+		if (_positiveUIEffect != null)
 		{
 			_positiveUIEffect.Deactivate();
 		}
-		if ((Object)(object)_negativeUIEffect != (Object)null)
+		if (_negativeUIEffect != null)
 		{
 			_negativeUIEffect.Deactivate();
 		}
@@ -129,7 +119,7 @@ public class ControllerUIElement : MonoBehaviour
 		}
 		for (int i = 0; i < _childElements.Length; i++)
 		{
-			if (!((Object)(object)_childElements[i] == (Object)null))
+			if (!(_childElements[i] == null))
 			{
 				_childElements[i].Deactivate();
 			}
@@ -138,19 +128,16 @@ public class ControllerUIElement : MonoBehaviour
 
 	public void SetLabel(string text, AxisRange labelType)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0012: Expected I4, but got Unknown
-		//IL_0067: Unknown result type (might be due to invalid IL or missing references)
-		Text val = (Text)((int)labelType switch
+		Text text2 = labelType switch
 		{
-			0 => _label, 
-			1 => _positiveLabel, 
-			2 => _negativeLabel, 
+			AxisRange.Full => _label, 
+			AxisRange.Positive => _positiveLabel, 
+			AxisRange.Negative => _negativeLabel, 
 			_ => null, 
-		});
-		if ((Object)(object)val != (Object)null)
+		};
+		if (text2 != null)
 		{
-			val.text = text;
+			text2.text = text;
 		}
 		if (_childElements.Length == 0)
 		{
@@ -158,7 +145,7 @@ public class ControllerUIElement : MonoBehaviour
 		}
 		for (int i = 0; i < _childElements.Length; i++)
 		{
-			if (!((Object)(object)_childElements[i] == (Object)null))
+			if (!(_childElements[i] == null))
 			{
 				_childElements[i].SetLabel(text, labelType);
 			}
@@ -167,15 +154,15 @@ public class ControllerUIElement : MonoBehaviour
 
 	public void ClearLabels()
 	{
-		if ((Object)(object)_label != (Object)null)
+		if (_label != null)
 		{
 			_label.text = string.Empty;
 		}
-		if ((Object)(object)_positiveLabel != (Object)null)
+		if (_positiveLabel != null)
 		{
 			_positiveLabel.text = string.Empty;
 		}
-		if ((Object)(object)_negativeLabel != (Object)null)
+		if (_negativeLabel != null)
 		{
 			_negativeLabel.text = string.Empty;
 		}
@@ -185,7 +172,7 @@ public class ControllerUIElement : MonoBehaviour
 		}
 		for (int i = 0; i < _childElements.Length; i++)
 		{
-			if (!((Object)(object)_childElements[i] == (Object)null))
+			if (!(_childElements[i] == null))
 			{
 				_childElements[i].ClearLabels();
 			}
@@ -194,7 +181,6 @@ public class ControllerUIElement : MonoBehaviour
 
 	private void RedrawImage()
 	{
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		((Graphic)_image).color = _color;
+		_image.color = _color;
 	}
 }

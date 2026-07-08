@@ -1,6 +1,4 @@
-using System;
 using UniRx;
-using UnityEngine;
 
 namespace ngov3;
 
@@ -8,23 +6,21 @@ public class PronHorror : SheetView
 {
 	protected override void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<bool>(OnDosed(), (Action<bool>)delegate
+		OnDosed().Subscribe(delegate
 		{
-			IntReactiveProperty currentDoseCount = _currentDoseCount;
-			int value = ((ReactiveProperty<int>)(object)currentDoseCount).Value;
-			((ReactiveProperty<int>)(object)currentDoseCount).Value = value + 1;
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)_currentDoseCount, (Action<int>)delegate(int count)
+			_currentDoseCount.Value++;
+		}).AddTo(base.gameObject);
+		_currentDoseCount.Subscribe(delegate(int count)
 		{
 			FetchOverDose(count);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void FetchOverDose(int count)
 	{
 		if (count > _tekiryou)
 		{
-			((Component)_odButton).gameObject.SetActive(true);
+			_odButton.gameObject.SetActive(value: true);
 		}
 	}
 }

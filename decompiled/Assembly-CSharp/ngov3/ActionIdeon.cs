@@ -29,11 +29,13 @@ public class ActionIdeon : MonoBehaviour
 
 	private void SetExecutable()
 	{
-		((Selectable)_button).interactable = true;
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(Observable.ThrottleFirst<Unit>(Observable.TakeUntilDestroy<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_button), (Component)(object)this), TimeSpan.FromMilliseconds(2000.0)), (Action<Unit>)delegate
-		{
-			OnCommand();
-		}), (Component)(object)_button);
+		_button.interactable = true;
+		_button.OnClickAsObservable().TakeUntilDestroy(this).ThrottleFirst(TimeSpan.FromMilliseconds(2000.0))
+			.Subscribe(delegate
+			{
+				OnCommand();
+			})
+			.AddTo(_button);
 	}
 
 	public void OnCommand()

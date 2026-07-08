@@ -32,27 +32,27 @@ public static class ControllerTemplateFactory
 	{
 		if (typeGuid == GamepadTemplate.typeGuid)
 		{
-			return (IControllerTemplate)(object)new GamepadTemplate(payload);
+			return new GamepadTemplate(payload);
 		}
 		if (typeGuid == RacingWheelTemplate.typeGuid)
 		{
-			return (IControllerTemplate)(object)new RacingWheelTemplate(payload);
+			return new RacingWheelTemplate(payload);
 		}
 		if (typeGuid == HOTASTemplate.typeGuid)
 		{
-			return (IControllerTemplate)(object)new HOTASTemplate(payload);
+			return new HOTASTemplate(payload);
 		}
 		if (typeGuid == FlightYokeTemplate.typeGuid)
 		{
-			return (IControllerTemplate)(object)new FlightYokeTemplate(payload);
+			return new FlightYokeTemplate(payload);
 		}
 		if (typeGuid == FlightPedalsTemplate.typeGuid)
 		{
-			return (IControllerTemplate)(object)new FlightPedalsTemplate(payload);
+			return new FlightPedalsTemplate(payload);
 		}
 		if (typeGuid == SixDofControllerTemplate.typeGuid)
 		{
-			return (IControllerTemplate)(object)new SixDofControllerTemplate(payload);
+			return new SixDofControllerTemplate(payload);
 		}
 		return null;
 	}

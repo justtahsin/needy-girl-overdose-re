@@ -31,9 +31,7 @@ public class TouchJoystickExample : MonoBehaviour, IPointerDownHandler, IEventSy
 
 	private void Start()
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Invalid comparison between Unknown and I4
-		if ((int)SystemInfo.deviceType == 1)
+		if (SystemInfo.deviceType == DeviceType.Handheld)
 		{
 			allowMouseControl = false;
 		}
@@ -42,8 +40,6 @@ public class TouchJoystickExample : MonoBehaviour, IPointerDownHandler, IEventSy
 
 	private void Update()
 	{
-		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
 		if ((float)Screen.width != origScreenResolution.x || (float)Screen.height != origScreenResolution.y || Screen.orientation != origScreenOrientation)
 		{
 			Restart();
@@ -53,48 +49,25 @@ public class TouchJoystickExample : MonoBehaviour, IPointerDownHandler, IEventSy
 
 	private void Restart()
 	{
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
 		hasFinger = false;
-		Transform transform = ((Component)this).transform;
-		((RectTransform)((transform is RectTransform) ? transform : null)).anchoredPosition = origAnchoredPosition;
+		(base.transform as RectTransform).anchoredPosition = origAnchoredPosition;
 		position = Vector2.zero;
 	}
 
 	private void StoreOrigValues()
 	{
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0039: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0044: Unknown result type (might be due to invalid IL or missing references)
-		Transform transform = ((Component)this).transform;
-		origAnchoredPosition = ((RectTransform)((transform is RectTransform) ? transform : null)).anchoredPosition;
-		origWorldPosition = ((Component)this).transform.position;
-		origScreenResolution = new Vector2((float)Screen.width, (float)Screen.height);
+		origAnchoredPosition = (base.transform as RectTransform).anchoredPosition;
+		origWorldPosition = base.transform.position;
+		origScreenResolution = new Vector2(Screen.width, Screen.height);
 		origScreenOrientation = Screen.orientation;
 	}
 
 	private void UpdateValue(Vector3 value)
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-		Vector3 val = origWorldPosition - value;
-		val.y = 0f - val.y;
-		val /= (float)radius;
-		position = new Vector2(0f - val.x, val.y);
+		Vector3 vector = origWorldPosition - value;
+		vector.y = 0f - vector.y;
+		vector /= (float)radius;
+		position = new Vector2(0f - vector.x, vector.y);
 	}
 
 	void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
@@ -116,24 +89,12 @@ public class TouchJoystickExample : MonoBehaviour, IPointerDownHandler, IEventSy
 
 	void IDragHandler.OnDrag(PointerEventData eventData)
 	{
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0054: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0060: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0066: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0074: Unknown result type (might be due to invalid IL or missing references)
 		if (hasFinger && eventData.pointerId == lastFingerId)
 		{
-			Vector3 val = default(Vector3);
-			((Vector3)(ref val))._002Ector(eventData.position.x - origWorldPosition.x, eventData.position.y - origWorldPosition.y);
-			val = Vector3.ClampMagnitude(val, (float)radius);
-			Vector3 value = origWorldPosition + val;
-			((Component)this).transform.position = value;
+			Vector3 vector = new Vector3(eventData.position.x - origWorldPosition.x, eventData.position.y - origWorldPosition.y);
+			vector = Vector3.ClampMagnitude(vector, radius);
+			Vector3 value = origWorldPosition + vector;
+			base.transform.position = value;
 			UpdateValue(value);
 		}
 	}

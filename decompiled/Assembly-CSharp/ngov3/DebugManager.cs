@@ -12,7 +12,7 @@ public class DebugManager : MonoBehaviour
 		DebugMode.IsDebugMode = isDebugBuild;
 		if (DebugMode.IsDebugMode)
 		{
-			Debug.Log((object)"/////////// DEBUG BUILD ///////////");
+			Debug.Log("/////////// DEBUG BUILD ///////////");
 		}
 	}
 }

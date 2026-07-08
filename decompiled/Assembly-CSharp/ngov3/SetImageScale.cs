@@ -29,13 +29,11 @@ public class SetImageScale : MonoBehaviour
 
 	public void Start()
 	{
-		image = ((Component)this).GetComponent<Image>();
-		Transform transform = ((Component)this).gameObject.transform;
-		rect = (RectTransform)(object)((transform is RectTransform) ? transform : null);
-		Transform transform2 = ((Component)((Transform)rect).parent).gameObject.transform;
-		parentRect = (RectTransform)(object)((transform2 is RectTransform) ? transform2 : null);
+		image = GetComponent<Image>();
+		rect = base.gameObject.transform as RectTransform;
+		parentRect = rect.parent.gameObject.transform as RectTransform;
 		ScaleToParent();
-		ObservableExtensions.Subscribe<Rect>(ObserveExtensions.ObserveEveryValueChanged<GameObject, Rect>(((Component)parentRect).gameObject, (Func<GameObject, Rect>)((GameObject _) => parentRect.rect), (FrameCountType)0, false), (Action<Rect>)delegate
+		parentRect.gameObject.ObserveEveryValueChanged((GameObject _) => parentRect.rect).Subscribe(delegate
 		{
 			ScaleToParent();
 		});
@@ -43,11 +41,9 @@ public class SetImageScale : MonoBehaviour
 
 	private void SetDefaultSize()
 	{
-		//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0040: Unknown result type (might be due to invalid IL or missing references)
-		if ((Object)(object)image.sprite != (Object)null)
+		if (image.sprite != null)
 		{
-			((Graphic)image).SetNativeSize();
+			image.SetNativeSize();
 			nativeSizex = Mathf.FloorToInt(rect.sizeDelta.x);
 			nativeSizey = Mathf.FloorToInt(rect.sizeDelta.y);
 		}
@@ -55,24 +51,17 @@ public class SetImageScale : MonoBehaviour
 
 	public float ScaleToParent()
 	{
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
 		if (nativeSizex == 1)
 		{
 			SetDefaultSize();
 		}
-		Rect val = parentRect.rect;
-		float width = ((Rect)(ref val)).width;
-		val = parentRect.rect;
-		float height = ((Rect)(ref val)).height;
-		float val2 = width / (float)nativeSizex;
-		float val3 = height / (float)nativeSizey;
+		float width = parentRect.rect.width;
+		float height = parentRect.rect.height;
+		float val = width / (float)nativeSizex;
+		float val2 = height / (float)nativeSizey;
 		if (fitType == FitType.Contain)
 		{
-			float num = Math.Min(val2, val3);
+			float num = Math.Min(val, val2);
 			if (num < 1f)
 			{
 				scale = num;
@@ -84,7 +73,7 @@ public class SetImageScale : MonoBehaviour
 		}
 		else
 		{
-			scale = Mathf.CeilToInt(Math.Max(val2, val3));
+			scale = Mathf.CeilToInt(Math.Max(val, val2));
 			if (scale < 1f)
 			{
 				scale = 1f;

@@ -48,7 +48,7 @@ public class StatusDiffComponent : MonoBehaviour
 			}
 		}
 		_statusdiff.text = text2;
-		int num3 = SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(diff.statusType) + diff.delta;
-		_newStatus.text = Mathf.Clamp(num3, SingletonMonoBehaviour<StatusManager>.Instance.GetMinStatus(diff.statusType), SingletonMonoBehaviour<StatusManager>.Instance.GetMaxStatus(diff.statusType)).ToString();
+		int value = SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(diff.statusType) + diff.delta;
+		_newStatus.text = Mathf.Clamp(value, SingletonMonoBehaviour<StatusManager>.Instance.GetMinStatus(diff.statusType), SingletonMonoBehaviour<StatusManager>.Instance.GetMaxStatus(diff.statusType)).ToString();
 	}
 }

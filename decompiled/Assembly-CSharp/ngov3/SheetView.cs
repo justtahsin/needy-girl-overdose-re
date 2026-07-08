@@ -46,83 +46,80 @@ public class SheetView : MonoBehaviour
 
 	protected IntReactiveProperty _currentDoseCount = new IntReactiveProperty(0);
 
-	public IReactiveProperty<int> CurrentDoseCount => (IReactiveProperty<int>)(object)_currentDoseCount;
+	public IReactiveProperty<int> CurrentDoseCount => _currentDoseCount;
 
 	protected virtual void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<bool>(OnDosed(), (Action<bool>)delegate
+		OnDosed().Subscribe(delegate
 		{
-			IntReactiveProperty currentDoseCount = _currentDoseCount;
-			int value = ((ReactiveProperty<int>)(object)currentDoseCount).Value;
-			((ReactiveProperty<int>)(object)currentDoseCount).Value = value + 1;
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)_currentDoseCount, (Action<int>)delegate(int count)
+			_currentDoseCount.Value++;
+		}).AddTo(base.gameObject);
+		_currentDoseCount.Subscribe(delegate(int count)
 		{
 			FetchOverDose(count);
-		}), ((Component)this).gameObject);
-		((Component)_tekiryouButton).gameObject.SetActive(false);
-		((Component)_odButton).gameObject.SetActive(false);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_sheet), (Action<Unit>)delegate
+		}).AddTo(base.gameObject);
+		_tekiryouButton.gameObject.SetActive(value: false);
+		_odButton.gameObject.SetActive(value: false);
+		_sheet.OnClickAsObservable().Subscribe(delegate
 		{
 			OnDose();
-		}), (Component)(object)this);
+		}).AddTo(this);
 	}
 
 	private TabletView NextTablet()
 	{
-		if (((ReactiveProperty<int>)(object)_currentDoseCount).Value >= _tablets.Count)
+		if (_currentDoseCount.Value >= _tablets.Count)
 		{
 			return null;
 		}
-		return _tablets[((ReactiveProperty<int>)(object)_currentDoseCount).Value];
+		return _tablets[_currentDoseCount.Value];
 	}
 
 	public virtual void OnDose()
 	{
-		TabletView tabletView = NextTablet();
-		if (tabletView != null)
-		{
-			((Component)tabletView).gameObject.SetActive(false);
-		}
+		NextTablet()?.gameObject.SetActive(value: false);
 		Shake();
 		AudioManager.Instance.PlaySeByType(SoundType.SE_piporo);
-		IntReactiveProperty currentDoseCount = _currentDoseCount;
-		int value = ((ReactiveProperty<int>)(object)currentDoseCount).Value;
-		((ReactiveProperty<int>)(object)currentDoseCount).Value = value + 1;
+		_currentDoseCount.Value++;
 		SingletonMonoBehaviour<VibrationInputManager>.Instance.Vibrate(0.1f, 0.5f, 50f, 0.25f);
 	}
 
 	protected virtual IObservable<bool> OnDosed()
 	{
-		return Observable.Where<bool>(Observable.Merge<bool>((IEnumerable<IObservable<bool>>)_tablets.Select((TabletView t) => t.HasDosed)), (Func<bool, bool>)((bool t) => t));
+		return from t in _tablets.Select((TabletView t) => t.HasDosed).Merge()
+			where t
+			select t;
 	}
 
 	private void FetchOverDose(int count)
 	{
 		if (count < _tekiryou)
 		{
-			((Component)_tekiryouButton).gameObject.SetActive(false);
-			((Component)this).GetComponent<TooltipCaller>().type = TooltipType.System_Clickme;
+			_tekiryouButton.gameObject.SetActive(value: false);
+			GetComponent<TooltipCaller>().type = TooltipType.System_Clickme;
 		}
 		else if (count == _tekiryou)
 		{
-			((Component)_tekiryouButton).gameObject.SetActive(true);
-			((Component)this).GetComponent<TooltipCaller>().type = TooltipType.Tooltip_more;
+			_tekiryouButton.gameObject.SetActive(value: true);
+			GetComponent<TooltipCaller>().type = TooltipType.Tooltip_more;
 		}
 		else if (count > _tekiryou)
 		{
-			((Component)_tekiryouButton).gameObject.SetActive(false);
-			((Component)_odButton).gameObject.SetActive(true);
+			_tekiryouButton.gameObject.SetActive(value: false);
+			_odButton.gameObject.SetActive(value: true);
 		}
 	}
 
 	private void Shake()
 	{
 		Sequence sequence = _sequence;
-		if (sequence == null || !TweenExtensions.IsPlaying((Tween)(object)sequence))
+		if (sequence == null || !sequence.IsPlaying())
 		{
-			_sequence = TweenSettingsExtensions.SetLoops<Sequence>(TweenSettingsExtensions.SetRelative<Sequence>(TweenSettingsExtensions.Append(TweenSettingsExtensions.Append(TweenSettingsExtensions.Append(DOTween.Sequence(), (Tween)(object)DOTweenModuleUI.DOAnchorPosY(_tabletRoot, (float)(-_tweenSetting.Power), (float)_tweenSetting.DurationMilliSeconds * 0.001f, true)), (Tween)(object)DOTweenModuleUI.DOAnchorPosY(_tabletRoot, (float)(_tweenSetting.Power * 2), (float)_tweenSetting.DurationMilliSeconds * 0.001f, true)), (Tween)(object)DOTweenModuleUI.DOAnchorPosY(_tabletRoot, (float)(-_tweenSetting.Power), (float)_tweenSetting.DurationMilliSeconds * 0.001f, true))), _tweenSetting.ShakeCount);
-			TweenExtensions.Play<Sequence>(TweenSettingsExtensions.SetAutoKill<Sequence>(_sequence, false));
+			_sequence = DOTween.Sequence().Append(_tabletRoot.DOAnchorPosY(-_tweenSetting.Power, (float)_tweenSetting.DurationMilliSeconds * 0.001f, snapping: true)).Append(_tabletRoot.DOAnchorPosY(_tweenSetting.Power * 2, (float)_tweenSetting.DurationMilliSeconds * 0.001f, snapping: true))
+				.Append(_tabletRoot.DOAnchorPosY(-_tweenSetting.Power, (float)_tweenSetting.DurationMilliSeconds * 0.001f, snapping: true))
+				.SetRelative()
+				.SetLoops(_tweenSetting.ShakeCount);
+			_sequence.SetAutoKill(autoKillOnCompletion: false).Play();
 		}
 	}
 }

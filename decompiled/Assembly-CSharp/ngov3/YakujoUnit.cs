@@ -26,23 +26,23 @@ public class YakujoUnit : MonoBehaviour
 	private void Awake()
 	{
 		LanguageType value = SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value;
-		if ((Object)(object)_namae != (Object)null)
+		if (_namae != null)
 		{
 			_namae.text = NgoEx.yakujo(type.ToString(), "namae", value);
 		}
-		if ((Object)(object)_tekiryo != (Object)null)
+		if (_tekiryo != null)
 		{
 			_tekiryo.text = NgoEx.yakujo(type.ToString(), "tekiryo", value);
 		}
-		if ((Object)(object)_kounou != (Object)null)
+		if (_kounou != null)
 		{
 			_kounou.text = NgoEx.yakujo(type.ToString(), "kounou", value);
 		}
-		if ((Object)(object)_hukusayou != (Object)null)
+		if (_hukusayou != null)
 		{
 			_hukusayou.text = NgoEx.yakujo(type.ToString(), "hukusayou", value);
 		}
-		if ((Object)(object)_memo != (Object)null)
+		if (_memo != null)
 		{
 			_memo.text = NgoEx.yakujo(type.ToString(), "memo", value);
 		}

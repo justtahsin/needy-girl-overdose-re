@@ -38,23 +38,23 @@ public struct TweetData
 		{
 			if (follower > 100000)
 			{
-				FavNumber = (int)((double)follower * 0.13555 - 5555.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerFav * Random.Range(1, 10)));
-				RtNumber = (int)((double)follower * 0.00888 + 1111.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerRT * Random.Range(1, 10)));
+				FavNumber = (int)((double)follower * 0.13555 - 5555.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerFav * UnityEngine.Random.Range(1, 10)));
+				RtNumber = (int)((double)follower * 0.00888 + 1111.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerRT * UnityEngine.Random.Range(1, 10)));
 			}
 			else if (follower > 10000)
 			{
-				FavNumber = (int)((double)follower * 0.066 + 1333.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerFav * Random.Range(1, 10)));
-				RtNumber = (int)((double)follower * 0.018 + 166.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerRT * Random.Range(1, 10)));
+				FavNumber = (int)((double)follower * 0.066 + 1333.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerFav * UnityEngine.Random.Range(1, 10)));
+				RtNumber = (int)((double)follower * 0.018 + 166.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerRT * UnityEngine.Random.Range(1, 10)));
 			}
 			else if (follower > 1000)
 			{
-				FavNumber = (int)((double)follower * 0.88 + 111.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerFav * Random.Range(0, 1)));
-				RtNumber = (int)((double)follower * 0.034 + 5.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerRT * Random.Range(0, 1)));
+				FavNumber = (int)((double)follower * 0.88 + 111.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerFav * UnityEngine.Random.Range(0, 1)));
+				RtNumber = (int)((double)follower * 0.034 + 5.0 + (double)(TweetFetcher.ConvertTypeToTweet(t).BuzzPowerRT * UnityEngine.Random.Range(0, 1)));
 			}
 			else
 			{
-				FavNumber = (int)(Mathf.Max(Mathf.Log10((float)follower), 0.5f) * (float)TweetFetcher.ConvertTypeToTweet(t).BuzzPowerFav * 2f) + Random.Range(1, 10);
-				RtNumber = (int)(Mathf.Max(Mathf.Log10((float)follower), 1f) * (float)TweetFetcher.ConvertTypeToTweet(t).BuzzPowerRT) + Random.Range(1, 10);
+				FavNumber = (int)(Mathf.Max(Mathf.Log10(follower), 0.5f) * (float)TweetFetcher.ConvertTypeToTweet(t).BuzzPowerFav * 2f) + UnityEngine.Random.Range(1, 10);
+				RtNumber = (int)(Mathf.Max(Mathf.Log10(follower), 1f) * (float)TweetFetcher.ConvertTypeToTweet(t).BuzzPowerRT) + UnityEngine.Random.Range(1, 10);
 			}
 		}
 		else
@@ -92,8 +92,8 @@ public struct TweetData
 			}
 			else
 			{
-				FavNumber = (int)Mathf.Max(Mathf.Log10((float)follower), 0.5f);
-				RtNumber = (int)Mathf.Max(Mathf.Log10((float)follower), 1f);
+				FavNumber = (int)Mathf.Max(Mathf.Log10(follower), 0.5f);
+				RtNumber = (int)Mathf.Max(Mathf.Log10(follower), 1f);
 			}
 		}
 		else

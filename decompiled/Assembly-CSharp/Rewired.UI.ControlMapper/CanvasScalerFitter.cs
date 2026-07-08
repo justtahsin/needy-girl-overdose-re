@@ -34,7 +34,7 @@ public class CanvasScalerFitter : MonoBehaviour
 
 	private void OnEnable()
 	{
-		canvasScaler = ((Component)this).GetComponent<CanvasScalerExt>();
+		canvasScaler = GetComponent<CanvasScalerExt>();
 		Update();
 		canvasScaler.ForceRefresh();
 	}
@@ -51,10 +51,7 @@ public class CanvasScalerFitter : MonoBehaviour
 
 	private void UpdateSize()
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000c: Invalid comparison between Unknown and I4
-		//IL_0099: Unknown result type (might be due to invalid IL or missing references)
-		if ((int)((CanvasScaler)canvasScaler).uiScaleMode != 1 || breakPoints == null)
+		if (canvasScaler.uiScaleMode != CanvasScaler.ScaleMode.ScaleWithScreenSize || breakPoints == null)
 		{
 			return;
 		}
@@ -70,6 +67,6 @@ public class CanvasScalerFitter : MonoBehaviour
 				num3 = i;
 			}
 		}
-		((CanvasScaler)canvasScaler).referenceResolution = breakPoints[num3].referenceResolution;
+		canvasScaler.referenceResolution = breakPoints[num3].referenceResolution;
 	}
 }

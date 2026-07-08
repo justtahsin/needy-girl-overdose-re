@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NGO;
 using UniRx;
@@ -31,10 +30,10 @@ public class JineStampView : MonoBehaviour
 	public void Awake()
 	{
 		SetSprite();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageUpdated();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void OnLanguageUpdated()
@@ -44,32 +43,32 @@ public class JineStampView : MonoBehaviour
 
 	private void SetSprite()
 	{
-		if (((Component)this).gameObject.transform.childCount > 0)
+		if (base.gameObject.transform.childCount > 0)
 		{
 			_selectableObjects.Clear();
-			for (int num = ((Component)this).gameObject.transform.childCount - 1; num >= 0; num--)
+			for (int num = base.gameObject.transform.childCount - 1; num >= 0; num--)
 			{
-				Object.Destroy((Object)(object)((Component)((Component)this).transform.GetChild(num)).gameObject);
+				Object.Destroy(base.transform.GetChild(num).gameObject);
 			}
 		}
 		foreach (StampType type in userStamplist)
 		{
 			if (type != StampType.None)
 			{
-				GameObject val = Object.Instantiate<GameObject>(stampBase, ((Component)this).transform);
-				val.GetComponent<Image>().sprite = LoadStampData.ReadStampContent(type, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-				DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(val.GetComponent<Button>()), (Action<Unit>)delegate
+				GameObject gameObject = Object.Instantiate(stampBase, base.transform);
+				gameObject.GetComponent<Image>().sprite = LoadStampData.ReadStampContent(type, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+				gameObject.GetComponent<Button>().OnClickAsObservable().Subscribe(delegate
 				{
 					sendStamp(type);
-				}), val);
-				_selectableObjects.Add(val);
+				})
+					.AddTo(gameObject);
+				_selectableObjects.Add(gameObject);
 			}
 		}
 	}
 
 	private void sendStamp(StampType s)
 	{
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
 		SingletonMonoBehaviour<JineManager>.Instance.AddJineHistory(new JineData(JineUserType.pi, JineType.None, ResponseType.Stamp, s, string.Empty));
 	}
 }

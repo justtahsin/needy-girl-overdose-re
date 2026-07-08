@@ -9,7 +9,7 @@ public static class JineDataConverter
 {
 	private static List<LineMaster.Param> JineRawList = null;
 
-	public static Random _R = new Random();
+	public static System.Random _R = new System.Random();
 
 	public static List<LineMaster.Param> getJineRawList()
 	{
@@ -62,7 +62,7 @@ public static class JineDataConverter
 				LineMaster.Param jineFromTypeId = getJineFromTypeId(raw.id);
 				if (jineFromTypeId == null)
 				{
-					Debug.LogError((object)("Jineのデータが見つかりませんでした:ID:" + raw.id));
+					Debug.LogError("Jineのデータが見つかりませんでした:ID:" + raw.id);
 					return new JineDrawable(JineUserType.ame, "", "", "", "", "", "", "", "", "", "", "", "", StampType.None);
 				}
 				return new JineDrawable(raw.user, jineFromTypeId.BodyJp, jineFromTypeId.BodyEn, jineFromTypeId.BodyCn, jineFromTypeId.BodyKo, jineFromTypeId.BodyTw, jineFromTypeId.BodyVn, jineFromTypeId.BodyFr, jineFromTypeId.BodyIt, jineFromTypeId.BodyGe, jineFromTypeId.BodySp, jineFromTypeId.BodyRu, string.Empty, StampType.None);
@@ -80,7 +80,7 @@ public static class JineDataConverter
 		LineMaster.Param jineFromTypeId2 = getJineFromTypeId(raw.id);
 		if (jineFromTypeId2 == null)
 		{
-			Debug.LogError((object)("Jineのデータが見つかりませんでした:ID:" + raw.id));
+			Debug.LogError("Jineのデータが見つかりませんでした:ID:" + raw.id);
 			return new JineDrawable(JineUserType.ame, "", "", "", "", "", "", "", "", "", "", "", "", StampType.None);
 		}
 		int kidokumillisecond = 1000;

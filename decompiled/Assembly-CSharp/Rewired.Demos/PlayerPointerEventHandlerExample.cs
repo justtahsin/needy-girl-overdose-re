@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Rewired.Integration.UnityUI;
-using Rewired.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -28,7 +27,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 
 	private void Update()
 	{
-		if (!((Object)(object)text != (Object)null))
+		if (!(text != null))
 		{
 			return;
 		}
@@ -44,7 +43,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnPointerEnter:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData));
 		}
 	}
@@ -53,7 +52,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnPointerExit:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData));
 		}
 	}
@@ -62,7 +61,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnPointerUp:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData) + ", Button Index = " + playerPointerEventData.buttonIndex);
 		}
 	}
@@ -71,7 +70,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnPointerDown:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData) + ", Button Index = " + playerPointerEventData.buttonIndex);
 		}
 	}
@@ -80,7 +79,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnPointerClick:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData) + ", Button Index = " + playerPointerEventData.buttonIndex);
 		}
 	}
@@ -89,7 +88,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnScroll:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData));
 		}
 	}
@@ -98,7 +97,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnBeginDrag:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData) + ", Button Index = " + playerPointerEventData.buttonIndex);
 		}
 	}
@@ -107,7 +106,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnDrag:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData) + ", Button Index = " + playerPointerEventData.buttonIndex);
 		}
 	}
@@ -116,7 +115,7 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 	{
 		if (eventData is PlayerPointerEventData)
 		{
-			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)(object)eventData;
+			PlayerPointerEventData playerPointerEventData = (PlayerPointerEventData)eventData;
 			Log("OnEndDrag:  Player = " + playerPointerEventData.playerId + ", Pointer Index = " + playerPointerEventData.inputSourceIndex + ", Source = " + GetSourceName(playerPointerEventData) + ", Button Index = " + playerPointerEventData.buttonIndex);
 		}
 	}
@@ -127,14 +126,12 @@ public sealed class PlayerPointerEventHandlerExample : MonoBehaviour, IPointerEn
 		{
 			if (playerEventData.mouseSource is Behaviour)
 			{
-				IMouseInputSource mouseSource = playerEventData.mouseSource;
-				return ((Object)((mouseSource is Behaviour) ? mouseSource : null)).name;
+				return (playerEventData.mouseSource as Behaviour).name;
 			}
 		}
 		else if (playerEventData.sourceType == PointerEventType.Touch && playerEventData.touchSource is Behaviour)
 		{
-			ITouchInputSource touchSource = playerEventData.touchSource;
-			return ((Object)((touchSource is Behaviour) ? touchSource : null)).name;
+			return (playerEventData.touchSource as Behaviour).name;
 		}
 		return null;
 	}

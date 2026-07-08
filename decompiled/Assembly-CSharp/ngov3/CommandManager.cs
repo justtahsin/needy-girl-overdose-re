@@ -46,7 +46,6 @@ public class CommandManager : SingletonMonoBehaviour<CommandManager>
 
 	public void OnActionHovered(ActionType a)
 	{
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
 		CmdMaster.Param c = NgoEx.CmdFromType(ChooseCommand(a));
 		if (a != ActionType.Haishin)
 		{
@@ -56,7 +55,6 @@ public class CommandManager : SingletonMonoBehaviour<CommandManager>
 
 	public void OnActionHovered(AlphaType alpha, int level)
 	{
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
 		CmdMaster.Param c = NgoEx.CmdFromType(ChooseCommand(alpha, level));
 		SingletonMonoBehaviour<TooltipManager>.Instance.ShowAction(ActionType.Haishin, c);
 	}
@@ -75,7 +73,7 @@ public class CommandManager : SingletonMonoBehaviour<CommandManager>
 			int result = 0;
 			if (int.TryParse(SingletonMonoBehaviour<EventManager>.Instance.alpha.ToString(), out result))
 			{
-				Debug.Log((object)"コマンドタイプに数値が指定されてます");
+				Debug.Log("コマンドタイプに数値が指定されてます");
 				return CmdType.Error;
 			}
 			return (CmdType)Enum.Parse(typeof(CmdType), SingletonMonoBehaviour<EventManager>.Instance.alpha.ToString() + "_" + SingletonMonoBehaviour<EventManager>.Instance.alphaLevel);

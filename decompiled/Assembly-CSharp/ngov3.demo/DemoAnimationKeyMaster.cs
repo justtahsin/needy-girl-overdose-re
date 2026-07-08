@@ -27,11 +27,11 @@ public class DemoAnimationKeyMaster : MonoBehaviour
 	{
 		foreach (AnimationCategoryVO item in animationCategoryVODataStore.Items)
 		{
-			PrefabFolder.InstantiateTo<DemoCategoryItem>((MonoBehaviour)(object)demoCategoryItemPrefab, categoryParent).Initialize(item, delegate(AnimationCategoryVO vo)
+			PrefabFolder.InstantiateTo<DemoCategoryItem>(demoCategoryItemPrefab, categoryParent).Initialize(item, delegate(AnimationCategoryVO vo)
 			{
 				foreach (AnimationKeyVO item2 in animationKeyVODataStore.Items.Where((AnimationKeyVO akv) => akv.AnimationCategory == vo.AnimationCategory))
 				{
-					PrefabFolder.InstantiateTo<DemoAnimationKeyItem>((MonoBehaviour)(object)demoAnimationKeyItemPrefab, animationKeyParent).Initialize(item2);
+					PrefabFolder.InstantiateTo<DemoAnimationKeyItem>(demoAnimationKeyItemPrefab, animationKeyParent).Initialize(item2);
 				}
 			});
 		}

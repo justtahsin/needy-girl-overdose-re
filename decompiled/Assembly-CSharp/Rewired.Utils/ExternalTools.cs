@@ -33,7 +33,7 @@ public class ExternalTools : IExternalTools
 
 	public bool isEditorPaused => _isEditorPaused;
 
-	public bool UnityInput_IsTouchPressureSupported => Input.touchPressureSupported;
+	public bool UnityInput_IsTouchPressureSupported => UnityEngine.Input.touchPressureSupported;
 
 	public event Action<bool> EditorPausedStateChangedEvent
 	{
@@ -124,34 +124,34 @@ public class ExternalTools : IExternalTools
 
 	public void WindowsStandalone_ForwardRawInput(IntPtr rawInputHeaderIndices, IntPtr rawInputDataIndices, uint indicesCount, IntPtr rawInputData, uint rawInputDataSize)
 	{
-		Input.ForwardRawInput(rawInputHeaderIndices, rawInputDataIndices, indicesCount, rawInputData, rawInputDataSize);
+		UnityEngine.Windows.Input.ForwardRawInput(rawInputHeaderIndices, rawInputDataIndices, indicesCount, rawInputData, rawInputDataSize);
 	}
 
 	public bool UnityUI_Graphic_GetRaycastTarget(object graphic)
 	{
-		if ((Object)((graphic is Graphic) ? graphic : null) == (Object)null)
+		if (graphic as Graphic == null)
 		{
 			return false;
 		}
-		return ((Graphic)((graphic is Graphic) ? graphic : null)).raycastTarget;
+		return (graphic as Graphic).raycastTarget;
 	}
 
 	public void UnityUI_Graphic_SetRaycastTarget(object graphic, bool value)
 	{
-		if (!((Object)((graphic is Graphic) ? graphic : null) == (Object)null))
+		if (!(graphic as Graphic == null))
 		{
-			((Graphic)((graphic is Graphic) ? graphic : null)).raycastTarget = value;
+			(graphic as Graphic).raycastTarget = value;
 		}
 	}
 
 	public float UnityInput_GetTouchPressure(ref Touch touch)
 	{
-		return ((Touch)(ref touch)).pressure;
+		return touch.pressure;
 	}
 
 	public float UnityInput_GetTouchMaximumPossiblePressure(ref Touch touch)
 	{
-		return ((Touch)(ref touch)).maximumPossiblePressure;
+		return touch.maximumPossiblePressure;
 	}
 
 	public IControllerTemplate CreateControllerTemplate(Guid typeGuid, object payload)

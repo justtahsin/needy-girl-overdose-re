@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -14,20 +13,18 @@ public class RectSizeSyncHorizontalLayoutd2D : MonoBehaviour
 
 	private void Start()
 	{
-		rectTransform = ((Component)this).GetComponent<RectTransform>();
-		layout2D = ((Component)this).GetComponent<HorizontalGridLayout2D>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(Observable.DistinctUntilChanged<float>(Observable.Select<Unit, float>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, float>)((Unit _) => layout2D.CurrentWidth))), (Action<float>)delegate
+		rectTransform = GetComponent<RectTransform>();
+		layout2D = GetComponent<HorizontalGridLayout2D>();
+		(from _ in this.UpdateAsObservable()
+			select layout2D.CurrentWidth).DistinctUntilChanged().Subscribe(delegate
 		{
 			WidthSet();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void WidthSet()
 	{
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-		Vector2 sizeDelta = default(Vector2);
-		((Vector2)(ref sizeDelta))._002Ector(layout2D.CurrentWidth, rectTransform.sizeDelta.y);
+		Vector2 sizeDelta = new Vector2(layout2D.CurrentWidth, rectTransform.sizeDelta.y);
 		rectTransform.sizeDelta = sizeDelta;
 	}
 }

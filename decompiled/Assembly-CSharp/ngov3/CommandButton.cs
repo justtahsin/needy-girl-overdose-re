@@ -1,4 +1,3 @@
-using System;
 using NGO;
 using TMPro;
 using UniRx;
@@ -73,7 +72,7 @@ public class CommandButton : MonoBehaviour
 		_canvas.alpha = 1f;
 		_canvas.interactable = true;
 		_canvas.blocksRaycasts = true;
-		((Selectable)_button).interactable = false;
+		_button.interactable = false;
 	}
 
 	private void SetExecutable()
@@ -81,10 +80,10 @@ public class CommandButton : MonoBehaviour
 		_canvas.alpha = 1f;
 		_canvas.interactable = true;
 		_canvas.blocksRaycasts = true;
-		((Selectable)_button).interactable = true;
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_button), (Action<Unit>)delegate
+		_button.interactable = true;
+		_button.OnClickAsObservable().Subscribe(delegate
 		{
 			SingletonMonoBehaviour<CommandManager>.Instance.CommandAction(commandType, windowType);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 }

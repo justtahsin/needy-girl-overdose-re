@@ -14,11 +14,11 @@ public class TropyManager : MonoBehaviour
 	{
 		if (Object.FindObjectsOfType<TropyManager>().Length > 1)
 		{
-			Object.Destroy((Object)(object)((Component)this).gameObject);
+			Object.Destroy(base.gameObject);
 		}
 		else
 		{
-			Object.DontDestroyOnLoad((Object)(object)((Component)this).gameObject);
+			Object.DontDestroyOnLoad(base.gameObject);
 		}
 	}
 }

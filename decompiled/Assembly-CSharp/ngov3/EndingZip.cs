@@ -23,6 +23,6 @@ public class EndingZip : MonoBehaviour
 		zipNumber = num;
 		label.text = num.ToString();
 		this.isEmpty = isEmpty;
-		((Selectable)button).interactable = !isEmpty;
+		button.interactable = !isEmpty;
 	}
 }

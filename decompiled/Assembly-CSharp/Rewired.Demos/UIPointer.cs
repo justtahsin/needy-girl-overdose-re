@@ -31,7 +31,7 @@ public sealed class UIPointer : UIBehaviour
 				_autoSort = value;
 				if (value)
 				{
-					((Component)this).transform.SetAsLastSibling();
+					base.transform.SetAsLastSibling();
 				}
 			}
 		}
@@ -39,8 +39,8 @@ public sealed class UIPointer : UIBehaviour
 
 	protected override void Awake()
 	{
-		((UIBehaviour)this).Awake();
-		Graphic[] componentsInChildren = ((Component)this).GetComponentsInChildren<Graphic>();
+		base.Awake();
+		Graphic[] componentsInChildren = GetComponentsInChildren<Graphic>();
 		for (int i = 0; i < componentsInChildren.Length; i++)
 		{
 			componentsInChildren[i].raycastTarget = false;
@@ -51,61 +51,48 @@ public sealed class UIPointer : UIBehaviour
 		}
 		if (_autoSort)
 		{
-			((Component)this).transform.SetAsLastSibling();
+			base.transform.SetAsLastSibling();
 		}
 		GetDependencies();
 	}
 
 	private void Update()
 	{
-		if (_autoSort && ((Component)this).transform.GetSiblingIndex() < ((Component)this).transform.parent.childCount - 1)
+		if (_autoSort && base.transform.GetSiblingIndex() < base.transform.parent.childCount - 1)
 		{
-			((Component)this).transform.SetAsLastSibling();
+			base.transform.SetAsLastSibling();
 		}
 	}
 
 	protected override void OnTransformParentChanged()
 	{
-		((UIBehaviour)this).OnTransformParentChanged();
+		base.OnTransformParentChanged();
 		GetDependencies();
 	}
 
 	protected override void OnCanvasGroupChanged()
 	{
-		((UIBehaviour)this).OnCanvasGroupChanged();
+		base.OnCanvasGroupChanged();
 		GetDependencies();
 	}
 
 	public void OnScreenPositionChanged(Vector2 screenPosition)
 	{
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0052: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0064: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0024: Invalid comparison between Unknown and I4
-		if (!((Object)(object)_canvas == (Object)null))
+		if (!(_canvas == null))
 		{
-			Camera val = null;
+			Camera cam = null;
 			RenderMode renderMode = _canvas.renderMode;
-			if ((int)renderMode != 0 && renderMode - 1 <= 1)
+			if (renderMode != RenderMode.ScreenSpaceOverlay && (uint)(renderMode - 1) <= 1u)
 			{
-				val = _canvas.worldCamera;
+				cam = _canvas.worldCamera;
 			}
-			Transform parent = ((Component)this).transform.parent;
-			Vector2 val2 = default(Vector2);
-			RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)(object)((parent is RectTransform) ? parent : null), screenPosition, val, ref val2);
-			((Component)this).transform.localPosition = new Vector3(val2.x, val2.y, ((Component)this).transform.localPosition.z);
+			RectTransformUtility.ScreenPointToLocalPointInRectangle(base.transform.parent as RectTransform, screenPosition, cam, out var localPoint);
+			base.transform.localPosition = new Vector3(localPoint.x, localPoint.y, base.transform.localPosition.z);
 		}
 	}
 
 	private void GetDependencies()
 	{
-		_canvas = ((Component)((Component)this).transform.root).GetComponentInChildren<Canvas>();
+		_canvas = base.transform.root.GetComponentInChildren<Canvas>();
 	}
 }

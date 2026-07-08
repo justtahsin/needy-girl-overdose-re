@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UniRx;
@@ -20,15 +19,17 @@ public class DayBaketter : MonoBehaviour
 
 	public void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<bool>(Observable.Where<bool>(ObserveExtensions.ObserveEveryValueChanged<EventManager, bool>(SingletonMonoBehaviour<EventManager>.Instance, (Func<EventManager, bool>)((EventManager v) => v.isHorror), (FrameCountType)0, false), (Func<bool, bool>)((bool v) => v)), (Action<bool>)delegate
+		(from v in SingletonMonoBehaviour<EventManager>.Instance.ObserveEveryValueChanged((EventManager v) => v.isHorror)
+			where v
+			select v).Subscribe(delegate
 		{
 			AddBake();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void AddBake()
 	{
-		if (!((Object)(object)label == (Object)null))
+		if (!(label == null))
 		{
 			label.text = bakes[Random.Range(0, bakes.Count)];
 		}

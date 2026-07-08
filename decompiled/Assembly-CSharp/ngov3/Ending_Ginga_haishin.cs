@@ -1,9 +1,4 @@
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using NGO;
 using UnityEngine;
 
@@ -11,89 +6,6 @@ namespace ngov3;
 
 public class Ending_Ginga_haishin : LiveScenario
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CStartScenario_003Ed__4 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public Ending_Ginga_haishin _003C_003E4__this;
-
-		private Awaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_005b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0060: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0067: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0041: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			Ending_Ginga_haishin ending_Ginga_haishin = _003C_003E4__this;
-			try
-			{
-				Awaiter val2;
-				if (num != 0)
-				{
-					AudioManager.Instance.PlayBgmByType(SoundType.BGM_ending_ginga);
-					UniTask val = ((LiveScenario)ending_Ginga_haishin).StartScenario();
-					val2 = ((UniTask)(ref val)).GetAwaiter();
-					if (!((Awaiter)(ref val2)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val2;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__4>(ref val2, ref this);
-						return;
-					}
-				}
-				else
-				{
-					val2 = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-				}
-				((Awaiter)(ref val2)).GetResult();
-				ending_Ginga_haishin._Live.HaishinClean();
-				SingletonMonoBehaviour<WindowManager>.Instance.CloseApp(AppType.LiveDark);
-				SingletonMonoBehaviour<EventManager>.Instance.ClearEventQueue();
-				AchievementStatsUpdater.UpdateStats("Ending_Ginga");
-				SingletonMonoBehaviour<NotificationManager>.Instance.osimai();
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	private int light;
 
 	protected override void Awake()
@@ -232,7 +144,7 @@ public class Ending_Ginga_haishin : LiveScenario
 
 	private void bloom()
 	{
-		Debug.Log((object)("light:" + light));
+		Debug.Log("light:" + light);
 		light++;
 		if (light <= 2150 && light > 2000)
 		{
@@ -240,17 +152,14 @@ public class Ending_Ginga_haishin : LiveScenario
 		}
 	}
 
-	[AsyncStateMachine(typeof(_003CStartScenario_003Ed__4))]
-	public override UniTask StartScenario()
+	public override async UniTask StartScenario()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CStartScenario_003Ed__4 _003CStartScenario_003Ed__5 = default(_003CStartScenario_003Ed__4);
-		_003CStartScenario_003Ed__5._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CStartScenario_003Ed__5._003C_003E4__this = this;
-		_003CStartScenario_003Ed__5._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CStartScenario_003Ed__5._003C_003Et__builder)).Start<_003CStartScenario_003Ed__4>(ref _003CStartScenario_003Ed__5);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CStartScenario_003Ed__5._003C_003Et__builder)).Task;
+		AudioManager.Instance.PlayBgmByType(SoundType.BGM_ending_ginga);
+		await base.StartScenario();
+		_Live.HaishinClean();
+		SingletonMonoBehaviour<WindowManager>.Instance.CloseApp(AppType.LiveDark);
+		SingletonMonoBehaviour<EventManager>.Instance.ClearEventQueue();
+		AchievementStatsUpdater.UpdateStats("Ending_Ginga");
+		SingletonMonoBehaviour<NotificationManager>.Instance.osimai();
 	}
 }

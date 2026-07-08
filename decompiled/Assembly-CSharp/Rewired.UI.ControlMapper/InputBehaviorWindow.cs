@@ -24,8 +24,6 @@ public class InputBehaviorWindow : Window
 
 		public InputBehaviorInfo(InputBehavior inputBehavior, UIControlSet controlSet, Dictionary<int, PropertyType> idToProperty)
 		{
-			//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0027: Expected O, but got Unknown
 			_inputBehavior = inputBehavior;
 			_controlSet = controlSet;
 			this.idToProperty = idToProperty;
@@ -52,7 +50,7 @@ public class InputBehaviorWindow : Window
 				float joystickAxisSensitivity = copyOfOriginal.joystickAxisSensitivity;
 				_inputBehavior.joystickAxisSensitivity = joystickAxisSensitivity;
 				UISliderControl control2 = _controlSet.GetControl<UISliderControl>(controlId);
-				if ((Object)(object)control2 != (Object)null)
+				if (control2 != null)
 				{
 					control2.slider.value = joystickAxisSensitivity;
 				}
@@ -63,7 +61,7 @@ public class InputBehaviorWindow : Window
 				float mouseXYAxisSensitivity = copyOfOriginal.mouseXYAxisSensitivity;
 				_inputBehavior.mouseXYAxisSensitivity = mouseXYAxisSensitivity;
 				UISliderControl control = _controlSet.GetControl<UISliderControl>(controlId);
-				if ((Object)(object)control != (Object)null)
+				if (control != null)
 				{
 					control.slider.value = mouseXYAxisSensitivity;
 				}
@@ -74,14 +72,14 @@ public class InputBehaviorWindow : Window
 
 		public void RefreshControls()
 		{
-			if ((Object)(object)_controlSet == (Object)null || idToProperty == null)
+			if (_controlSet == null || idToProperty == null)
 			{
 				return;
 			}
 			foreach (KeyValuePair<int, PropertyType> item in idToProperty)
 			{
 				UISliderControl control = _controlSet.GetControl<UISliderControl>(item.Key);
-				if (!((Object)(object)control == (Object)null))
+				if (!(control == null))
 				{
 					switch (item.Value)
 					{
@@ -147,9 +145,9 @@ public class InputBehaviorWindow : Window
 
 	public override void Initialize(int id, Func<int, bool> isFocusedCallback)
 	{
-		if ((Object)(object)spawnTransform == (Object)null || (Object)(object)doneButton == (Object)null || (Object)(object)cancelButton == (Object)null || (Object)(object)defaultButton == (Object)null || (Object)(object)uiControlSetPrefab == (Object)null || (Object)(object)uiSliderControlPrefab == (Object)null || (Object)(object)doneButtonLabel == (Object)null || (Object)(object)cancelButtonLabel == (Object)null || (Object)(object)defaultButtonLabel == (Object)null)
+		if (spawnTransform == null || doneButton == null || cancelButton == null || defaultButton == null || uiControlSetPrefab == null || uiSliderControlPrefab == null || doneButtonLabel == null || cancelButtonLabel == null || defaultButtonLabel == null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: All inspector values must be assigned!");
+			Debug.LogError("Rewired Control Mapper: All inspector values must be assigned!");
 			return;
 		}
 		inputBehaviorInfo = new List<InputBehaviorInfo>();
@@ -202,7 +200,7 @@ public class InputBehaviorWindow : Window
 				inputBehaviorInfo.Add(new InputBehaviorInfo(inputBehavior, uIControlSet, dictionary));
 			}
 		}
-		base.defaultUIElement = ((Component)doneButton).gameObject;
+		base.defaultUIElement = doneButton.gameObject;
 	}
 
 	public void SetButtonCallback(ButtonIdentifier buttonIdentifier, Action<int> callback)
@@ -234,7 +232,7 @@ public class InputBehaviorWindow : Window
 		{
 			if (cancelCallback != null)
 			{
-				cancelCallback.Invoke();
+				cancelCallback();
 			}
 		}
 		else
@@ -295,8 +293,8 @@ public class InputBehaviorWindow : Window
 
 	private UIControlSet CreateControlSet()
 	{
-		GameObject obj = Object.Instantiate<GameObject>(uiControlSetPrefab);
-		obj.transform.SetParent((Transform)(object)spawnTransform, false);
+		GameObject obj = UnityEngine.Object.Instantiate(uiControlSetPrefab);
+		obj.transform.SetParent(spawnTransform, worldPositionStays: false);
 		return obj.GetComponent<UIControlSet>();
 	}
 
@@ -319,7 +317,7 @@ public class InputBehaviorWindow : Window
 		{
 			uISliderControl.showTitle = false;
 		}
-		uISliderControl.showIcon = (Object)(object)icon != (Object)null;
+		uISliderControl.showIcon = icon != null;
 		return uISliderControl;
 	}
 

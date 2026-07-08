@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,10 +13,9 @@ public class TestStatusButton : MonoBehaviour
 
 	public void Awake()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_plusLove), (Action<Unit>)delegate
+		_plusLove.OnClickAsObservable().Subscribe(delegate
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
 			SingletonMonoBehaviour<StatusManager>.Instance.UpdateStatus(StatusType.Love, 10);
-		}), (Component)(object)_plusLove);
+		}).AddTo(_plusLove);
 	}
 }

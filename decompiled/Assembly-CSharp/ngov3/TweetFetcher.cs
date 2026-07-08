@@ -140,7 +140,7 @@ public static class TweetFetcher
 		{
 			return TweetType.None;
 		}
-		return list[Random.Range(0, list.Count)];
+		return list[UnityEngine.Random.Range(0, list.Count)];
 	}
 
 	public static TweetMaster.Param ConvertTypeToTweet(TweetType t)
@@ -155,6 +155,6 @@ public static class TweetFetcher
 
 	public static string SuteakaIconId()
 	{
-		return _suteakaIconList[Random.Range(0, _suteakaIconList.Count)];
+		return _suteakaIconList[UnityEngine.Random.Range(0, _suteakaIconList.Count)];
 	}
 }

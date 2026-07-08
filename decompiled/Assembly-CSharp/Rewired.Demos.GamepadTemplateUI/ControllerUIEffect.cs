@@ -21,21 +21,13 @@ public class ControllerUIEffect : MonoBehaviour
 
 	private void Awake()
 	{
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-		_image = ((Component)this).GetComponent<Image>();
-		_origColor = ((Graphic)_image).color;
+		_image = GetComponent<Image>();
+		_origColor = _image.color;
 		_color = _origColor;
 	}
 
 	public void Activate(float amount)
 	{
-		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0039: Unknown result type (might be due to invalid IL or missing references)
 		amount = Mathf.Clamp01(amount);
 		if (!_isActive || amount != _highlightAmount)
 		{
@@ -48,8 +40,6 @@ public class ControllerUIEffect : MonoBehaviour
 
 	public void Deactivate()
 	{
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
 		if (_isActive)
 		{
 			_color = _origColor;
@@ -61,8 +51,7 @@ public class ControllerUIEffect : MonoBehaviour
 
 	private void RedrawImage()
 	{
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		((Graphic)_image).color = _color;
-		((Behaviour)_image).enabled = _isActive;
+		_image.color = _color;
+		_image.enabled = _isActive;
 	}
 }

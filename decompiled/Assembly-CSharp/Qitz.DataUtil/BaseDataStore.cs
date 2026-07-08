@@ -38,13 +38,11 @@ public class BaseDataStore<T> : ScriptableObject
 
 	private void LoadFromURL(string loadingServerUrl)
 	{
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0018: Expected O, but got Unknown
 		GameObject ga = new GameObject();
-		((MonoBehaviour)ga.AddComponent<StartCorutinReferrer>()).StartCoroutine(JsonFromGoogleSpreadSheet.GetJsonArrayFromGoogleSpreadSheetUrl(loadingServerUrl, delegate(string[] jsonArry)
+		ga.AddComponent<StartCorutinReferrer>().StartCoroutine(JsonFromGoogleSpreadSheet.GetJsonArrayFromGoogleSpreadSheetUrl(loadingServerUrl, delegate(string[] jsonArry)
 		{
 			items = jsonArry.Select((string j) => JsonUtility.FromJson<T>(j)).ToList();
-			Object.DestroyImmediate((Object)(object)ga);
+			Object.DestroyImmediate(ga);
 		}));
 	}
 

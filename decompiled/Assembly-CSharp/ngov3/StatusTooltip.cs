@@ -45,8 +45,7 @@ public class StatusTooltip : Tooltip
 
 	public void SlideToLeft()
 	{
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		((Transform)((Component)this).gameObject.GetComponent<RectTransform>()).localPosition = new Vector3(640f, 100f, 0f);
+		base.gameObject.GetComponent<RectTransform>().localPosition = new Vector3(640f, 100f, 0f);
 	}
 
 	public void SetActionName(ActMaster.Param a, LanguageType l)
@@ -171,9 +170,9 @@ public class StatusTooltip : Tooltip
 
 	public void SetBonusLine(LanguageType lang)
 	{
-		((Component)_BonusLine).gameObject.SetActive(true);
+		_BonusLine.gameObject.SetActive(value: true);
 		_BonusLine.text = NgoEx.SystemTextFromType(SystemTextType.System_HaishinBonus, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		((Component)_BonusLine).gameObject.transform.SetAsLastSibling();
+		_BonusLine.gameObject.transform.SetAsLastSibling();
 	}
 
 	public void SetStatusDiff(List<StatusDiff> diffs)
@@ -182,7 +181,7 @@ public class StatusTooltip : Tooltip
 		{
 			if (diff.statusType != StatusType.Follower && diff.statusType != StatusType.Stress && diff.statusType != StatusType.Yami && diff.statusType != StatusType.Love && diff.delta != 0)
 			{
-				Object.Instantiate<StatusDiffComponent>(_diffPrefab, _diffParent).SetData(diff);
+				Object.Instantiate(_diffPrefab, _diffParent).SetData(diff);
 			}
 		}
 	}
@@ -193,14 +192,14 @@ public class StatusTooltip : Tooltip
 		{
 			if ((diff.statusType == StatusType.Stress || diff.statusType == StatusType.Yami || diff.statusType == StatusType.Love) && diff.delta != 0)
 			{
-				Object.Instantiate<MainStatusDiffComponent>(_diffMainPrefab, _diffParent).SetData(diff);
+				Object.Instantiate(_diffMainPrefab, _diffParent).SetData(diff);
 			}
 		}
 	}
 
 	public void SetFollowerDiff(CmdMaster.Param c)
 	{
-		FollowerDiffComponent followerDiffComponent = Object.Instantiate<FollowerDiffComponent>(_followerDiffPrefab, _diffParent);
+		FollowerDiffComponent followerDiffComponent = Object.Instantiate(_followerDiffPrefab, _diffParent);
 		followerDiffComponent.SetData(c.FollowerDelta);
 		if (c.ParentAct == "Haishin")
 		{

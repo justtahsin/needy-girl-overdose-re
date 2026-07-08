@@ -1,14 +1,6 @@
-using System;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using NGO;
 using TMPro;
 using UniRx;
@@ -20,644 +12,6 @@ namespace ngov3;
 
 public class PoketterCell : MonoBehaviour
 {
-	[CompilerGenerated]
-	private sealed class _003C_003Ec__DisplayClass24_0
-	{
-		public string imageId;
-
-		public ResourceLocal resource;
-
-		internal bool _003CFetchTweetImage_003Eb__0(ResourceLocal r)
-		{
-			return r.FileName == imageId;
-		}
-
-		internal void _003CFetchTweetImage_003Eb__1(Unit _)
-		{
-			//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-			ImageViewerHelper.OpenImageViewer(resource.FileName);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CAnimate_003Ed__20 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public PoketterCell _003C_003E4__this;
-
-		private Awaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_0054: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0060: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0083: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0088: Unknown result type (might be due to invalid IL or missing references)
-			//IL_008b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0090: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			PoketterCell poketterCell = _003C_003E4__this;
-			try
-			{
-				Awaiter val;
-				UniTask val2;
-				if (num != 0)
-				{
-					if (num == 1)
-					{
-						val = _003C_003Eu__1;
-						_003C_003Eu__1 = default(Awaiter);
-						num = (_003C_003E1__state = -1);
-						goto IL_00d6;
-					}
-					val2 = poketterCell.Show();
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CAnimate_003Ed__20>(ref val, ref this);
-						return;
-					}
-				}
-				else
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-				}
-				((Awaiter)(ref val)).GetResult();
-				poketterCell.FavRtMove();
-				poketterCell.SetKusoRep();
-				val2 = poketterCell.ShowKusoReps();
-				val = ((UniTask)(ref val2)).GetAwaiter();
-				if (!((Awaiter)(ref val)).IsCompleted)
-				{
-					num = (_003C_003E1__state = 1);
-					_003C_003Eu__1 = val;
-					((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CAnimate_003Ed__20>(ref val, ref this);
-					return;
-				}
-				goto IL_00d6;
-				IL_00d6:
-				((Awaiter)(ref val)).GetResult();
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CFetchTweetImage_003Ed__24 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder<bool> _003C_003Et__builder;
-
-		public PoketterCell _003C_003E4__this;
-
-		private _003C_003Ec__DisplayClass24_0 _003C_003E8__1;
-
-		private bool _003ChasImage_003E5__2;
-
-		private Image _003C_003E7__wrap2;
-
-		private Awaiter<Sprite> _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_0147: Unknown result type (might be due to invalid IL or missing references)
-			//IL_014c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0154: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0109: Unknown result type (might be due to invalid IL or missing references)
-			//IL_010e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0112: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0117: Unknown result type (might be due to invalid IL or missing references)
-			//IL_012c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_012e: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			PoketterCell CS_0024_003C_003E8__locals8 = _003C_003E4__this;
-			bool result;
-			try
-			{
-				Awaiter<Sprite> val;
-				if (num == 0)
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter<Sprite>);
-					num = (_003C_003E1__state = -1);
-					goto IL_0163;
-				}
-				_003ChasImage_003E5__2 = CS_0024_003C_003E8__locals8.tweetDrawable.ImageId.IsNotEmpty();
-				((Component)CS_0024_003C_003E8__locals8._image).gameObject.SetActive(_003ChasImage_003E5__2);
-				if (!_003ChasImage_003E5__2)
-				{
-					goto IL_0212;
-				}
-				_003C_003E8__1 = new _003C_003Ec__DisplayClass24_0();
-				_003C_003E8__1.imageId = CS_0024_003C_003E8__locals8.tweetDrawable.ImageId;
-				_003C_003E8__1.resource = CS_0024_003C_003E8__locals8._resourceMaster.ResourceList.FirstOrDefault((ResourceLocal r) => r.FileName == _003C_003E8__1.imageId);
-				SingletonMonoBehaviour<Settings>.Instance.addImage(_003C_003E8__1.imageId);
-				if (_003C_003E8__1.resource != null)
-				{
-					_003C_003E7__wrap2 = CS_0024_003C_003E8__locals8._image;
-					val = LoadPictures.LoadPictureAsync(_003C_003E8__1.resource.FileName, LoadPictures.PictureType.Poketter).GetAwaiter();
-					if (!val.IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						_003C_003Et__builder.AwaitUnsafeOnCompleted<Awaiter<Sprite>, _003CFetchTweetImage_003Ed__24>(ref val, ref this);
-						return;
-					}
-					goto IL_0163;
-				}
-				Debug.LogError((object)("TWEET MASTER: " + _003C_003E8__1.imageId + " の 画像Id がなかったよ " + _003C_003E8__1.imageId));
-				result = false;
-				goto end_IL_000e;
-				IL_0212:
-				result = _003ChasImage_003E5__2;
-				goto end_IL_000e;
-				IL_0163:
-				Sprite result2 = val.GetResult();
-				_003C_003E7__wrap2.sprite = result2;
-				_003C_003E7__wrap2 = null;
-				if (!(_003C_003E8__1.imageId == "MV_thumbnail"))
-				{
-					Button component = ((Component)CS_0024_003C_003E8__locals8._image).gameObject.GetComponent<Button>();
-					DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(component), (Action<Unit>)delegate
-					{
-						//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-						ImageViewerHelper.OpenImageViewer(_003C_003E8__1.resource.FileName);
-					}), ((Component)component).gameObject);
-					_003C_003E8__1 = null;
-					goto IL_0212;
-				}
-				Button component2 = ((Component)CS_0024_003C_003E8__locals8._image).gameObject.GetComponent<Button>();
-				DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(component2), (Action<Unit>)async delegate
-				{
-					await CS_0024_003C_003E8__locals8.PlayMV();
-				}), ((Component)component2).gameObject);
-				result = true;
-				end_IL_000e:;
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				_003C_003Et__builder.SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			_003C_003Et__builder.SetResult(result);
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			_003C_003Et__builder.SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CPlayMV_003Ed__25 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public PoketterCell _003C_003E4__this;
-
-		private VideoPlayer _003CvideoViewer_003E5__2;
-
-		private Awaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_00d7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00dc: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e3: Unknown result type (might be due to invalid IL or missing references)
-			//IL_011b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0120: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0123: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0128: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0156: Unknown result type (might be due to invalid IL or missing references)
-			//IL_015b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0162: Unknown result type (might be due to invalid IL or missing references)
-			//IL_009c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a9: Unknown result type (might be due to invalid IL or missing references)
-			//IL_013c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_013d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00bd: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00be: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			PoketterCell poketterCell = _003C_003E4__this;
-			try
-			{
-				Awaiter val;
-				UniTask val2;
-				if (num != 0)
-				{
-					if (num == 1)
-					{
-						val = _003C_003Eu__1;
-						_003C_003Eu__1 = default(Awaiter);
-						num = (_003C_003E1__state = -1);
-						goto IL_0171;
-					}
-					_003CvideoViewer_003E5__2 = GameObject.Find("Main Camera").GetComponent<VideoPlayer>();
-					_003CvideoViewer_003E5__2.clip = Resources.Load<VideoClip>("Videos/INTERNETOVERDOSE");
-					_003CvideoViewer_003E5__2.Prepare();
-					_003CvideoViewer_003E5__2.aspectRatio = (VideoAspectRatio)3;
-					_003CvideoViewer_003E5__2.SetDirectAudioVolume((ushort)0, SingletonMonoBehaviour<Settings>.Instance.BgmVolume);
-					AudioManager.Instance.StopBgm();
-					_003CvideoViewer_003E5__2.targetCameraAlpha = 1f;
-					_003CvideoViewer_003E5__2.Play();
-					val2 = NgoEvent.DelaySkippable(2000);
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CPlayMV_003Ed__25>(ref val, ref this);
-						return;
-					}
-				}
-				else
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-				}
-				((Awaiter)(ref val)).GetResult();
-				AudioManager.Instance.PlayBgmByType(SoundType.BGM_InternetOverdose);
-				poketterCell._baseCanvasGroup.interactable = false;
-				val2 = NgoEvent.DelaySkippable(224000);
-				val = ((UniTask)(ref val2)).GetAwaiter();
-				if (!((Awaiter)(ref val)).IsCompleted)
-				{
-					num = (_003C_003E1__state = 1);
-					_003C_003Eu__1 = val;
-					((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CPlayMV_003Ed__25>(ref val, ref this);
-					return;
-				}
-				goto IL_0171;
-				IL_0171:
-				((Awaiter)(ref val)).GetResult();
-				_003CvideoViewer_003E5__2.targetCameraAlpha = 0f;
-				_003CvideoViewer_003E5__2.Stop();
-				AudioManager.Instance.PlayBgmByType(SoundType.BGM_InternetOverdose8bit, isLoop: true);
-				poketterCell._baseCanvasGroup.interactable = true;
-				_003CvideoViewer_003E5__2.aspectRatio = (VideoAspectRatio)2;
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				_003CvideoViewer_003E5__2 = null;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			_003CvideoViewer_003E5__2 = null;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CShow_003Ed__26 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public PoketterCell _003C_003E4__this;
-
-		private float _003Cfade_003E5__2;
-
-		private TweenAwaiter _003C_003Eu__1;
-
-		private Awaiter _003C_003Eu__2;
-
-		private void MoveNext()
-		{
-			//IL_00c0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00cc: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0130: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0135: Unknown result type (might be due to invalid IL or missing references)
-			//IL_013c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01a0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01a5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01ad: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0046: Unknown result type (might be due to invalid IL or missing references)
-			//IL_008d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0092: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00fd: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0102: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0165: Unknown result type (might be due to invalid IL or missing references)
-			//IL_016a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_016e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0173: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0116: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0117: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0188: Unknown result type (might be due to invalid IL or missing references)
-			//IL_018a: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			PoketterCell poketterCell = _003C_003E4__this;
-			try
-			{
-				TweenAwaiter val2;
-				Awaiter val;
-				UniTask val3;
-				switch (num)
-				{
-				default:
-				{
-					poketterCell._baseCanvasGroup.alpha = 0f;
-					RectTransform component = ((Component)poketterCell).GetComponent<RectTransform>();
-					((Transform)component).localScale = new Vector3(1f, 0f, 1f);
-					float num2 = (float)poketterCell._scrollMillisecond / 1000f;
-					_003Cfade_003E5__2 = (float)poketterCell._fadeMillisecond / 1000f;
-					UniTaskCancellationExtensions.GetCancellationTokenOnDestroy(((Component)poketterCell).gameObject);
-					val2 = DOTweenAsyncExtensions.GetAwaiter((Tween)(object)TweenExtensions.Play<TweenerCore<Vector3, Vector3, VectorOptions>>(ShortcutExtensions.DOScaleY((Transform)(object)component, 1f, num2)));
-					if (!((TweenAwaiter)(ref val2)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val2;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<TweenAwaiter, _003CShow_003Ed__26>(ref val2, ref this);
-						return;
-					}
-					goto IL_00db;
-				}
-				case 0:
-					val2 = _003C_003Eu__1;
-					_003C_003Eu__1 = default(TweenAwaiter);
-					num = (_003C_003E1__state = -1);
-					goto IL_00db;
-				case 1:
-					val2 = _003C_003Eu__1;
-					_003C_003Eu__1 = default(TweenAwaiter);
-					num = (_003C_003E1__state = -1);
-					goto IL_014b;
-				case 2:
-					{
-						val = _003C_003Eu__2;
-						_003C_003Eu__2 = default(Awaiter);
-						num = (_003C_003E1__state = -1);
-						break;
-					}
-					IL_014b:
-					((TweenAwaiter)(ref val2)).GetResult();
-					val3 = NgoEvent.DelaySkippable(poketterCell._bodyText.text.Length * 10);
-					val = ((UniTask)(ref val3)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 2);
-						_003C_003Eu__2 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CShow_003Ed__26>(ref val, ref this);
-						return;
-					}
-					break;
-					IL_00db:
-					((TweenAwaiter)(ref val2)).GetResult();
-					val2 = DOTweenAsyncExtensions.GetAwaiter((Tween)(object)TweenExtensions.Play<TweenerCore<float, float, FloatOptions>>(DOTweenModuleUI.DOFade(poketterCell._baseCanvasGroup, 1f, _003Cfade_003E5__2)));
-					if (!((TweenAwaiter)(ref val2)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 1);
-						_003C_003Eu__1 = val2;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<TweenAwaiter, _003CShow_003Ed__26>(ref val2, ref this);
-						return;
-					}
-					goto IL_014b;
-				}
-				((Awaiter)(ref val)).GetResult();
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CShowKusoReps_003Ed__31 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public PoketterCell _003C_003E4__this;
-
-		private Awaiter _003C_003Eu__1;
-
-		private int _003Ci_003E5__2;
-
-		private void MoveNext()
-		{
-			//IL_0065: Unknown result type (might be due to invalid IL or missing references)
-			//IL_006a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0071: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00ed: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0032: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a9: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00ae: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00cb: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			PoketterCell poketterCell = _003C_003E4__this;
-			try
-			{
-				Awaiter val;
-				UniTask val2;
-				if (num != 0)
-				{
-					if (num == 1)
-					{
-						val = _003C_003Eu__1;
-						_003C_003Eu__1 = default(Awaiter);
-						num = (_003C_003E1__state = -1);
-						goto IL_00fc;
-					}
-					if (((Transform)poketterCell._kusoRepRoot).childCount == 0)
-					{
-						goto IL_0087;
-					}
-					val2 = NgoEvent.DelaySkippable(Constants.MIDDLE);
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CShowKusoReps_003Ed__31>(ref val, ref this);
-						return;
-					}
-				}
-				else
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter);
-					num = (_003C_003E1__state = -1);
-				}
-				((Awaiter)(ref val)).GetResult();
-				goto IL_0087;
-				IL_0087:
-				_003Ci_003E5__2 = 0;
-				goto IL_0115;
-				IL_00fc:
-				((Awaiter)(ref val)).GetResult();
-				_003Ci_003E5__2++;
-				goto IL_0115;
-				IL_0115:
-				if (_003Ci_003E5__2 < ((Transform)poketterCell._kusoRepRoot).childCount)
-				{
-					val2 = ((Component)((Transform)poketterCell._kusoRepRoot).GetChild(_003Ci_003E5__2)).GetComponent<KusoRepView>().Show();
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 1);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CShowKusoReps_003Ed__31>(ref val, ref this);
-						return;
-					}
-					goto IL_00fc;
-				}
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	[SerializeField]
 	protected ResourceLocalMaster _resourceMaster;
 
@@ -712,16 +66,15 @@ public class PoketterCell : MonoBehaviour
 
 	public void Awake()
 	{
-		_baseCanvasGroup = ((Component)this).GetComponent<CanvasGroup>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		_baseCanvasGroup = GetComponent<CanvasGroup>();
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageUpdated();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	public void SetData(TweetDrawable nakami)
 	{
-		//IL_0091: Unknown result type (might be due to invalid IL or missing references)
 		tweetDrawable = nakami;
 		SetUserIcon();
 		SetUserName();
@@ -739,7 +92,6 @@ public class PoketterCell : MonoBehaviour
 
 	public void SetDataStatic(TweetDrawable nakami)
 	{
-		//IL_0091: Unknown result type (might be due to invalid IL or missing references)
 		tweetDrawable = nakami;
 		SetUserIcon();
 		SetUserName();
@@ -758,24 +110,18 @@ public class PoketterCell : MonoBehaviour
 		_favText.text = ConvertGigaNumber(nakami.FavNumber);
 	}
 
-	[AsyncStateMachine(typeof(_003CAnimate_003Ed__20))]
-	public UniTask Animate()
+	public async UniTask Animate()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CAnimate_003Ed__20 _003CAnimate_003Ed__21 = default(_003CAnimate_003Ed__20);
-		_003CAnimate_003Ed__21._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CAnimate_003Ed__21._003C_003E4__this = this;
-		_003CAnimate_003Ed__21._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CAnimate_003Ed__21._003C_003Et__builder)).Start<_003CAnimate_003Ed__20>(ref _003CAnimate_003Ed__21);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CAnimate_003Ed__21._003C_003Et__builder)).Task;
+		await Show();
+		FavRtMove();
+		SetKusoRep();
+		await ShowKusoReps();
 	}
 
 	protected virtual bool SetUserIcon()
 	{
 		_userIcon.sprite = (tweetDrawable.IsOmote ? _omoteIcon : _uraIcon);
-		return (Object)(object)_userIcon.sprite != (Object)null;
+		return _userIcon.sprite != null;
 	}
 
 	protected virtual bool SetUserName()
@@ -824,46 +170,72 @@ public class PoketterCell : MonoBehaviour
 		}
 	}
 
-	[AsyncStateMachine(typeof(_003CFetchTweetImage_003Ed__24))]
-	private UniTask<bool> FetchTweetImage()
+	private async UniTask<bool> FetchTweetImage()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CFetchTweetImage_003Ed__24 _003CFetchTweetImage_003Ed__25 = default(_003CFetchTweetImage_003Ed__24);
-		_003CFetchTweetImage_003Ed__25._003C_003Et__builder = AsyncUniTaskMethodBuilder<bool>.Create();
-		_003CFetchTweetImage_003Ed__25._003C_003E4__this = this;
-		_003CFetchTweetImage_003Ed__25._003C_003E1__state = -1;
-		_003CFetchTweetImage_003Ed__25._003C_003Et__builder.Start<_003CFetchTweetImage_003Ed__24>(ref _003CFetchTweetImage_003Ed__25);
-		return _003CFetchTweetImage_003Ed__25._003C_003Et__builder.Task;
+		bool hasImage = tweetDrawable.ImageId.IsNotEmpty();
+		_image.gameObject.SetActive(hasImage);
+		if (hasImage)
+		{
+			string imageId = tweetDrawable.ImageId;
+			ResourceLocal resource = _resourceMaster.ResourceList.FirstOrDefault((ResourceLocal r) => r.FileName == imageId);
+			SingletonMonoBehaviour<Settings>.Instance.addImage(imageId);
+			if (resource == null)
+			{
+				Debug.LogError("TWEET MASTER: " + imageId + " の 画像Id がなかったよ " + imageId);
+				return false;
+			}
+			Image image = _image;
+			image.sprite = await LoadPictures.LoadPictureAsync(resource.FileName, LoadPictures.PictureType.Poketter);
+			if (imageId == "MV_thumbnail")
+			{
+				Button component = _image.gameObject.GetComponent<Button>();
+				component.OnClickAsObservable().Subscribe(async delegate
+				{
+					await PlayMV();
+				}).AddTo(component.gameObject);
+				return true;
+			}
+			Button component2 = _image.gameObject.GetComponent<Button>();
+			component2.OnClickAsObservable().Subscribe(delegate
+			{
+				ImageViewerHelper.OpenImageViewer(resource.FileName);
+			}).AddTo(component2.gameObject);
+		}
+		return hasImage;
 	}
 
-	[AsyncStateMachine(typeof(_003CPlayMV_003Ed__25))]
-	private UniTask PlayMV()
+	private async UniTask PlayMV()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CPlayMV_003Ed__25 _003CPlayMV_003Ed__26 = default(_003CPlayMV_003Ed__25);
-		_003CPlayMV_003Ed__26._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CPlayMV_003Ed__26._003C_003E4__this = this;
-		_003CPlayMV_003Ed__26._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CPlayMV_003Ed__26._003C_003Et__builder)).Start<_003CPlayMV_003Ed__25>(ref _003CPlayMV_003Ed__26);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CPlayMV_003Ed__26._003C_003Et__builder)).Task;
+		VideoPlayer videoViewer = GameObject.Find("Main Camera").GetComponent<VideoPlayer>();
+		videoViewer.clip = Resources.Load<VideoClip>("Videos/INTERNETOVERDOSE");
+		videoViewer.Prepare();
+		videoViewer.aspectRatio = VideoAspectRatio.FitInside;
+		videoViewer.SetDirectAudioVolume(0, SingletonMonoBehaviour<Settings>.Instance.BgmVolume);
+		AudioManager.Instance.StopBgm();
+		videoViewer.targetCameraAlpha = 1f;
+		videoViewer.Play();
+		await NgoEvent.DelaySkippable(2000);
+		AudioManager.Instance.PlayBgmByType(SoundType.BGM_InternetOverdose);
+		_baseCanvasGroup.interactable = false;
+		await NgoEvent.DelaySkippable(224000);
+		videoViewer.targetCameraAlpha = 0f;
+		videoViewer.Stop();
+		AudioManager.Instance.PlayBgmByType(SoundType.BGM_InternetOverdose8bit, isLoop: true);
+		_baseCanvasGroup.interactable = true;
+		videoViewer.aspectRatio = VideoAspectRatio.FitHorizontally;
 	}
 
-	[AsyncStateMachine(typeof(_003CShow_003Ed__26))]
-	private UniTask Show()
+	private async UniTask Show()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CShow_003Ed__26 _003CShow_003Ed__27 = default(_003CShow_003Ed__26);
-		_003CShow_003Ed__27._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CShow_003Ed__27._003C_003E4__this = this;
-		_003CShow_003Ed__27._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CShow_003Ed__27._003C_003Et__builder)).Start<_003CShow_003Ed__26>(ref _003CShow_003Ed__27);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CShow_003Ed__27._003C_003Et__builder)).Task;
+		_baseCanvasGroup.alpha = 0f;
+		RectTransform component = GetComponent<RectTransform>();
+		component.localScale = new Vector3(1f, 0f, 1f);
+		float duration = (float)_scrollMillisecond / 1000f;
+		float fade = (float)_fadeMillisecond / 1000f;
+		base.gameObject.GetCancellationTokenOnDestroy();
+		await component.DOScaleY(1f, duration).Play();
+		await _baseCanvasGroup.DOFade(1f, fade).Play();
+		await NgoEvent.DelaySkippable(_bodyText.text.Length * 10);
 	}
 
 	private string ConvertGigaNumber(int number)
@@ -885,28 +257,24 @@ public class PoketterCell : MonoBehaviour
 
 	private void FavRtMove()
 	{
-		//IL_004b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0055: Expected O, but got Unknown
-		//IL_008a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0094: Expected O, but got Unknown
 		if (!tweetDrawable.IsOmote)
 		{
 			return;
 		}
-		float num = (float)_buzzMillisecond / 1000f;
+		float duration = (float)_buzzMillisecond / 1000f;
 		if (tweetDrawable.RtNumber > 0)
 		{
-			TweenExtensions.Play<TweenerCore<int, int, NoOptions>>(TweenSettingsExtensions.OnComplete<TweenerCore<int, int, NoOptions>>(ShortcutExtensionsTMPText.DOCounter(_rtText, 0, tweetDrawable.RtNumber, num, true, (CultureInfo)null), (TweenCallback)delegate
+			_rtText.DOCounter(0, tweetDrawable.RtNumber, duration).OnComplete(delegate
 			{
 				_rtText.text = ConvertGigaNumber(tweetDrawable.RtNumber);
-			}));
+			}).Play();
 		}
 		if (tweetDrawable.FavNumber > 0)
 		{
-			TweenExtensions.Play<TweenerCore<int, int, NoOptions>>(TweenSettingsExtensions.OnComplete<TweenerCore<int, int, NoOptions>>(ShortcutExtensionsTMPText.DOCounter(_favText, 0, tweetDrawable.FavNumber, num, true, (CultureInfo)null), (TweenCallback)delegate
+			_favText.DOCounter(0, tweetDrawable.FavNumber, duration).OnComplete(delegate
 			{
 				_favText.text = ConvertGigaNumber(tweetDrawable.FavNumber);
-			}));
+			}).Play();
 		}
 	}
 
@@ -914,7 +282,7 @@ public class PoketterCell : MonoBehaviour
 	{
 		foreach (KusoRepDrawable kusoRep in tweetDrawable.kusoReps)
 		{
-			Object.Instantiate<KusoRepView>(_kusoRepPrefab, ((Component)_kusoRepRoot).transform).SetData(kusoRep);
+			Object.Instantiate(_kusoRepPrefab, _kusoRepRoot.transform).SetData(kusoRep);
 		}
 	}
 
@@ -922,24 +290,22 @@ public class PoketterCell : MonoBehaviour
 	{
 		foreach (KusoRepDrawable kusoRep in tweetDrawable.kusoReps)
 		{
-			KusoRepView kusoRepView = Object.Instantiate<KusoRepView>(_kusoRepPrefab, ((Component)_kusoRepRoot).transform);
+			KusoRepView kusoRepView = Object.Instantiate(_kusoRepPrefab, _kusoRepRoot.transform);
 			kusoRepView.SetData(kusoRep);
 			kusoRepView.ShowPosted();
 		}
 	}
 
-	[AsyncStateMachine(typeof(_003CShowKusoReps_003Ed__31))]
-	private UniTask ShowKusoReps()
+	private async UniTask ShowKusoReps()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CShowKusoReps_003Ed__31 _003CShowKusoReps_003Ed__32 = default(_003CShowKusoReps_003Ed__31);
-		_003CShowKusoReps_003Ed__32._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CShowKusoReps_003Ed__32._003C_003E4__this = this;
-		_003CShowKusoReps_003Ed__32._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CShowKusoReps_003Ed__32._003C_003Et__builder)).Start<_003CShowKusoReps_003Ed__31>(ref _003CShowKusoReps_003Ed__32);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CShowKusoReps_003Ed__32._003C_003Et__builder)).Task;
+		if (_kusoRepRoot.childCount != 0)
+		{
+			await NgoEvent.DelaySkippable(Constants.MIDDLE);
+		}
+		for (int i = 0; i < _kusoRepRoot.childCount; i++)
+		{
+			await _kusoRepRoot.GetChild(i).GetComponent<KusoRepView>().Show();
+		}
 	}
 
 	public void OnLanguageUpdated()

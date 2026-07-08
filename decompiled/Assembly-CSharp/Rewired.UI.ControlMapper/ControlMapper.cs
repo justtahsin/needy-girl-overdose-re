@@ -30,15 +30,15 @@ public class ControlMapper : MonoBehaviour
 
 		public GUIElement(GameObject gameObject)
 		{
-			if ((Object)(object)gameObject == (Object)null)
+			if (gameObject == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: gameObject is null!");
+				Debug.LogError("Rewired Control Mapper: gameObject is null!");
 				return;
 			}
 			selectable = gameObject.GetComponent<Selectable>();
-			if ((Object)(object)selectable == (Object)null)
+			if (selectable == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: Selectable is null!");
+				Debug.LogError("Rewired Control Mapper: Selectable is null!");
 				return;
 			}
 			this.gameObject = gameObject;
@@ -50,13 +50,13 @@ public class ControlMapper : MonoBehaviour
 
 		public GUIElement(Selectable selectable, Text label)
 		{
-			if ((Object)(object)selectable == (Object)null)
+			if (selectable == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: Selectable is null!");
+				Debug.LogError("Rewired Control Mapper: Selectable is null!");
 				return;
 			}
 			this.selectable = selectable;
-			gameObject = ((Component)selectable).gameObject;
+			gameObject = selectable.gameObject;
 			rectTransform = gameObject.GetComponent<RectTransform>();
 			text = label;
 			uiElementInfo = gameObject.GetComponent<UIElementInfo>();
@@ -77,7 +77,7 @@ public class ControlMapper : MonoBehaviour
 					children[i].SetInteractible(state, playTransition, permanent);
 				}
 			}
-			if (!permanentStateSet && !((Object)(object)selectable == (Object)null))
+			if (!permanentStateSet && !(selectable == null))
 			{
 				if (permanent)
 				{
@@ -92,34 +92,34 @@ public class ControlMapper : MonoBehaviour
 
 		public virtual void SetTextWidth(int value)
 		{
-			if (!((Object)(object)text == (Object)null))
+			if (!(text == null))
 			{
-				LayoutElement val = ((Component)text).GetComponent<LayoutElement>();
-				if ((Object)(object)val == (Object)null)
+				LayoutElement layoutElement = text.GetComponent<LayoutElement>();
+				if (layoutElement == null)
 				{
-					val = ((Component)text).gameObject.AddComponent<LayoutElement>();
+					layoutElement = text.gameObject.AddComponent<LayoutElement>();
 				}
-				val.preferredWidth = value;
+				layoutElement.preferredWidth = value;
 			}
 		}
 
 		public virtual void SetFirstChildObjectWidth(LayoutElementSizeType type, int value)
 		{
-			if (((Transform)rectTransform).childCount != 0)
+			if (rectTransform.childCount != 0)
 			{
-				Transform child = ((Transform)rectTransform).GetChild(0);
-				LayoutElement val = ((Component)child).GetComponent<LayoutElement>();
-				if ((Object)(object)val == (Object)null)
+				Transform child = rectTransform.GetChild(0);
+				LayoutElement layoutElement = child.GetComponent<LayoutElement>();
+				if (layoutElement == null)
 				{
-					val = ((Component)child).gameObject.AddComponent<LayoutElement>();
+					layoutElement = child.gameObject.AddComponent<LayoutElement>();
 				}
 				switch (type)
 				{
 				case LayoutElementSizeType.MinSize:
-					val.minWidth = value;
+					layoutElement.minWidth = value;
 					break;
 				case LayoutElementSizeType.PreferredSize:
-					val.preferredWidth = value;
+					layoutElement.preferredWidth = value;
 					break;
 				default:
 					throw new NotImplementedException();
@@ -129,7 +129,7 @@ public class ControlMapper : MonoBehaviour
 
 		public virtual void SetLabel(string label)
 		{
-			if (!((Object)(object)text == (Object)null))
+			if (!(text == null))
 			{
 				text.text = label;
 			}
@@ -137,7 +137,7 @@ public class ControlMapper : MonoBehaviour
 
 		public virtual string GetLabel()
 		{
-			if ((Object)(object)text == (Object)null)
+			if (text == null)
 			{
 				return string.Empty;
 			}
@@ -151,7 +151,7 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetElementInfoData(string identifier, int intData)
 		{
-			if (!((Object)(object)uiElementInfo == (Object)null))
+			if (!(uiElementInfo == null))
 			{
 				uiElementInfo.identifier = identifier;
 				uiElementInfo.intData = intData;
@@ -160,7 +160,7 @@ public class ControlMapper : MonoBehaviour
 
 		public virtual void SetActive(bool state)
 		{
-			if (!((Object)(object)gameObject == (Object)null))
+			if (!(gameObject == null))
 			{
 				gameObject.SetActive(state);
 			}
@@ -176,19 +176,19 @@ public class ControlMapper : MonoBehaviour
 					result = false;
 				}
 			}
-			if ((Object)(object)selectable == (Object)null)
+			if (selectable == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: UI Element is missing Selectable component!");
+				Debug.LogError("Rewired Control Mapper: UI Element is missing Selectable component!");
 				result = false;
 			}
-			if ((Object)(object)rectTransform == (Object)null)
+			if (rectTransform == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: UI Element is missing RectTransform component!");
+				Debug.LogError("Rewired Control Mapper: UI Element is missing RectTransform component!");
 				result = false;
 			}
-			if ((Object)(object)uiElementInfo == (Object)null)
+			if (uiElementInfo == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: UI Element is missing UIElementInfo component!");
+				Debug.LogError("Rewired Control Mapper: UI Element is missing UIElementInfo component!");
 				result = false;
 			}
 			return result;
@@ -197,14 +197,7 @@ public class ControlMapper : MonoBehaviour
 
 	private class GUIButton : GUIElement
 	{
-		protected Button button
-		{
-			get
-			{
-				Selectable obj = selectable;
-				return (Button)(object)((obj is Button) ? obj : null);
-			}
-		}
+		protected Button button => selectable as Button;
 
 		public ButtonInfo buttonInfo => uiElementInfo as ButtonInfo;
 
@@ -215,7 +208,7 @@ public class ControlMapper : MonoBehaviour
 		}
 
 		public GUIButton(Button button, Text label)
-			: base((Selectable)(object)button, label)
+			: base(button, label)
 		{
 			Init();
 		}
@@ -227,11 +220,9 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetOnClickCallback(Action<ButtonInfo> callback)
 		{
-			//IL_0035: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003f: Expected O, but got Unknown
-			if (!((Object)(object)button == (Object)null))
+			if (!(button == null))
 			{
-				((UnityEvent)button.onClick).AddListener((UnityAction)delegate
+				button.onClick.AddListener(delegate
 				{
 					callback(buttonInfo);
 				});
@@ -241,14 +232,7 @@ public class ControlMapper : MonoBehaviour
 
 	private class GUIInputField : GUIElement
 	{
-		protected Button button
-		{
-			get
-			{
-				Selectable obj = selectable;
-				return (Button)(object)((obj is Button) ? obj : null);
-			}
-		}
+		protected Button button => selectable as Button;
 
 		public InputFieldInfo fieldInfo => uiElementInfo as InputFieldInfo;
 
@@ -260,7 +244,7 @@ public class ControlMapper : MonoBehaviour
 		{
 			get
 			{
-				if ((Object)(object)fieldInfo == (Object)null)
+				if (fieldInfo == null)
 				{
 					return -1;
 				}
@@ -268,7 +252,7 @@ public class ControlMapper : MonoBehaviour
 			}
 			set
 			{
-				if (!((Object)(object)fieldInfo == (Object)null))
+				if (!(fieldInfo == null))
 				{
 					fieldInfo.actionElementMapId = value;
 				}
@@ -279,7 +263,7 @@ public class ControlMapper : MonoBehaviour
 		{
 			get
 			{
-				if ((Object)(object)fieldInfo == (Object)null)
+				if (fieldInfo == null)
 				{
 					return -1;
 				}
@@ -287,7 +271,7 @@ public class ControlMapper : MonoBehaviour
 			}
 			set
 			{
-				if (!((Object)(object)fieldInfo == (Object)null))
+				if (!(fieldInfo == null))
 				{
 					fieldInfo.controllerId = value;
 				}
@@ -301,17 +285,15 @@ public class ControlMapper : MonoBehaviour
 		}
 
 		public GUIInputField(Button button, Text label)
-			: base((Selectable)(object)button, label)
+			: base(button, label)
 		{
 			Init();
 		}
 
 		public void SetFieldInfoData(int actionId, AxisRange axisRange, ControllerType controllerType, int intData)
 		{
-			//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003a: Unknown result type (might be due to invalid IL or missing references)
 			SetElementInfoData(string.Empty, intData);
-			if (!((Object)(object)fieldInfo == (Object)null))
+			if (!(fieldInfo == null))
 			{
 				fieldInfo.actionId = actionId;
 				fieldInfo.axisRange = axisRange;
@@ -321,11 +303,9 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetOnClickCallback(Action<InputFieldInfo> callback)
 		{
-			//IL_0035: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003f: Expected O, but got Unknown
-			if (!((Object)(object)button == (Object)null))
+			if (!(button == null))
 			{
-				((UnityEvent)button.onClick).AddListener((UnityAction)delegate
+				button.onClick.AddListener(delegate
 				{
 					callback(fieldInfo);
 				});
@@ -355,14 +335,7 @@ public class ControlMapper : MonoBehaviour
 
 	private class GUIToggle : GUIElement
 	{
-		protected Toggle toggle
-		{
-			get
-			{
-				Selectable obj = selectable;
-				return (Toggle)(object)((obj is Toggle) ? obj : null);
-			}
-		}
+		protected Toggle toggle => selectable as Toggle;
 
 		public ToggleInfo toggleInfo => uiElementInfo as ToggleInfo;
 
@@ -370,7 +343,7 @@ public class ControlMapper : MonoBehaviour
 		{
 			get
 			{
-				if ((Object)(object)toggleInfo == (Object)null)
+				if (toggleInfo == null)
 				{
 					return -1;
 				}
@@ -378,7 +351,7 @@ public class ControlMapper : MonoBehaviour
 			}
 			set
 			{
-				if (!((Object)(object)toggleInfo == (Object)null))
+				if (!(toggleInfo == null))
 				{
 					toggleInfo.actionElementMapId = value;
 				}
@@ -392,17 +365,15 @@ public class ControlMapper : MonoBehaviour
 		}
 
 		public GUIToggle(Toggle toggle, Text label)
-			: base((Selectable)(object)toggle, label)
+			: base(toggle, label)
 		{
 			Init();
 		}
 
 		public void SetToggleInfoData(int actionId, AxisRange axisRange, ControllerType controllerType, int intData)
 		{
-			//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003a: Unknown result type (might be due to invalid IL or missing references)
 			SetElementInfoData(string.Empty, intData);
-			if (!((Object)(object)toggleInfo == (Object)null))
+			if (!(toggleInfo == null))
 			{
 				toggleInfo.actionId = actionId;
 				toggleInfo.axisRange = axisRange;
@@ -412,62 +383,48 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetOnSubmitCallback(Action<ToggleInfo, bool> callback)
 		{
-			//IL_0049: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004f: Expected O, but got Unknown
-			//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0066: Unknown result type (might be due to invalid IL or missing references)
-			//IL_006d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0070: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0076: Expected O, but got Unknown
-			//IL_0076: Unknown result type (might be due to invalid IL or missing references)
-			//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0082: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0084: Unknown result type (might be due to invalid IL or missing references)
-			//IL_008b: Expected O, but got Unknown
-			if ((Object)(object)toggle == (Object)null)
+			if (toggle == null)
 			{
 				return;
 			}
-			EventTrigger val = ((Component)toggle).GetComponent<EventTrigger>();
-			if ((Object)(object)val == (Object)null)
+			EventTrigger eventTrigger = toggle.GetComponent<EventTrigger>();
+			if (eventTrigger == null)
 			{
-				val = ((Component)toggle).gameObject.AddComponent<EventTrigger>();
+				eventTrigger = toggle.gameObject.AddComponent<EventTrigger>();
 			}
-			TriggerEvent val2 = new TriggerEvent();
-			((UnityEvent<BaseEventData>)(object)val2).AddListener((UnityAction<BaseEventData>)delegate(BaseEventData data)
+			EventTrigger.TriggerEvent triggerEvent = new EventTrigger.TriggerEvent();
+			triggerEvent.AddListener(delegate(BaseEventData data)
 			{
-				//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-				PointerEventData val3 = (PointerEventData)(object)((data is PointerEventData) ? data : null);
-				if (val3 == null || (int)val3.button == 0)
+				if (!(data is PointerEventData { button: not PointerEventData.InputButton.Left }))
 				{
 					callback(toggleInfo, toggle.isOn);
 				}
 			});
-			Entry item = new Entry
+			EventTrigger.Entry item = new EventTrigger.Entry
 			{
-				callback = val2,
-				eventID = (EventTriggerType)15
+				callback = triggerEvent,
+				eventID = EventTriggerType.Submit
 			};
-			Entry item2 = new Entry
+			EventTrigger.Entry item2 = new EventTrigger.Entry
 			{
-				callback = val2,
-				eventID = (EventTriggerType)4
+				callback = triggerEvent,
+				eventID = EventTriggerType.PointerClick
 			};
-			if (val.triggers != null)
+			if (eventTrigger.triggers != null)
 			{
-				val.triggers.Clear();
+				eventTrigger.triggers.Clear();
 			}
 			else
 			{
-				val.triggers = new List<Entry>();
+				eventTrigger.triggers = new List<EventTrigger.Entry>();
 			}
-			val.triggers.Add(item);
-			val.triggers.Add(item2);
+			eventTrigger.triggers.Add(item);
+			eventTrigger.triggers.Add(item2);
 		}
 
 		public void SetToggleState(bool state)
 		{
-			if (!((Object)(object)toggle == (Object)null))
+			if (!(toggle == null))
 			{
 				toggle.isOn = state;
 			}
@@ -484,9 +441,9 @@ public class ControlMapper : MonoBehaviour
 
 		public GUILabel(GameObject gameObject)
 		{
-			if ((Object)(object)gameObject == (Object)null)
+			if (gameObject == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: gameObject is null!");
+				Debug.LogError("Rewired Control Mapper: gameObject is null!");
 				return;
 			}
 			text = UnityTools.GetComponentInSelfOrChildren<Text>(gameObject);
@@ -501,32 +458,32 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetSize(int width, int height)
 		{
-			if (!((Object)(object)text == (Object)null))
+			if (!(text == null))
 			{
-				rectTransform.SetSizeWithCurrentAnchors((Axis)0, (float)width);
-				rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)height);
+				rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+				rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
 			}
 		}
 
 		public void SetWidth(int width)
 		{
-			if (!((Object)(object)text == (Object)null))
+			if (!(text == null))
 			{
-				rectTransform.SetSizeWithCurrentAnchors((Axis)0, (float)width);
+				rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
 			}
 		}
 
 		public void SetHeight(int height)
 		{
-			if (!((Object)(object)text == (Object)null))
+			if (!(text == null))
 			{
-				rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)height);
+				rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
 			}
 		}
 
 		public void SetLabel(string label)
 		{
-			if (!((Object)(object)text == (Object)null))
+			if (!(text == null))
 			{
 				text.text = label;
 			}
@@ -534,8 +491,7 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetFontStyle(FontStyle style)
 		{
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			if (!((Object)(object)text == (Object)null))
+			if (!(text == null))
 			{
 				text.fontStyle = style;
 			}
@@ -543,8 +499,7 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetTextAlignment(TextAnchor alignment)
 		{
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			if (!((Object)(object)text == (Object)null))
+			if (!(text == null))
 			{
 				text.alignment = alignment;
 			}
@@ -552,7 +507,7 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetActive(bool state)
 		{
-			if (!((Object)(object)gameObject == (Object)null))
+			if (!(gameObject == null))
 			{
 				gameObject.SetActive(state);
 			}
@@ -561,13 +516,13 @@ public class ControlMapper : MonoBehaviour
 		private bool Check()
 		{
 			bool result = true;
-			if ((Object)(object)text == (Object)null)
+			if (text == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: Button is missing Text child component!");
+				Debug.LogError("Rewired Control Mapper: Button is missing Text child component!");
 				result = false;
 			}
-			gameObject = ((Component)text).gameObject;
-			rectTransform = ((Component)text).GetComponent<RectTransform>();
+			gameObject = text.gameObject;
+			rectTransform = text.GetComponent<RectTransform>();
 			return result;
 		}
 	}
@@ -648,7 +603,7 @@ public class ControlMapper : MonoBehaviour
 				{
 					return false;
 				}
-				if (!((InputCategory)mapCategory).userAssignable)
+				if (!mapCategory.userAssignable)
 				{
 					return false;
 				}
@@ -842,7 +797,7 @@ public class ControlMapper : MonoBehaviour
 
 		public bool Check()
 		{
-			if ((Object)(object)_button == (Object)null || (Object)(object)_fitButton == (Object)null || (Object)(object)_inputGridLabel == (Object)null || (Object)(object)_inputGridHeaderLabel == (Object)null || (Object)(object)_inputGridFieldButton == (Object)null || (Object)(object)_inputGridFieldInvertToggle == (Object)null || (Object)(object)_window == (Object)null || (Object)(object)_windowTitleText == (Object)null || (Object)(object)_windowContentText == (Object)null || (Object)(object)_fader == (Object)null || (Object)(object)_calibrationWindow == (Object)null || (Object)(object)_inputBehaviorsWindow == (Object)null)
+			if (_button == null || _fitButton == null || _inputGridLabel == null || _inputGridHeaderLabel == null || _inputGridFieldButton == null || _inputGridFieldInvertToggle == null || _window == null || _windowTitleText == null || _windowContentText == null || _fader == null || _calibrationWindow == null || _inputBehaviorsWindow == null)
 			{
 				return false;
 			}
@@ -1008,7 +963,7 @@ public class ControlMapper : MonoBehaviour
 
 		public bool Check()
 		{
-			if ((Object)(object)_canvas == (Object)null || (Object)(object)_mainCanvasGroup == (Object)null || (Object)(object)_mainContent == (Object)null || (Object)(object)_mainContentInner == (Object)null || (Object)(object)_playersGroup == (Object)null || (Object)(object)_controllerGroup == (Object)null || (Object)(object)_controllerGroupLabelGroup == (Object)null || (Object)(object)_controllerSettingsGroup == (Object)null || (Object)(object)_assignedControllersGroup == (Object)null || (Object)(object)_settingsAndMapCategoriesGroup == (Object)null || (Object)(object)_settingsGroup == (Object)null || (Object)(object)_mapCategoriesGroup == (Object)null || (Object)(object)_inputGridGroup == (Object)null || (Object)(object)_inputGridContainer == (Object)null || (Object)(object)_inputGridHeadersGroup == (Object)null || (Object)(object)_inputGridVScrollbar == (Object)null || (Object)(object)_inputGridScrollRect == (Object)null || (Object)(object)_inputGridInnerGroup == (Object)null || (Object)(object)_controllerNameLabel == (Object)null || (Object)(object)_removeControllerButton == (Object)null || (Object)(object)_assignControllerButton == (Object)null || (Object)(object)_calibrateControllerButton == (Object)null || (Object)(object)_doneButton == (Object)null || (Object)(object)_restoreDefaultsButton == (Object)null || (Object)(object)_defaultSelection == (Object)null)
+			if (_canvas == null || _mainCanvasGroup == null || _mainContent == null || _mainContentInner == null || _playersGroup == null || _controllerGroup == null || _controllerGroupLabelGroup == null || _controllerSettingsGroup == null || _assignedControllersGroup == null || _settingsAndMapCategoriesGroup == null || _settingsGroup == null || _mapCategoriesGroup == null || _inputGridGroup == null || _inputGridContainer == null || _inputGridHeadersGroup == null || _inputGridVScrollbar == null || _inputGridScrollRect == null || _inputGridInnerGroup == null || _controllerNameLabel == null || _removeControllerButton == null || _assignControllerButton == null || _calibrateControllerButton == null || _doneButton == null || _restoreDefaultsButton == null || _defaultSelection == null)
 			{
 				return false;
 			}
@@ -1028,8 +983,6 @@ public class ControlMapper : MonoBehaviour
 
 		public InputActionSet(int actionId, AxisRange axisRange)
 		{
-			//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
 			_actionId = actionId;
 			_axisRange = axisRange;
 		}
@@ -1057,30 +1010,10 @@ public class ControlMapper : MonoBehaviour
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0038: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0018: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-				//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-				AxisRange result = (AxisRange)1;
-				ControllerPollingInfo val = pollingInfo;
-				if ((int)((ControllerPollingInfo)(ref val)).elementType == 0)
+				AxisRange result = AxisRange.Positive;
+				if (pollingInfo.elementType == ControllerElementType.Axis)
 				{
-					if ((int)fieldInfo.axisRange == 0)
-					{
-						result = (AxisRange)0;
-					}
-					else
-					{
-						val = pollingInfo;
-						result = (AxisRange)(((int)((ControllerPollingInfo)(ref val)).axisPole == 0) ? 1 : 2);
-					}
+					result = ((fieldInfo.axisRange != AxisRange.Full) ? ((pollingInfo.axisPole == Pole.Positive) ? AxisRange.Positive : AxisRange.Negative) : AxisRange.Full);
 				}
 				return result;
 			}
@@ -1090,38 +1023,16 @@ public class ControlMapper : MonoBehaviour
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-				//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0032: Unknown result type (might be due to invalid IL or missing references)
-				//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0040: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0049: Unknown result type (might be due to invalid IL or missing references)
-				//IL_004e: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0051: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-				ControllerPollingInfo val;
-				if ((int)controllerType == 0)
+				if (controllerType == ControllerType.Keyboard)
 				{
-					LanguageDataBase language = GetLanguage();
-					val = pollingInfo;
-					return language.GetElementIdentifierName(((ControllerPollingInfo)(ref val)).keyboardKey, modifierKeyFlags);
+					return GetLanguage().GetElementIdentifierName(pollingInfo.keyboardKey, modifierKeyFlags);
 				}
-				LanguageDataBase language2 = GetLanguage();
-				val = pollingInfo;
-				Controller controller = ((ControllerPollingInfo)(ref val)).controller;
-				val = pollingInfo;
-				int elementIdentifierId = ((ControllerPollingInfo)(ref val)).elementIdentifierId;
-				val = pollingInfo;
-				return language2.GetElementIdentifierName(controller, elementIdentifierId, (AxisRange)(((int)((ControllerPollingInfo)(ref val)).axisPole == 0) ? 1 : 2));
+				return GetLanguage().GetElementIdentifierName(pollingInfo.controller, pollingInfo.elementIdentifierId, (pollingInfo.axisPole == Pole.Positive) ? AxisRange.Positive : AxisRange.Negative);
 			}
 		}
 
 		public InputMapping(string actionName, InputFieldInfo fieldInfo, ControllerMap map, ActionElementMap aem, ControllerType controllerType, int controllerId)
 		{
-			//IL_0024: Unknown result type (might be due to invalid IL or missing references)
 			this.actionName = actionName;
 			this.fieldInfo = fieldInfo;
 			this.map = map;
@@ -1132,17 +1043,12 @@ public class ControlMapper : MonoBehaviour
 
 		public ElementAssignment ToElementAssignment(ControllerPollingInfo pollingInfo)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
 			this.pollingInfo = pollingInfo;
 			return ToElementAssignment();
 		}
 
 		public ElementAssignment ToElementAssignment(ControllerPollingInfo pollingInfo, ModifierKeyFlags modifierKeyFlags)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
 			this.pollingInfo = pollingInfo;
 			this.modifierKeyFlags = modifierKeyFlags;
 			return ToElementAssignment();
@@ -1150,28 +1056,7 @@ public class ControlMapper : MonoBehaviour
 
 		public ElementAssignment ToElementAssignment()
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0023: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0053: Invalid comparison between Unknown and I4
-			//IL_0070: Unknown result type (might be due to invalid IL or missing references)
-			ControllerType val = controllerType;
-			ControllerPollingInfo val2 = pollingInfo;
-			ControllerElementType elementType = ((ControllerPollingInfo)(ref val2)).elementType;
-			val2 = pollingInfo;
-			int elementIdentifierId = ((ControllerPollingInfo)(ref val2)).elementIdentifierId;
-			AxisRange val3 = axisRange;
-			val2 = pollingInfo;
-			return new ElementAssignment(val, elementType, elementIdentifierId, val3, ((ControllerPollingInfo)(ref val2)).keyboardKey, modifierKeyFlags, fieldInfo.actionId, (Pole)((int)fieldInfo.axisRange == 2), false, (aem != null) ? aem.id : (-1));
+			return new ElementAssignment(controllerType, pollingInfo.elementType, pollingInfo.elementIdentifierId, axisRange, pollingInfo.keyboardKey, modifierKeyFlags, fieldInfo.actionId, (fieldInfo.axisRange == AxisRange.Negative) ? Pole.Negative : Pole.Positive, false, (aem != null) ? aem.id : (-1));
 		}
 	}
 
@@ -1183,7 +1068,7 @@ public class ControlMapper : MonoBehaviour
 
 		public readonly int axisIndex;
 
-		private Axis axis;
+		private Controller.Axis axis;
 
 		private bool firstRun;
 
@@ -1191,16 +1076,13 @@ public class ControlMapper : MonoBehaviour
 
 		public AxisCalibrator(Joystick joystick, int axisIndex)
 		{
-			//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0054: Unknown result type (might be due to invalid IL or missing references)
 			data = default(AxisCalibrationData);
 			this.joystick = joystick;
 			this.axisIndex = axisIndex;
-			if (joystick != null && axisIndex >= 0 && ((ControllerWithAxes)joystick).axisCount > axisIndex)
+			if (joystick != null && axisIndex >= 0 && joystick.axisCount > axisIndex)
 			{
-				axis = ((ControllerWithAxes)joystick).Axes[axisIndex];
-				data = ((ControllerWithAxes)joystick).calibrationMap.GetAxis(axisIndex).GetData();
+				axis = joystick.Axes[axisIndex];
+				data = joystick.calibrationMap.GetAxis(axisIndex).GetData();
 			}
 			firstRun = true;
 		}
@@ -1232,13 +1114,12 @@ public class ControlMapper : MonoBehaviour
 
 		public void Commit()
 		{
-			//IL_004f: Unknown result type (might be due to invalid IL or missing references)
 			if (axis != null)
 			{
-				AxisCalibration val = ((ControllerWithAxes)joystick).calibrationMap.GetAxis(axisIndex);
-				if (val != null && !((double)Mathf.Abs(data.max - data.min) < 0.1))
+				AxisCalibration axisCalibration = joystick.calibrationMap.GetAxis(axisIndex);
+				if (axisCalibration != null && !((double)Mathf.Abs(data.max - data.min) < 0.1))
 				{
-					val.SetData(data);
+					axisCalibration.SetData(data);
 				}
 			}
 		}
@@ -1373,7 +1254,6 @@ public class ControlMapper : MonoBehaviour
 
 		public void AddAction(int mapCategoryId, InputAction action, AxisRange axisRange)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
 			list.AddAction(mapCategoryId, action, axisRange);
 		}
 
@@ -1384,15 +1264,11 @@ public class ControlMapper : MonoBehaviour
 
 		public void AddInputFieldSet(int mapCategoryId, InputAction action, AxisRange axisRange, ControllerType controllerType, GameObject fieldSetContainer)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
 			list.AddInputFieldSet(mapCategoryId, action, axisRange, controllerType, fieldSetContainer);
 		}
 
 		public void AddInputField(int mapCategoryId, InputAction action, AxisRange axisRange, ControllerType controllerType, int fieldIndex, GUIInputField inputField)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
 			list.AddInputField(mapCategoryId, action, axisRange, controllerType, fieldIndex, inputField);
 		}
 
@@ -1403,7 +1279,6 @@ public class ControlMapper : MonoBehaviour
 
 		public void AddActionLabel(int mapCategoryId, int actionId, AxisRange axisRange, GUILabel label)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
 			list.AddActionLabel(mapCategoryId, actionId, axisRange, label);
 		}
 
@@ -1414,15 +1289,11 @@ public class ControlMapper : MonoBehaviour
 
 		public bool Contains(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int fieldIndex)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
 			return list.Contains(mapCategoryId, actionId, axisRange, controllerType, fieldIndex);
 		}
 
 		public GUIInputField GetGUIInputField(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int fieldIndex)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
 			return list.GetGUIInputField(mapCategoryId, actionId, axisRange, controllerType, fieldIndex);
 		}
 
@@ -1448,22 +1319,16 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetFieldLabel(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int index, string label)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
 			list.SetLabel(mapCategoryId, actionId, axisRange, controllerType, index, label);
 		}
 
 		public void PopulateField(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int controllerId, int index, int actionElementMapId, string label, bool invert)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
 			list.PopulateField(mapCategoryId, actionId, axisRange, controllerType, controllerId, index, actionElementMapId, label, invert);
 		}
 
 		public void SetFixedFieldData(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int controllerId)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
 			list.SetFixedFieldData(mapCategoryId, actionId, axisRange, controllerType, controllerId);
 		}
 
@@ -1491,9 +1356,9 @@ public class ControlMapper : MonoBehaviour
 		{
 			for (int i = 0; i < groups.Count; i++)
 			{
-				if (!((Object)(object)groups[i] == (Object)null))
+				if (!(groups[i] == null))
 				{
-					Object.Destroy((Object)(object)groups[i]);
+					UnityEngine.Object.Destroy(groups[i]);
 				}
 			}
 		}
@@ -1539,7 +1404,6 @@ public class ControlMapper : MonoBehaviour
 
 			public ActionEntry GetActionEntry(int actionId, AxisRange axisRange)
 			{
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 				int num = IndexOfActionEntry(actionId, axisRange);
 				if (num < 0)
 				{
@@ -1550,7 +1414,6 @@ public class ControlMapper : MonoBehaviour
 
 			public int IndexOfActionEntry(int actionId, AxisRange axisRange)
 			{
-				//IL_001d: Unknown result type (might be due to invalid IL or missing references)
 				int count = _actionList.Count;
 				for (int i = 0; i < count; i++)
 				{
@@ -1564,14 +1427,11 @@ public class ControlMapper : MonoBehaviour
 
 			public bool ContainsActionEntry(int actionId, AxisRange axisRange)
 			{
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 				return IndexOfActionEntry(actionId, axisRange) >= 0;
 			}
 
 			public ActionEntry AddAction(InputAction action, AxisRange axisRange)
 			{
-				//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001d: Unknown result type (might be due to invalid IL or missing references)
 				if (action == null)
 				{
 					return null;
@@ -1634,9 +1494,6 @@ public class ControlMapper : MonoBehaviour
 
 			public ActionEntry(InputAction action, AxisRange axisRange)
 			{
-				//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001b: Unknown result type (might be due to invalid IL or missing references)
 				this.action = action;
 				this.axisRange = axisRange;
 				actionSet = new InputActionSet(action.id, axisRange);
@@ -1650,8 +1507,6 @@ public class ControlMapper : MonoBehaviour
 
 			public bool Matches(int actionId, AxisRange axisRange)
 			{
-				//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0016: Unknown result type (might be due to invalid IL or missing references)
 				if (action.id != actionId)
 				{
 					return false;
@@ -1665,10 +1520,6 @@ public class ControlMapper : MonoBehaviour
 
 			public void AddInputFieldSet(ControllerType controllerType, GameObject fieldSetContainer)
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000c: Expected I4, but got Unknown
-				//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0021: Expected I4, but got Unknown
 				if (!fieldSets.ContainsKey((int)controllerType))
 				{
 					fieldSets.Add((int)controllerType, new FieldSet(fieldSetContainer));
@@ -1677,10 +1528,6 @@ public class ControlMapper : MonoBehaviour
 
 			public void AddInputField(ControllerType controllerType, int fieldIndex, GUIInputField inputField)
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000c: Expected I4, but got Unknown
-				//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001b: Expected I4, but got Unknown
 				if (fieldSets.ContainsKey((int)controllerType))
 				{
 					FieldSet fieldSet = fieldSets.Get((int)controllerType);
@@ -1693,12 +1540,6 @@ public class ControlMapper : MonoBehaviour
 
 			public GUIInputField GetGUIInputField(ControllerType controllerType, int fieldIndex)
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000c: Expected I4, but got Unknown
-				//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001c: Expected I4, but got Unknown
-				//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0037: Expected I4, but got Unknown
 				if (!fieldSets.ContainsKey((int)controllerType))
 				{
 					return null;
@@ -1712,10 +1553,6 @@ public class ControlMapper : MonoBehaviour
 
 			public bool Contains(ControllerType controllerType, int fieldId)
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000c: Expected I4, but got Unknown
-				//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001c: Expected I4, but got Unknown
 				if (!fieldSets.ContainsKey((int)controllerType))
 				{
 					return false;
@@ -1729,12 +1566,6 @@ public class ControlMapper : MonoBehaviour
 
 			public void SetFieldLabel(ControllerType controllerType, int index, string label)
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000c: Expected I4, but got Unknown
-				//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001b: Expected I4, but got Unknown
-				//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0035: Expected I4, but got Unknown
 				if (fieldSets.ContainsKey((int)controllerType) && fieldSets.Get((int)controllerType).fields.ContainsKey(index))
 				{
 					fieldSets.Get((int)controllerType).fields.Get(index).SetLabel(label);
@@ -1743,12 +1574,6 @@ public class ControlMapper : MonoBehaviour
 
 			public void PopulateField(ControllerType controllerType, int controllerId, int index, int actionElementMapId, string label, bool invert)
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000c: Expected I4, but got Unknown
-				//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001b: Expected I4, but got Unknown
-				//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0035: Expected I4, but got Unknown
 				if (fieldSets.ContainsKey((int)controllerType) && fieldSets.Get((int)controllerType).fields.ContainsKey(index))
 				{
 					GUIInputField gUIInputField = fieldSets.Get((int)controllerType).fields.Get(index);
@@ -1766,10 +1591,6 @@ public class ControlMapper : MonoBehaviour
 
 			public void SetFixedFieldData(ControllerType controllerType, int controllerId)
 			{
-				//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000c: Expected I4, but got Unknown
-				//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001b: Expected I4, but got Unknown
 				if (fieldSets.ContainsKey((int)controllerType))
 				{
 					FieldSet fieldSet = fieldSets.Get((int)controllerType);
@@ -1903,13 +1724,11 @@ public class ControlMapper : MonoBehaviour
 
 		public void AddAction(int mapCategoryId, InputAction action, AxisRange axisRange)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
 			AddActionEntry(mapCategoryId, action, axisRange);
 		}
 
 		private ActionEntry AddActionEntry(int mapCategoryId, InputAction action, AxisRange axisRange)
 		{
-			//IL_0019: Unknown result type (might be due to invalid IL or missing references)
 			if (action == null)
 			{
 				return null;
@@ -1923,7 +1742,6 @@ public class ControlMapper : MonoBehaviour
 
 		public void AddActionLabel(int mapCategoryId, int actionId, AxisRange axisRange, GUILabel label)
 		{
-			//IL_0013: Unknown result type (might be due to invalid IL or missing references)
 			if (entries.TryGet(mapCategoryId, out var value))
 			{
 				value.GetActionEntry(actionId, axisRange)?.SetLabel(label);
@@ -1954,28 +1772,21 @@ public class ControlMapper : MonoBehaviour
 
 		public void AddInputFieldSet(int mapCategoryId, InputAction action, AxisRange axisRange, ControllerType controllerType, GameObject fieldSetContainer)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
 			GetActionEntry(mapCategoryId, action, axisRange)?.AddInputFieldSet(controllerType, fieldSetContainer);
 		}
 
 		public void AddInputField(int mapCategoryId, InputAction action, AxisRange axisRange, ControllerType controllerType, int fieldIndex, GUIInputField inputField)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
 			GetActionEntry(mapCategoryId, action, axisRange)?.AddInputField(controllerType, fieldIndex, inputField);
 		}
 
 		public bool Contains(int mapCategoryId, int actionId, AxisRange axisRange)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
 			return GetActionEntry(mapCategoryId, actionId, axisRange) != null;
 		}
 
 		public bool Contains(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int fieldIndex)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
 			return GetActionEntry(mapCategoryId, actionId, axisRange)?.Contains(controllerType, fieldIndex) ?? false;
 		}
 
@@ -1998,14 +1809,11 @@ public class ControlMapper : MonoBehaviour
 
 		public GUIInputField GetGUIInputField(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int fieldIndex)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
 			return GetActionEntry(mapCategoryId, actionId, axisRange)?.GetGUIInputField(controllerType, fieldIndex);
 		}
 
 		private ActionEntry GetActionEntry(int mapCategoryId, int actionId, AxisRange axisRange)
 		{
-			//IL_001a: Unknown result type (might be due to invalid IL or missing references)
 			if (actionId < 0)
 			{
 				return null;
@@ -2019,7 +1827,6 @@ public class ControlMapper : MonoBehaviour
 
 		private ActionEntry GetActionEntry(int mapCategoryId, InputAction action, AxisRange axisRange)
 		{
-			//IL_000d: Unknown result type (might be due to invalid IL or missing references)
 			if (action == null)
 			{
 				return null;
@@ -2055,22 +1862,16 @@ public class ControlMapper : MonoBehaviour
 
 		public void SetLabel(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int index, string label)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
 			GetActionEntry(mapCategoryId, actionId, axisRange)?.SetFieldLabel(controllerType, index, label);
 		}
 
 		public void PopulateField(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int controllerId, int index, int actionElementMapId, string label, bool invert)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
 			GetActionEntry(mapCategoryId, actionId, axisRange)?.PopulateField(controllerType, controllerId, index, actionElementMapId, label, invert);
 		}
 
 		public void SetFixedFieldData(int mapCategoryId, int actionId, AxisRange axisRange, ControllerType controllerType, int controllerId)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
 			GetActionEntry(mapCategoryId, actionId, axisRange)?.SetFixedFieldData(controllerType, controllerId);
 		}
 
@@ -2140,7 +1941,7 @@ public class ControlMapper : MonoBehaviour
 			{
 				for (int num = windows.Count - 1; num >= 0; num--)
 				{
-					if (!((Object)(object)windows[num] == (Object)null))
+					if (!(windows[num] == null))
 					{
 						return true;
 					}
@@ -2155,7 +1956,7 @@ public class ControlMapper : MonoBehaviour
 			{
 				for (int num = windows.Count - 1; num >= 0; num--)
 				{
-					if (!((Object)(object)windows[num] == (Object)null))
+					if (!(windows[num] == null))
 					{
 						return windows[num];
 					}
@@ -2166,14 +1967,12 @@ public class ControlMapper : MonoBehaviour
 
 		public WindowManager(GameObject windowPrefab, GameObject faderPrefab, Transform parent)
 		{
-			//IL_0048: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004d: Unknown result type (might be due to invalid IL or missing references)
 			this.windowPrefab = windowPrefab;
 			this.parent = parent;
 			windows = new List<Window>();
-			fader = Object.Instantiate<GameObject>(faderPrefab);
-			fader.transform.SetParent(parent, false);
-			((Transform)fader.GetComponent<RectTransform>()).localScale = Vector2.op_Implicit(Vector2.one);
+			fader = UnityEngine.Object.Instantiate(faderPrefab);
+			fader.transform.SetParent(parent, worldPositionStays: false);
+			fader.GetComponent<RectTransform>().localScale = Vector2.one;
 			SetFaderActive(state: false);
 		}
 
@@ -2186,9 +1985,9 @@ public class ControlMapper : MonoBehaviour
 
 		public Window OpenWindow(GameObject windowPrefab, string name)
 		{
-			if ((Object)(object)windowPrefab == (Object)null)
+			if (windowPrefab == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: Window Prefab is null!");
+				Debug.LogError("Rewired Control Mapper: Window Prefab is null!");
 				return null;
 			}
 			Window result = InstantiateWindow(name, windowPrefab);
@@ -2201,7 +2000,7 @@ public class ControlMapper : MonoBehaviour
 			int num = windows.Count - 1;
 			while (num >= 0)
 			{
-				if ((Object)(object)windows[num] == (Object)null)
+				if (windows[num] == null)
 				{
 					windows.RemoveAt(num);
 					num--;
@@ -2221,17 +2020,17 @@ public class ControlMapper : MonoBehaviour
 
 		public void CloseWindow(Window window)
 		{
-			if ((Object)(object)window == (Object)null)
+			if (window == null)
 			{
 				return;
 			}
 			for (int num = windows.Count - 1; num >= 0; num--)
 			{
-				if ((Object)(object)windows[num] == (Object)null)
+				if (windows[num] == null)
 				{
 					windows.RemoveAt(num);
 				}
-				else if (!((Object)(object)windows[num] != (Object)(object)window))
+				else if (!(windows[num] != window))
 				{
 					DestroyWindow(windows[num]);
 					windows.RemoveAt(num);
@@ -2247,7 +2046,7 @@ public class ControlMapper : MonoBehaviour
 			SetFaderActive(state: false);
 			for (int num = windows.Count - 1; num >= 0; num--)
 			{
-				if ((Object)(object)windows[num] == (Object)null)
+				if (windows[num] == null)
 				{
 					windows.RemoveAt(num);
 				}
@@ -2268,7 +2067,7 @@ public class ControlMapper : MonoBehaviour
 			}
 			for (int num = windows.Count - 1; num >= 0; num--)
 			{
-				if (!((Object)(object)windows[num] == (Object)null))
+				if (!(windows[num] == null))
 				{
 					windows[num].Cancel();
 				}
@@ -2284,7 +2083,7 @@ public class ControlMapper : MonoBehaviour
 			}
 			for (int num = windows.Count - 1; num >= 0; num--)
 			{
-				if (!((Object)(object)windows[num] == (Object)null) && windows[num].id == windowId)
+				if (!(windows[num] == null) && windows[num].id == windowId)
 				{
 					return windows[num];
 				}
@@ -2298,7 +2097,7 @@ public class ControlMapper : MonoBehaviour
 			{
 				return false;
 			}
-			if ((Object)(object)topWindow == (Object)null)
+			if (topWindow == null)
 			{
 				return false;
 			}
@@ -2312,7 +2111,7 @@ public class ControlMapper : MonoBehaviour
 
 		public void Focus(Window window)
 		{
-			if (!((Object)(object)window == (Object)null))
+			if (!(window == null))
 			{
 				window.TakeInputFocus();
 				DefocusOtherWindows(window.id);
@@ -2327,7 +2126,7 @@ public class ControlMapper : MonoBehaviour
 			}
 			for (int num = windows.Count - 1; num >= 0; num--)
 			{
-				if (!((Object)(object)windows[num] == (Object)null) && windows[num].id != focusedWindowId)
+				if (!(windows[num] == null) && windows[num].id != focusedWindowId)
 				{
 					windows[num].Disable();
 				}
@@ -2340,18 +2139,18 @@ public class ControlMapper : MonoBehaviour
 			{
 				SetFaderActive(state: false);
 			}
-			else if (!((Object)(object)((Component)topWindow).transform.parent == (Object)null))
+			else if (!(topWindow.transform.parent == null))
 			{
 				SetFaderActive(state: true);
 				fader.transform.SetAsLastSibling();
-				int siblingIndex = ((Component)topWindow).transform.GetSiblingIndex();
+				int siblingIndex = topWindow.transform.GetSiblingIndex();
 				fader.transform.SetSiblingIndex(siblingIndex);
 			}
 		}
 
 		private void FocusTopWindow()
 		{
-			if (!((Object)(object)topWindow == (Object)null))
+			if (!(topWindow == null))
 			{
 				topWindow.TakeInputFocus();
 			}
@@ -2368,13 +2167,13 @@ public class ControlMapper : MonoBehaviour
 			{
 				name = "Window";
 			}
-			GameObject val = UITools.InstantiateGUIObject<Window>(windowPrefab, parent, name);
-			if ((Object)(object)val == (Object)null)
+			GameObject gameObject = UITools.InstantiateGUIObject<Window>(windowPrefab, parent, name);
+			if (gameObject == null)
 			{
 				return null;
 			}
-			Window component = val.GetComponent<Window>();
-			if ((Object)(object)component != (Object)null)
+			Window component = gameObject.GetComponent<Window>();
+			if (component != null)
 			{
 				component.Initialize(GetNewId(), IsFocused);
 				windows.Add(component);
@@ -2389,17 +2188,17 @@ public class ControlMapper : MonoBehaviour
 			{
 				name = "Window";
 			}
-			if ((Object)(object)windowPrefab == (Object)null)
+			if (windowPrefab == null)
 			{
 				return null;
 			}
-			GameObject val = UITools.InstantiateGUIObject<Window>(windowPrefab, parent, name);
-			if ((Object)(object)val == (Object)null)
+			GameObject gameObject = UITools.InstantiateGUIObject<Window>(windowPrefab, parent, name);
+			if (gameObject == null)
 			{
 				return null;
 			}
-			Window component = val.GetComponent<Window>();
-			if ((Object)(object)component != (Object)null)
+			Window component = gameObject.GetComponent<Window>();
+			if (component != null)
 			{
 				component.Initialize(GetNewId(), IsFocused);
 				windows.Add(component);
@@ -2409,9 +2208,9 @@ public class ControlMapper : MonoBehaviour
 
 		private void DestroyWindow(Window window)
 		{
-			if (!((Object)(object)window == (Object)null))
+			if (!(window == null))
 			{
-				Object.Destroy((Object)(object)((Component)window).gameObject);
+				UnityEngine.Object.Destroy(window.gameObject);
 			}
 		}
 
@@ -2425,9 +2224,9 @@ public class ControlMapper : MonoBehaviour
 		public void ClearCompletely()
 		{
 			CloseAll();
-			if ((Object)(object)fader != (Object)null)
+			if (fader != null)
 			{
-				Object.Destroy((Object)(object)fader);
+				UnityEngine.Object.Destroy(fader);
 			}
 		}
 	}
@@ -2788,7 +2587,7 @@ public class ControlMapper : MonoBehaviour
 		{
 			if (value != _dontDestroyOnLoad && value)
 			{
-				Object.DontDestroyOnLoad((Object)(object)((Component)((Component)this).transform).gameObject);
+				UnityEngine.Object.DontDestroyOnLoad(base.transform.gameObject);
 			}
 			_dontDestroyOnLoad = value;
 		}
@@ -3262,7 +3061,7 @@ public class ControlMapper : MonoBehaviour
 		set
 		{
 			_language = value;
-			if ((Object)(object)_language != (Object)null)
+			if (_language != null)
 			{
 				_language.Initialize();
 			}
@@ -3379,11 +3178,11 @@ public class ControlMapper : MonoBehaviour
 		{
 			if (!initialized)
 			{
-				if (!((Object)(object)references.canvas != (Object)null))
+				if (!(references.canvas != null))
 				{
 					return false;
 				}
-				return ((Component)references.canvas).gameObject.activeInHierarchy;
+				return references.canvas.gameObject.activeInHierarchy;
 			}
 			return canvas.activeInHierarchy;
 		}
@@ -3438,7 +3237,7 @@ public class ControlMapper : MonoBehaviour
 
 	private Player currentPlayer => ReInput.players.GetPlayer(currentPlayerId);
 
-	private InputCategory currentMapCategory => (InputCategory)(object)ReInput.mapping.GetMapCategory(currentMapCategoryId);
+	private InputCategory currentMapCategory => ReInput.mapping.GetMapCategory(currentMapCategoryId);
 
 	private MappingSet currentMappingSet
 	{
@@ -3467,7 +3266,7 @@ public class ControlMapper : MonoBehaviour
 	{
 		get
 		{
-			if (!((Object)(object)EventSystem.current != (Object)null))
+			if (!(EventSystem.current != null))
 			{
 				return null;
 			}
@@ -3651,7 +3450,7 @@ public class ControlMapper : MonoBehaviour
 	{
 		if (_dontDestroyOnLoad)
 		{
-			Object.DontDestroyOnLoad((Object)(object)((Component)((Component)this).transform).gameObject);
+			UnityEngine.Object.DontDestroyOnLoad(base.transform.gameObject);
 		}
 		PreInitialize();
 		if (isOpen)
@@ -3689,7 +3488,7 @@ public class ControlMapper : MonoBehaviour
 	{
 		if (!ReInput.isReady)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: Rewired has not been initialized! Are you missing a Rewired Input Manager in your scene?");
+			Debug.LogError("Rewired Control Mapper: Rewired has not been initialized! Are you missing a Rewired Input Manager in your scene?");
 		}
 		else
 		{
@@ -3703,65 +3502,65 @@ public class ControlMapper : MonoBehaviour
 		{
 			return;
 		}
-		if ((Object)(object)_rewiredInputManager == (Object)null)
+		if (_rewiredInputManager == null)
 		{
-			_rewiredInputManager = Object.FindObjectOfType<InputManager>();
-			if ((Object)(object)_rewiredInputManager == (Object)null)
+			_rewiredInputManager = UnityEngine.Object.FindObjectOfType<InputManager>();
+			if (_rewiredInputManager == null)
 			{
-				Debug.LogError((object)"Rewired Control Mapper: A Rewired Input Manager was not assigned in the inspector or found in the current scene! Control Mapper will not function.");
+				Debug.LogError("Rewired Control Mapper: A Rewired Input Manager was not assigned in the inspector or found in the current scene! Control Mapper will not function.");
 				return;
 			}
 		}
-		if ((Object)(object)Instance != (Object)null)
+		if (Instance != null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: Only one ControlMapper can exist at one time!");
+			Debug.LogError("Rewired Control Mapper: Only one ControlMapper can exist at one time!");
 			return;
 		}
 		Instance = this;
 		if (prefabs == null || !prefabs.Check())
 		{
-			Debug.LogError((object)"Rewired Control Mapper: All prefabs must be assigned in the inspector!");
+			Debug.LogError("Rewired Control Mapper: All prefabs must be assigned in the inspector!");
 			return;
 		}
 		if (references == null || !references.Check())
 		{
-			Debug.LogError((object)"Rewired Control Mapper: All references must be assigned in the inspector!");
+			Debug.LogError("Rewired Control Mapper: All references must be assigned in the inspector!");
 			return;
 		}
-		references.inputGridLayoutElement = ((Component)references.inputGridContainer).GetComponent<LayoutElement>();
-		if ((Object)(object)references.inputGridLayoutElement == (Object)null)
+		references.inputGridLayoutElement = references.inputGridContainer.GetComponent<LayoutElement>();
+		if (references.inputGridLayoutElement == null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: InputGridContainer is missing LayoutElement component!");
+			Debug.LogError("Rewired Control Mapper: InputGridContainer is missing LayoutElement component!");
 			return;
 		}
 		if (_showKeyboard && _keyboardInputFieldCount < 1)
 		{
-			Debug.LogWarning((object)"Rewired Control Mapper: Keyboard Input Fields must be at least 1!");
+			Debug.LogWarning("Rewired Control Mapper: Keyboard Input Fields must be at least 1!");
 			_keyboardInputFieldCount = 1;
 		}
 		if (_showMouse && _mouseInputFieldCount < 1)
 		{
-			Debug.LogWarning((object)"Rewired Control Mapper: Mouse Input Fields must be at least 1!");
+			Debug.LogWarning("Rewired Control Mapper: Mouse Input Fields must be at least 1!");
 			_mouseInputFieldCount = 1;
 		}
 		if (_showControllers && _controllerInputFieldCount < 1)
 		{
-			Debug.LogWarning((object)"Rewired Control Mapper: Controller Input Fields must be at least 1!");
+			Debug.LogWarning("Rewired Control Mapper: Controller Input Fields must be at least 1!");
 			_controllerInputFieldCount = 1;
 		}
 		if (_maxControllersPerPlayer < 0)
 		{
-			Debug.LogWarning((object)"Rewired Control Mapper: Max Controllers Per Player must be at least 0 (no limit)!");
+			Debug.LogWarning("Rewired Control Mapper: Max Controllers Per Player must be at least 0 (no limit)!");
 			_maxControllersPerPlayer = 0;
 		}
-		if (_useThemeSettings && (Object)(object)_themeSettings == (Object)null)
+		if (_useThemeSettings && _themeSettings == null)
 		{
-			Debug.LogWarning((object)"Rewired Control Mapper: To use theming, Theme Settings must be set in the inspector! Theming has been disabled.");
+			Debug.LogWarning("Rewired Control Mapper: To use theming, Theme Settings must be set in the inspector! Theming has been disabled.");
 			_useThemeSettings = false;
 		}
-		if ((Object)(object)_language == (Object)null)
+		if (_language == null)
 		{
-			Debug.LogError((object)"Rawired UI: Language must be set in the inspector!");
+			Debug.LogError("Rawired UI: Language must be set in the inspector!");
 			return;
 		}
 		_language.Initialize();
@@ -3771,8 +3570,8 @@ public class ControlMapper : MonoBehaviour
 		ReInput.ControllerDisconnectedEvent += OnJoystickDisconnected;
 		ReInput.ControllerPreDisconnectEvent += OnJoystickPreDisconnect;
 		playerCount = ReInput.players.playerCount;
-		canvas = ((Component)references.canvas).gameObject;
-		windowManager = new WindowManager(prefabs.window, prefabs.fader, ((Component)references.canvas).transform);
+		canvas = references.canvas.gameObject;
+		windowManager = new WindowManager(prefabs.window, prefabs.fader, references.canvas.transform);
 		playerButtons = new List<GUIButton>();
 		mapCategoryButtons = new List<GUIButton>();
 		assignedControllerButtons = new List<GUIButton>();
@@ -3860,11 +3659,6 @@ public class ControlMapper : MonoBehaviour
 
 	public void OnInputFieldActivated(InputFieldInfo fieldInfo)
 	{
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0041: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0057: Unknown result type (might be due to invalid IL or missing references)
 		if (!initialized || !inputAllowed || currentPlayer == null)
 		{
 			return;
@@ -3874,15 +3668,15 @@ public class ControlMapper : MonoBehaviour
 		{
 			return;
 		}
-		AxisRange axisRange = (AxisRange)(((int)action.type == 0) ? ((int)fieldInfo.axisRange) : 0);
+		AxisRange axisRange = ((action.type == InputActionType.Axis) ? fieldInfo.axisRange : AxisRange.Full);
 		string actionName = _language.GetActionName(action.id, axisRange);
 		ControllerMap controllerMap = GetControllerMap(fieldInfo.controllerType);
 		if (controllerMap != null)
 		{
-			ActionElementMap val = ((fieldInfo.actionElementMapId >= 0) ? controllerMap.GetElementMap(fieldInfo.actionElementMapId) : null);
-			if (val != null)
+			ActionElementMap actionElementMap = ((fieldInfo.actionElementMapId >= 0) ? controllerMap.GetElementMap(fieldInfo.actionElementMapId) : null);
+			if (actionElementMap != null)
 			{
-				ShowBeginElementAssignmentReplacementWindow(fieldInfo, action, controllerMap, val, actionName);
+				ShowBeginElementAssignmentReplacementWindow(fieldInfo, action, controllerMap, actionElementMap, actionName);
 			}
 			else
 			{
@@ -3893,7 +3687,6 @@ public class ControlMapper : MonoBehaviour
 
 	public void OnInputFieldInvertToggleStateChanged(ToggleInfo toggleInfo, bool newState)
 	{
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
 		if (initialized && inputAllowed)
 		{
 			SetActionAxisInverted(newState, toggleInfo.controllerType, toggleInfo.actionElementMapId);
@@ -4017,24 +3810,18 @@ public class ControlMapper : MonoBehaviour
 
 	private void OnBeginElementAssignment(InputFieldInfo fieldInfo, ControllerMap map, ActionElementMap aem, string actionName)
 	{
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0042: Expected I4, but got Unknown
-		if (!((Object)(object)fieldInfo == (Object)null) && map != null)
+		if (!(fieldInfo == null) && map != null)
 		{
 			pendingInputMapping = new InputMapping(actionName, fieldInfo, map, aem, fieldInfo.controllerType, fieldInfo.controllerId);
-			ControllerType controllerType = fieldInfo.controllerType;
-			switch ((int)controllerType)
+			switch (fieldInfo.controllerType)
 			{
-			case 2:
+			case ControllerType.Joystick:
 				ShowElementAssignmentPrePollingWindow();
 				break;
-			case 0:
+			case ControllerType.Keyboard:
 				ShowElementAssignmentPollingWindow();
 				break;
-			case 1:
+			case ControllerType.Mouse:
 				ShowElementAssignmentPollingWindow();
 				break;
 			default:
@@ -4072,128 +3859,78 @@ public class ControlMapper : MonoBehaviour
 
 	private void OnElementAssignmentConflictReplaceConfirmed(int windowId, InputMapping mapping, ElementAssignment assignment, bool skipOtherPlayers, bool allowSwap)
 	{
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0046: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0061: Expected O, but got Unknown
-		//IL_0068: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006e: Expected O, but got Unknown
-		//IL_00b2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ea: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ef: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ff: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0102: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0107: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0112: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0117: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0121: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0124: Unknown result type (might be due to invalid IL or missing references)
-		//IL_014c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_012b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0170: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0151: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0157: Invalid comparison between Unknown and I4
-		//IL_012f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0132: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0174: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0169: Unknown result type (might be due to invalid IL or missing references)
-		//IL_015a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0139: Unknown result type (might be due to invalid IL or missing references)
-		//IL_016e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0162: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0143: Unknown result type (might be due to invalid IL or missing references)
-		//IL_013e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_019f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01a1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01a3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01a7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01ae: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01e2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01fb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01ff: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0201: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0203: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0207: Unknown result type (might be due to invalid IL or missing references)
-		//IL_020b: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null || mapping == null)
 		{
 			return;
 		}
 		if (!CreateConflictCheck(mapping, assignment, out var conflictCheck))
 		{
-			Debug.LogError((object)"Rewired Control Mapper: Error creating conflict check!");
+			Debug.LogError("Rewired Control Mapper: Error creating conflict check!");
 			CloseWindow(windowId);
 			return;
 		}
 		ElementAssignmentConflictInfo conflict = default(ElementAssignmentConflictInfo);
-		ActionElementMap val = null;
-		ActionElementMap val2 = null;
+		ActionElementMap actionElementMap = null;
+		ActionElementMap actionElementMap2 = null;
 		bool flag = false;
 		if (allowSwap && mapping.aem != null && GetFirstElementAssignmentConflict(conflictCheck, out conflict, skipOtherPlayers))
 		{
 			flag = true;
-			val2 = new ActionElementMap(mapping.aem);
-			val = new ActionElementMap(((ElementAssignmentConflictInfo)(ref conflict)).elementMap);
+			actionElementMap2 = new ActionElementMap(mapping.aem);
+			actionElementMap = new ActionElementMap(conflict.elementMap);
 		}
 		IList<Player> allPlayers = ReInput.players.AllPlayers;
 		for (int i = 0; i < allPlayers.Count; i++)
 		{
-			Player val3 = allPlayers[i];
-			if (!skipOtherPlayers || val3 == currentPlayer || val3 == ReInput.players.SystemPlayer)
+			Player player = allPlayers[i];
+			if (!skipOtherPlayers || player == currentPlayer || player == ReInput.players.SystemPlayer)
 			{
-				val3.controllers.conflictChecking.RemoveElementAssignmentConflicts(conflictCheck);
+				player.controllers.conflictChecking.RemoveElementAssignmentConflicts(conflictCheck);
 			}
 		}
 		mapping.map.ReplaceOrCreateElementMap(assignment);
 		if (allowSwap && flag)
 		{
-			int actionId = val.actionId;
-			Pole axisContribution = val.axisContribution;
-			bool flag2 = val.invert;
-			AxisRange val4 = val2.axisRange;
-			ControllerElementType elementType = val2.elementType;
-			int elementIdentifierId = val2.elementIdentifierId;
-			KeyCode keyCode = val2.keyCode;
-			ModifierKeyFlags modifierKeyFlags = val2.modifierKeyFlags;
-			if (elementType == val.elementType && (int)elementType == 0)
+			int actionId = actionElementMap.actionId;
+			Pole axisContribution = actionElementMap.axisContribution;
+			bool invert = actionElementMap.invert;
+			AxisRange axisRange = actionElementMap2.axisRange;
+			ControllerElementType elementType = actionElementMap2.elementType;
+			int elementIdentifierId = actionElementMap2.elementIdentifierId;
+			KeyCode keyCode = actionElementMap2.keyCode;
+			ModifierKeyFlags modifierKeyFlags = actionElementMap2.modifierKeyFlags;
+			if (elementType == actionElementMap.elementType && elementType == ControllerElementType.Axis)
 			{
-				if (val4 != val.axisRange)
+				if (axisRange != actionElementMap.axisRange)
 				{
-					if ((int)val4 == 0)
+					if (axisRange == AxisRange.Full)
 					{
-						val4 = (AxisRange)1;
+						axisRange = AxisRange.Positive;
 					}
-					else if ((int)val.axisRange != 0)
+					else if (actionElementMap.axisRange != AxisRange.Full)
 					{
 					}
 				}
 			}
-			else if ((int)elementType == 0 && ((int)val.elementType == 1 || ((int)val.elementType == 0 && (int)val.axisRange != 0)) && (int)val4 == 0)
+			else if (elementType == ControllerElementType.Axis && (actionElementMap.elementType == ControllerElementType.Button || (actionElementMap.elementType == ControllerElementType.Axis && actionElementMap.axisRange != AxisRange.Full)) && axisRange == AxisRange.Full)
 			{
-				val4 = (AxisRange)1;
+				axisRange = AxisRange.Positive;
 			}
-			if ((int)elementType != 0 || (int)val4 != 0)
+			if (elementType != ControllerElementType.Axis || axisRange != AxisRange.Full)
 			{
-				flag2 = false;
+				invert = false;
 			}
 			int num = 0;
-			foreach (ActionElementMap item in ((ElementAssignmentConflictInfo)(ref conflict)).controllerMap.ElementMapsWithAction(actionId))
+			foreach (ActionElementMap item in conflict.controllerMap.ElementMapsWithAction(actionId))
 			{
-				if (SwapIsSameInputRange(elementType, val4, axisContribution, item.elementType, item.axisRange, item.axisContribution))
+				if (SwapIsSameInputRange(elementType, axisRange, axisContribution, item.elementType, item.axisRange, item.axisContribution))
 				{
 					num++;
 				}
 			}
 			if (num < GetControllerInputFieldCount(mapping.controllerType))
 			{
-				((ElementAssignmentConflictInfo)(ref conflict)).controllerMap.ReplaceOrCreateElementMap(ElementAssignment.CompleteAssignment(mapping.controllerType, elementType, elementIdentifierId, val4, keyCode, modifierKeyFlags, actionId, axisContribution, flag2));
+				conflict.controllerMap.ReplaceOrCreateElementMap(ElementAssignment.CompleteAssignment(mapping.controllerType, elementType, elementIdentifierId, axisRange, keyCode, modifierKeyFlags, actionId, axisContribution, invert));
 			}
 		}
 		CloseWindow(windowId);
@@ -4201,7 +3938,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void OnElementAssignmentAddConfirmed(int windowId, InputMapping mapping, ElementAssignment assignment)
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer != null && mapping != null)
 		{
 			mapping.map.ReplaceOrCreateElementMap(assignment);
@@ -4216,18 +3952,18 @@ public class ControlMapper : MonoBehaviour
 			IList<Player> players = ReInput.players.Players;
 			for (int i = 0; i < players.Count; i++)
 			{
-				Player val = players[i];
+				Player player = players[i];
 				if (_showControllers)
 				{
-					val.controllers.maps.LoadDefaultMaps((ControllerType)2);
+					player.controllers.maps.LoadDefaultMaps(ControllerType.Joystick);
 				}
 				if (_showKeyboard)
 				{
-					val.controllers.maps.LoadDefaultMaps((ControllerType)0);
+					player.controllers.maps.LoadDefaultMaps(ControllerType.Keyboard);
 				}
 				if (_showMouse)
 				{
-					val.controllers.maps.LoadDefaultMaps((ControllerType)1);
+					player.controllers.maps.LoadDefaultMaps(ControllerType.Mouse);
 				}
 			}
 		}
@@ -4240,8 +3976,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void OnAssignControllerWindowUpdate(int windowId)
 	{
-		//IL_0047: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004c: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
@@ -4258,17 +3992,17 @@ public class ControlMapper : MonoBehaviour
 			CloseWindow(windowId);
 			return;
 		}
-		ControllerPollingInfo val = ReInput.controllers.polling.PollAllControllersOfTypeForFirstElementDown((ControllerType)2);
-		if (((ControllerPollingInfo)(ref val)).success)
+		ControllerPollingInfo controllerPollingInfo = ReInput.controllers.polling.PollAllControllersOfTypeForFirstElementDown(ControllerType.Joystick);
+		if (controllerPollingInfo.success)
 		{
 			InputPollingStopped();
-			if (ReInput.controllers.IsControllerAssigned((ControllerType)2, ((ControllerPollingInfo)(ref val)).controllerId) && !currentPlayer.controllers.ContainsController((ControllerType)2, ((ControllerPollingInfo)(ref val)).controllerId))
+			if (ReInput.controllers.IsControllerAssigned(ControllerType.Joystick, controllerPollingInfo.controllerId) && !currentPlayer.controllers.ContainsController(ControllerType.Joystick, controllerPollingInfo.controllerId))
 			{
-				ShowControllerAssignmentConflictWindow(((ControllerPollingInfo)(ref val)).controllerId);
+				ShowControllerAssignmentConflictWindow(controllerPollingInfo.controllerId);
 			}
 			else
 			{
-				OnControllerAssignmentConfirmed(windowId, currentPlayer, ((ControllerPollingInfo)(ref val)).controllerId);
+				OnControllerAssignmentConfirmed(windowId, currentPlayer, controllerPollingInfo.controllerId);
 			}
 		}
 		else
@@ -4279,18 +4013,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void OnElementAssignmentPrePollingWindowUpdate(int windowId)
 	{
-		//IL_005f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0064: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0065: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0067: Invalid comparison between Unknown and I4
-		//IL_00b8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00be: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0069: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006b: Invalid comparison between Unknown and I4
-		//IL_0090: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
@@ -4304,25 +4026,24 @@ public class ControlMapper : MonoBehaviour
 		if (!window.timer.finished)
 		{
 			window.SetContentText(Mathf.CeilToInt(window.timer.remaining).ToString(), 1);
-			ControllerType controllerType = pendingInputMapping.controllerType;
-			ControllerPollingInfo val;
-			if ((int)controllerType > 1)
+			ControllerPollingInfo controllerPollingInfo;
+			switch (pendingInputMapping.controllerType)
 			{
-				if ((int)controllerType != 2)
-				{
-					throw new NotImplementedException();
-				}
+			case ControllerType.Joystick:
 				if (currentPlayer.controllers.joystickCount == 0)
 				{
 					return;
 				}
-				val = ReInput.controllers.polling.PollControllerForFirstButtonDown(pendingInputMapping.controllerType, ((Controller)currentJoystick).id);
+				controllerPollingInfo = ReInput.controllers.polling.PollControllerForFirstButtonDown(pendingInputMapping.controllerType, currentJoystick.id);
+				break;
+			case ControllerType.Keyboard:
+			case ControllerType.Mouse:
+				controllerPollingInfo = ReInput.controllers.polling.PollControllerForFirstButtonDown(pendingInputMapping.controllerType, 0);
+				break;
+			default:
+				throw new NotImplementedException();
 			}
-			else
-			{
-				val = ReInput.controllers.polling.PollControllerForFirstButtonDown(pendingInputMapping.controllerType, 0);
-			}
-			if (!((ControllerPollingInfo)(ref val)).success)
+			if (!controllerPollingInfo.success)
 			{
 				return;
 			}
@@ -4332,15 +4053,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void OnJoystickElementAssignmentPollingWindowUpdate(int windowId)
 	{
-		//IL_008d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0092: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00db: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
@@ -4362,34 +4074,26 @@ public class ControlMapper : MonoBehaviour
 		{
 			return;
 		}
-		ControllerPollingInfo pollingInfo = ReInput.controllers.polling.PollControllerForFirstElementDown((ControllerType)2, ((Controller)currentJoystick).id);
-		if (((ControllerPollingInfo)(ref pollingInfo)).success && IsAllowedAssignment(pendingInputMapping, pollingInfo))
+		ControllerPollingInfo pollingInfo = ReInput.controllers.polling.PollControllerForFirstElementDown(ControllerType.Joystick, currentJoystick.id);
+		if (pollingInfo.success && IsAllowedAssignment(pendingInputMapping, pollingInfo))
 		{
-			ElementAssignment val = pendingInputMapping.ToElementAssignment(pollingInfo);
-			if (!HasElementAssignmentConflicts(currentPlayer, pendingInputMapping, val, skipOtherPlayers: false))
+			ElementAssignment elementAssignment = pendingInputMapping.ToElementAssignment(pollingInfo);
+			if (!HasElementAssignmentConflicts(currentPlayer, pendingInputMapping, elementAssignment, skipOtherPlayers: false))
 			{
-				pendingInputMapping.map.ReplaceOrCreateElementMap(val);
+				pendingInputMapping.map.ReplaceOrCreateElementMap(elementAssignment);
 				InputPollingStopped();
 				CloseWindow(windowId);
 			}
 			else
 			{
 				InputPollingStopped();
-				ShowElementAssignmentConflictWindow(val, skipOtherPlayers: false);
+				ShowElementAssignmentConflictWindow(elementAssignment, skipOtherPlayers: false);
 			}
 		}
 	}
 
 	private void OnKeyboardElementAssignmentPollingWindowUpdate(int windowId)
 	{
-		//IL_00ab: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ba: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0102: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e5: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
@@ -4413,40 +4117,25 @@ public class ControlMapper : MonoBehaviour
 		}
 		window.SetContentText(modifierKeyPressed ? string.Empty : Mathf.CeilToInt(window.timer.remaining).ToString(), 2);
 		window.SetContentText(label, 1);
-		if (((ControllerPollingInfo)(ref pollingInfo)).success && IsAllowedAssignment(pendingInputMapping, pollingInfo))
+		if (pollingInfo.success && IsAllowedAssignment(pendingInputMapping, pollingInfo))
 		{
-			ElementAssignment val = pendingInputMapping.ToElementAssignment(pollingInfo, modifierFlags);
-			if (!HasElementAssignmentConflicts(currentPlayer, pendingInputMapping, val, skipOtherPlayers: false))
+			ElementAssignment elementAssignment = pendingInputMapping.ToElementAssignment(pollingInfo, modifierFlags);
+			if (!HasElementAssignmentConflicts(currentPlayer, pendingInputMapping, elementAssignment, skipOtherPlayers: false))
 			{
-				pendingInputMapping.map.ReplaceOrCreateElementMap(val);
+				pendingInputMapping.map.ReplaceOrCreateElementMap(elementAssignment);
 				InputPollingStopped();
 				CloseWindow(windowId);
 			}
 			else
 			{
 				InputPollingStopped();
-				ShowElementAssignmentConflictWindow(val, skipOtherPlayers: false);
+				ShowElementAssignmentConflictWindow(elementAssignment, skipOtherPlayers: false);
 			}
 		}
 	}
 
 	private void OnMouseElementAssignmentPollingWindowUpdate(int windowId)
 	{
-		//IL_0076: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0098: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_010a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00cb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00cd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0119: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_012d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_015d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0141: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
@@ -4468,41 +4157,38 @@ public class ControlMapper : MonoBehaviour
 		if (_ignoreMouseXAxisAssignment || _ignoreMouseYAxisAssignment)
 		{
 			pollingInfo = default(ControllerPollingInfo);
-			foreach (ControllerPollingInfo item in ReInput.controllers.polling.PollControllerForAllElementsDown((ControllerType)1, 0))
+			foreach (ControllerPollingInfo item in ReInput.controllers.polling.PollControllerForAllElementsDown(ControllerType.Mouse, 0))
 			{
-				ControllerPollingInfo current = item;
-				if ((int)((ControllerPollingInfo)(ref current)).elementType != 0 || ((!_ignoreMouseXAxisAssignment || ((ControllerPollingInfo)(ref current)).elementIndex != 0) && (!_ignoreMouseYAxisAssignment || ((ControllerPollingInfo)(ref current)).elementIndex != 1)))
+				if (item.elementType != ControllerElementType.Axis || ((!_ignoreMouseXAxisAssignment || item.elementIndex != 0) && (!_ignoreMouseYAxisAssignment || item.elementIndex != 1)))
 				{
-					pollingInfo = current;
+					pollingInfo = item;
 					break;
 				}
 			}
 		}
 		else
 		{
-			pollingInfo = ReInput.controllers.polling.PollControllerForFirstElementDown((ControllerType)1, 0);
+			pollingInfo = ReInput.controllers.polling.PollControllerForFirstElementDown(ControllerType.Mouse, 0);
 		}
-		if (((ControllerPollingInfo)(ref pollingInfo)).success && IsAllowedAssignment(pendingInputMapping, pollingInfo))
+		if (pollingInfo.success && IsAllowedAssignment(pendingInputMapping, pollingInfo))
 		{
-			ElementAssignment val = pendingInputMapping.ToElementAssignment(pollingInfo);
-			if (!HasElementAssignmentConflicts(currentPlayer, pendingInputMapping, val, skipOtherPlayers: true))
+			ElementAssignment elementAssignment = pendingInputMapping.ToElementAssignment(pollingInfo);
+			if (!HasElementAssignmentConflicts(currentPlayer, pendingInputMapping, elementAssignment, skipOtherPlayers: true))
 			{
-				pendingInputMapping.map.ReplaceOrCreateElementMap(val);
+				pendingInputMapping.map.ReplaceOrCreateElementMap(elementAssignment);
 				InputPollingStopped();
 				CloseWindow(windowId);
 			}
 			else
 			{
 				InputPollingStopped();
-				ShowElementAssignmentConflictWindow(val, skipOtherPlayers: true);
+				ShowElementAssignmentConflictWindow(elementAssignment, skipOtherPlayers: true);
 			}
 		}
 	}
 
 	private void OnCalibrateAxisStep1WindowUpdate(int windowId)
 	{
-		//IL_0081: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0086: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
@@ -4516,12 +4202,7 @@ public class ControlMapper : MonoBehaviour
 		if (!window.timer.finished)
 		{
 			window.SetContentText(Mathf.CeilToInt(window.timer.remaining).ToString(), 1);
-			if (currentPlayer.controllers.joystickCount == 0)
-			{
-				return;
-			}
-			ControllerPollingInfo val = ((Controller)pendingAxisCalibration.joystick).PollForFirstButtonDown();
-			if (!((ControllerPollingInfo)(ref val)).success)
+			if (currentPlayer.controllers.joystickCount == 0 || !pendingAxisCalibration.joystick.PollForFirstButtonDown().success)
 			{
 				return;
 			}
@@ -4533,8 +4214,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void OnCalibrateAxisStep2WindowUpdate(int windowId)
 	{
-		//IL_0086: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008b: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
@@ -4548,12 +4227,7 @@ public class ControlMapper : MonoBehaviour
 		{
 			window.SetContentText(Mathf.CeilToInt(window.timer.remaining).ToString(), 1);
 			pendingAxisCalibration.RecordMinMax();
-			if (currentPlayer.controllers.joystickCount == 0)
-			{
-				return;
-			}
-			ControllerPollingInfo val = ((Controller)pendingAxisCalibration.joystick).PollForFirstButtonDown();
-			if (!((ControllerPollingInfo)(ref val)).success)
+			if (currentPlayer.controllers.joystickCount == 0 || !pendingAxisCalibration.joystick.PollForFirstButtonDown().success)
 			{
 				return;
 			}
@@ -4565,17 +4239,10 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowAssignControllerWindow()
 	{
-		//IL_0046: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0067: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a6: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer != null && ReInput.controllers.joystickCount != 0)
 		{
 			Window window = OpenWindow(closeOthers: true);
-			if (!((Object)(object)window == (Object)null))
+			if (!(window == null))
 			{
 				window.SetUpdateCallback(OnAssignControllerWindowUpdate);
 				window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, _language.assignControllerWindowTitle);
@@ -4589,26 +4256,12 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowControllerAssignmentConflictWindow(int controllerId)
 	{
-		//IL_00d4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ff: Unknown result type (might be due to invalid IL or missing references)
-		//IL_010e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_014d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0154: Expected O, but got Unknown
-		//IL_0172: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0177: Unknown result type (might be due to invalid IL or missing references)
-		//IL_017c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0193: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01a0: Expected O, but got Unknown
-		//IL_01b1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01bb: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null || ReInput.controllers.joystickCount == 0)
 		{
 			return;
 		}
 		Window window = OpenWindow(closeOthers: true);
-		if ((Object)(object)window == (Object)null)
+		if (window == null)
 		{
 			return;
 		}
@@ -4616,7 +4269,7 @@ public class ControlMapper : MonoBehaviour
 		IList<Player> players = ReInput.players.Players;
 		for (int i = 0; i < players.Count; i++)
 		{
-			if (players[i] != currentPlayer && players[i].controllers.ContainsController((ControllerType)2, controllerId))
+			if (players[i] != currentPlayer && players[i].controllers.ContainsController(ControllerType.Joystick, controllerId))
 			{
 				otherPlayerName = _language.GetPlayerName(players[i].id);
 				break;
@@ -4624,75 +4277,52 @@ public class ControlMapper : MonoBehaviour
 		}
 		Joystick joystick = ReInput.controllers.GetJoystick(controllerId);
 		window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, _language.controllerAssignmentConflictWindowTitle);
-		window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.GetControllerAssignmentConflictWindowMessage(_language.GetControllerName((Controller)(object)joystick), otherPlayerName, _language.GetPlayerName(currentPlayer.id)));
-		UnityAction val = (UnityAction)delegate
+		window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.GetControllerAssignmentConflictWindowMessage(_language.GetControllerName(joystick), otherPlayerName, _language.GetPlayerName(currentPlayer.id)));
+		UnityAction unityAction = delegate
 		{
 			OnWindowCancel(window.id);
 		};
-		window.cancelCallback = val;
-		window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, _language.yes, (UnityAction)delegate
+		window.cancelCallback = unityAction;
+		window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, _language.yes, delegate
 		{
 			OnControllerAssignmentConfirmed(window.id, currentPlayer, controllerId);
-		}, val, setDefault: true);
-		window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, _language.no, val, val, setDefault: false);
+		}, unityAction, setDefault: true);
+		window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, _language.no, unityAction, unityAction, setDefault: false);
 		windowManager.Focus(window);
 	}
 
 	private void ShowBeginElementAssignmentReplacementWindow(InputFieldInfo fieldInfo, InputAction action, ControllerMap map, ActionElementMap aem, string actionName)
 	{
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0095: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e7: Expected O, but got Unknown
-		//IL_0104: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0109: Unknown result type (might be due to invalid IL or missing references)
-		//IL_010e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0125: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0131: Expected O, but got Unknown
-		//IL_0142: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0147: Unknown result type (might be due to invalid IL or missing references)
-		//IL_014c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0163: Unknown result type (might be due to invalid IL or missing references)
-		//IL_016f: Expected O, but got Unknown
-		//IL_0180: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0185: Unknown result type (might be due to invalid IL or missing references)
-		//IL_018a: Unknown result type (might be due to invalid IL or missing references)
 		GUIInputField gUIInputField = inputGrid.GetGUIInputField(currentMapCategoryId, action.id, fieldInfo.axisRange, fieldInfo.controllerType, fieldInfo.intData);
 		if (gUIInputField == null)
 		{
 			return;
 		}
 		Window window = OpenWindow(closeOthers: true);
-		if (!((Object)(object)window == (Object)null))
+		if (!(window == null))
 		{
 			window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, actionName);
 			window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), gUIInputField.GetLabel());
-			UnityAction val = (UnityAction)delegate
+			UnityAction unityAction = delegate
 			{
 				OnWindowCancel(window.id);
 			};
-			window.cancelCallback = val;
-			window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, _language.replace, (UnityAction)delegate
+			window.cancelCallback = unityAction;
+			window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, _language.replace, delegate
 			{
 				OnBeginElementAssignment(fieldInfo, map, aem, actionName);
-			}, val, setDefault: true);
-			window.CreateButton(prefabs.fitButton, UIPivot.BottomCenter, UIAnchor.BottomCenter, Vector2.zero, _language.remove, (UnityAction)delegate
+			}, unityAction, setDefault: true);
+			window.CreateButton(prefabs.fitButton, UIPivot.BottomCenter, UIAnchor.BottomCenter, Vector2.zero, _language.remove, delegate
 			{
 				OnRemoveElementAssignment(window.id, map, aem);
-			}, val, setDefault: false);
-			window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, _language.cancel, val, val, setDefault: false);
+			}, unityAction, setDefault: false);
+			window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, _language.cancel, unityAction, unityAction, setDefault: false);
 			windowManager.Focus(window);
 		}
 	}
 
 	private void ShowCreateNewElementAssignmentWindow(InputFieldInfo fieldInfo, InputAction action, ControllerMap map, string actionName)
 	{
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
 		if (inputGrid.GetGUIInputField(currentMapCategoryId, action.id, fieldInfo.axisRange, fieldInfo.controllerType, fieldInfo.intData) != null)
 		{
 			OnBeginElementAssignment(fieldInfo, map, null, actionName);
@@ -4701,26 +4331,16 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowElementAssignmentPrePollingWindow()
 	{
-		//IL_0027: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ba: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bf: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0090: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0095: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a4: Unknown result type (might be due to invalid IL or missing references)
 		if (pendingInputMapping == null)
 		{
 			return;
 		}
 		Window window = OpenWindow(closeOthers: true);
-		if (!((Object)(object)window == (Object)null))
+		if (!(window == null))
 		{
 			window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, pendingInputMapping.actionName);
 			window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.elementAssignmentPrePollingWindowMessage);
-			if ((Object)(object)prefabs.centerStickGraphic != (Object)null)
+			if (prefabs.centerStickGraphic != null)
 			{
 				window.AddContentImage(prefabs.centerStickGraphic, UIPivot.BottomCenter, UIAnchor.BottomCenter, new Vector2(0f, 40f));
 			}
@@ -4733,24 +4353,19 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowElementAssignmentPollingWindow()
 	{
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0027: Expected I4, but got Unknown
 		if (pendingInputMapping == null)
 		{
 			return;
 		}
-		ControllerType controllerType = pendingInputMapping.controllerType;
-		switch ((int)controllerType)
+		switch (pendingInputMapping.controllerType)
 		{
-		case 2:
+		case ControllerType.Joystick:
 			ShowJoystickElementAssignmentPollingWindow();
 			break;
-		case 0:
+		case ControllerType.Keyboard:
 			ShowKeyboardElementAssignmentPollingWindow();
 			break;
-		case 1:
+		case ControllerType.Mouse:
 			if (currentPlayer.controllers.hasMouse)
 			{
 				ShowMouseElementAssignmentPollingWindow();
@@ -4767,20 +4382,12 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowJoystickElementAssignmentPollingWindow()
 	{
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0073: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0099: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bf: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c9: Unknown result type (might be due to invalid IL or missing references)
 		if (pendingInputMapping != null)
 		{
 			Window window = OpenWindow(closeOthers: true);
-			if (!((Object)(object)window == (Object)null))
+			if (!(window == null))
 			{
-				string text = (((int)pendingInputMapping.axisRange == 0 && _showFullAxisInputFields && !_showSplitAxisInputFields) ? _language.GetJoystickElementAssignmentPollingWindowMessage_FullAxisFieldOnly(pendingInputMapping.actionName) : _language.GetJoystickElementAssignmentPollingWindowMessage(pendingInputMapping.actionName));
+				string text = ((pendingInputMapping.axisRange == AxisRange.Full && _showFullAxisInputFields && !_showSplitAxisInputFields) ? _language.GetJoystickElementAssignmentPollingWindowMessage_FullAxisFieldOnly(pendingInputMapping.actionName) : _language.GetJoystickElementAssignmentPollingWindowMessage(pendingInputMapping.actionName));
 				window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, pendingInputMapping.actionName);
 				window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), text);
 				window.AddContentText(prefabs.windowContentText, UIPivot.BottomCenter, UIAnchor.BottomHStretch, Vector2.zero, "");
@@ -4793,20 +4400,10 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowKeyboardElementAssignmentPollingWindow()
 	{
-		//IL_0027: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0088: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
 		if (pendingInputMapping != null)
 		{
 			Window window = OpenWindow(closeOthers: true);
-			if (!((Object)(object)window == (Object)null))
+			if (!(window == null))
 			{
 				window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, pendingInputMapping.actionName);
 				window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.GetKeyboardElementAssignmentPollingWindowMessage(pendingInputMapping.actionName));
@@ -4821,20 +4418,12 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowMouseElementAssignmentPollingWindow()
 	{
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0073: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0099: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bf: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c9: Unknown result type (might be due to invalid IL or missing references)
 		if (pendingInputMapping != null)
 		{
 			Window window = OpenWindow(closeOthers: true);
-			if (!((Object)(object)window == (Object)null))
+			if (!(window == null))
 			{
-				string text = (((int)pendingInputMapping.axisRange == 0 && _showFullAxisInputFields && !_showSplitAxisInputFields) ? _language.GetMouseElementAssignmentPollingWindowMessage_FullAxisFieldOnly(pendingInputMapping.actionName) : _language.GetMouseElementAssignmentPollingWindowMessage(pendingInputMapping.actionName));
+				string text = ((pendingInputMapping.axisRange == AxisRange.Full && _showFullAxisInputFields && !_showSplitAxisInputFields) ? _language.GetMouseElementAssignmentPollingWindowMessage_FullAxisFieldOnly(pendingInputMapping.actionName) : _language.GetMouseElementAssignmentPollingWindowMessage(pendingInputMapping.actionName));
 				window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, pendingInputMapping.actionName);
 				window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), text);
 				window.AddContentText(prefabs.windowContentText, UIPivot.BottomCenter, UIAnchor.BottomHStretch, Vector2.zero, "");
@@ -4847,37 +4436,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowElementAssignmentConflictWindow(ElementAssignment assignment, bool skipOtherPlayers)
 	{
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00cd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00dc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f4: Expected O, but got Unknown
-		//IL_014c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0151: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0156: Unknown result type (might be due to invalid IL or missing references)
-		//IL_016d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0179: Expected O, but got Unknown
-		//IL_0114: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0119: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01d4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0192: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0197: Unknown result type (might be due to invalid IL or missing references)
-		//IL_019c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01bf: Expected O, but got Unknown
-		//IL_0235: Unknown result type (might be due to invalid IL or missing references)
-		//IL_023a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_023f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01fc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0201: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0218: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0224: Expected O, but got Unknown
 		if (pendingInputMapping == null)
 		{
 			return;
@@ -4885,71 +4443,54 @@ public class ControlMapper : MonoBehaviour
 		bool flag = IsBlockingAssignmentConflict(pendingInputMapping, assignment, skipOtherPlayers);
 		string text = (flag ? _language.GetElementAlreadyInUseBlocked(pendingInputMapping.elementName) : _language.GetElementAlreadyInUseCanReplace(pendingInputMapping.elementName, _allowElementAssignmentConflicts));
 		Window window = OpenWindow(closeOthers: true);
-		if ((Object)(object)window == (Object)null)
+		if (window == null)
 		{
 			return;
 		}
 		window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, _language.elementAssignmentConflictWindowMessage);
 		window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), text);
-		UnityAction val = (UnityAction)delegate
+		UnityAction unityAction = delegate
 		{
 			OnWindowCancel(window.id);
 		};
-		window.cancelCallback = val;
+		window.cancelCallback = unityAction;
 		if (flag)
 		{
-			window.CreateButton(prefabs.fitButton, UIPivot.BottomCenter, UIAnchor.BottomCenter, Vector2.zero, _language.okay, val, val, setDefault: true);
+			window.CreateButton(prefabs.fitButton, UIPivot.BottomCenter, UIAnchor.BottomCenter, Vector2.zero, _language.okay, unityAction, unityAction, setDefault: true);
 		}
 		else
 		{
-			window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, _language.replace, (UnityAction)delegate
+			window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, _language.replace, delegate
 			{
-				//IL_001d: Unknown result type (might be due to invalid IL or missing references)
 				OnElementAssignmentConflictReplaceConfirmed(window.id, pendingInputMapping, assignment, skipOtherPlayers, allowSwap: false);
-			}, val, setDefault: true);
+			}, unityAction, setDefault: true);
 			if (_allowElementAssignmentConflicts)
 			{
-				window.CreateButton(prefabs.fitButton, UIPivot.BottomCenter, UIAnchor.BottomCenter, Vector2.zero, _language.add, (UnityAction)delegate
+				window.CreateButton(prefabs.fitButton, UIPivot.BottomCenter, UIAnchor.BottomCenter, Vector2.zero, _language.add, delegate
 				{
-					//IL_001d: Unknown result type (might be due to invalid IL or missing references)
 					OnElementAssignmentAddConfirmed(window.id, pendingInputMapping, assignment);
-				}, val, setDefault: false);
+				}, unityAction, setDefault: false);
 			}
 			else if (ShowSwapButton(window.id, pendingInputMapping, assignment, skipOtherPlayers))
 			{
-				window.CreateButton(prefabs.fitButton, UIPivot.BottomCenter, UIAnchor.BottomCenter, Vector2.zero, _language.swap, (UnityAction)delegate
+				window.CreateButton(prefabs.fitButton, UIPivot.BottomCenter, UIAnchor.BottomCenter, Vector2.zero, _language.swap, delegate
 				{
-					//IL_001d: Unknown result type (might be due to invalid IL or missing references)
 					OnElementAssignmentConflictReplaceConfirmed(window.id, pendingInputMapping, assignment, skipOtherPlayers, allowSwap: true);
-				}, val, setDefault: false);
+				}, unityAction, setDefault: false);
 			}
-			window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, _language.cancel, val, val, setDefault: false);
+			window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, _language.cancel, unityAction, unityAction, setDefault: false);
 		}
 		windowManager.Focus(window);
 	}
 
 	private void ShowMouseAssignmentConflictWindow()
 	{
-		//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ce: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0115: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011b: Expected O, but got Unknown
-		//IL_0138: Unknown result type (might be due to invalid IL or missing references)
-		//IL_013d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0142: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0159: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0165: Expected O, but got Unknown
-		//IL_0176: Unknown result type (might be due to invalid IL or missing references)
-		//IL_017b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0180: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
 		}
 		Window window = OpenWindow(closeOthers: true);
-		if ((Object)(object)window == (Object)null)
+		if (window == null)
 		{
 			return;
 		}
@@ -4965,26 +4506,25 @@ public class ControlMapper : MonoBehaviour
 		}
 		window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, _language.mouseAssignmentConflictWindowTitle);
 		window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.GetMouseAssignmentConflictWindowMessage(otherPlayerName, _language.GetPlayerName(currentPlayer.id)));
-		UnityAction val = (UnityAction)delegate
+		UnityAction unityAction = delegate
 		{
 			OnWindowCancel(window.id);
 		};
-		window.cancelCallback = val;
-		window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, _language.yes, (UnityAction)delegate
+		window.cancelCallback = unityAction;
+		window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, _language.yes, delegate
 		{
 			OnMouseAssignmentConfirmed(window.id, currentPlayer);
-		}, val, setDefault: true);
-		window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, _language.no, val, val, setDefault: false);
+		}, unityAction, setDefault: true);
+		window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, _language.no, unityAction, unityAction, setDefault: false);
 		windowManager.Focus(window);
 	}
 
 	private void ShowCalibrateControllerWindow()
 	{
-		//IL_0056: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer != null && currentPlayer.controllers.joystickCount != 0)
 		{
 			CalibrationWindow calibrationWindow = OpenWindow(prefabs.calibrationWindow, "CalibrationWindow", closeOthers: true) as CalibrationWindow;
-			if (!((Object)(object)calibrationWindow == (Object)null))
+			if (!(calibrationWindow == null))
 			{
 				Joystick joystick = currentJoystick;
 				calibrationWindow.CreateTitleText(prefabs.windowTitleText, Vector2.zero, _language.calibrateControllerWindowTitle);
@@ -4999,36 +4539,26 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowCalibrateAxisStep1Window()
 	{
-		//IL_005f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0080: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0085: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0110: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0115: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00eb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fa: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
 		}
 		Window window = OpenWindow(closeOthers: false);
-		if ((Object)(object)window == (Object)null || pendingAxisCalibration == null)
+		if (window == null || pendingAxisCalibration == null)
 		{
 			return;
 		}
 		Joystick joystick = pendingAxisCalibration.joystick;
-		if (((ControllerWithAxes)joystick).axisCount == 0)
+		if (joystick.axisCount == 0)
 		{
 			return;
 		}
 		int axisIndex = pendingAxisCalibration.axisIndex;
-		if (axisIndex >= 0 && axisIndex < ((ControllerWithAxes)joystick).axisCount)
+		if (axisIndex >= 0 && axisIndex < joystick.axisCount)
 		{
 			window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, _language.calibrateAxisStep1WindowTitle);
-			window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.GetCalibrateAxisStep1WindowMessage(_language.GetElementIdentifierName((Controller)(object)joystick, ((ControllerWithAxes)joystick).AxisElementIdentifiers[axisIndex].id, (AxisRange)0)));
-			if ((Object)(object)prefabs.centerStickGraphic != (Object)null)
+			window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.GetCalibrateAxisStep1WindowMessage(_language.GetElementIdentifierName(joystick, joystick.AxisElementIdentifiers[axisIndex].id, AxisRange.Full)));
+			if (prefabs.centerStickGraphic != null)
 			{
 				window.AddContentImage(prefabs.centerStickGraphic, UIPivot.BottomCenter, UIAnchor.BottomCenter, new Vector2(0f, 40f));
 			}
@@ -5041,36 +4571,26 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowCalibrateAxisStep2Window()
 	{
-		//IL_005f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0080: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0085: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0110: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0115: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00eb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fa: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return;
 		}
 		Window window = OpenWindow(closeOthers: false);
-		if ((Object)(object)window == (Object)null || pendingAxisCalibration == null)
+		if (window == null || pendingAxisCalibration == null)
 		{
 			return;
 		}
 		Joystick joystick = pendingAxisCalibration.joystick;
-		if (((ControllerWithAxes)joystick).axisCount == 0)
+		if (joystick.axisCount == 0)
 		{
 			return;
 		}
 		int axisIndex = pendingAxisCalibration.axisIndex;
-		if (axisIndex >= 0 && axisIndex < ((ControllerWithAxes)joystick).axisCount)
+		if (axisIndex >= 0 && axisIndex < joystick.axisCount)
 		{
 			window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, _language.calibrateAxisStep2WindowTitle);
-			window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.GetCalibrateAxisStep2WindowMessage(_language.GetElementIdentifierName((Controller)(object)joystick, ((ControllerWithAxes)joystick).AxisElementIdentifiers[axisIndex].id, (AxisRange)0)));
-			if ((Object)(object)prefabs.moveStickGraphic != (Object)null)
+			window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), _language.GetCalibrateAxisStep2WindowMessage(_language.GetElementIdentifierName(joystick, joystick.AxisElementIdentifiers[axisIndex].id, AxisRange.Full)));
+			if (prefabs.moveStickGraphic != null)
 			{
 				window.AddContentImage(prefabs.moveStickGraphic, UIPivot.BottomCenter, UIAnchor.BottomCenter, new Vector2(0f, 40f));
 			}
@@ -5083,11 +4603,10 @@ public class ControlMapper : MonoBehaviour
 
 	private void ShowEditInputBehaviorsWindow()
 	{
-		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer != null && _inputBehaviorSettings != null)
 		{
 			InputBehaviorWindow inputBehaviorWindow = OpenWindow(prefabs.inputBehaviorsWindow, "EditInputBehaviorsWindow", closeOthers: true) as InputBehaviorWindow;
-			if (!((Object)(object)inputBehaviorWindow == (Object)null))
+			if (!(inputBehaviorWindow == null))
 			{
 				inputBehaviorWindow.CreateTitleText(prefabs.windowTitleText, Vector2.zero, _language.inputBehaviorSettingsWindowTitle);
 				inputBehaviorWindow.SetData(currentPlayer.id, _inputBehaviorSettings);
@@ -5122,12 +4641,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void InitializeInputGrid()
 	{
-		//IL_01bc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0213: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0219: Invalid comparison between Unknown and I4
-		//IL_00ec: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0143: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0149: Invalid comparison between Unknown and I4
 		if (inputGrid == null)
 		{
 			inputGrid = new InputGrid();
@@ -5144,7 +4657,7 @@ public class ControlMapper : MonoBehaviour
 				continue;
 			}
 			InputMapCategory mapCategory = ReInput.mapping.GetMapCategory(mappingSet.mapCategoryId);
-			if (mapCategory == null || !((InputCategory)mapCategory).userAssignable)
+			if (mapCategory == null || !mapCategory.userAssignable)
 			{
 				continue;
 			}
@@ -5163,21 +4676,21 @@ public class ControlMapper : MonoBehaviour
 					inputGrid.AddActionCategory(mappingSet.mapCategoryId, num);
 					foreach (InputAction item in ReInput.mapping.UserAssignableActionsInCategory(num))
 					{
-						if ((int)item.type == 0)
+						if (item.type == InputActionType.Axis)
 						{
 							if (_showFullAxisInputFields)
 							{
-								inputGrid.AddAction(mappingSet.mapCategoryId, item, (AxisRange)0);
+								inputGrid.AddAction(mappingSet.mapCategoryId, item, AxisRange.Full);
 							}
 							if (_showSplitAxisInputFields)
 							{
-								inputGrid.AddAction(mappingSet.mapCategoryId, item, (AxisRange)1);
-								inputGrid.AddAction(mappingSet.mapCategoryId, item, (AxisRange)2);
+								inputGrid.AddAction(mappingSet.mapCategoryId, item, AxisRange.Positive);
+								inputGrid.AddAction(mappingSet.mapCategoryId, item, AxisRange.Negative);
 							}
 						}
-						else if ((int)item.type == 1)
+						else if (item.type == InputActionType.Button)
 						{
-							inputGrid.AddAction(mappingSet.mapCategoryId, item, (AxisRange)1);
+							inputGrid.AddAction(mappingSet.mapCategoryId, item, AxisRange.Positive);
 						}
 					}
 				}
@@ -5191,25 +4704,25 @@ public class ControlMapper : MonoBehaviour
 				{
 					continue;
 				}
-				if ((int)action.type == 0)
+				if (action.type == InputActionType.Axis)
 				{
 					if (_showFullAxisInputFields)
 					{
-						inputGrid.AddAction(mappingSet.mapCategoryId, action, (AxisRange)0);
+						inputGrid.AddAction(mappingSet.mapCategoryId, action, AxisRange.Full);
 					}
 					if (_showSplitAxisInputFields)
 					{
-						inputGrid.AddAction(mappingSet.mapCategoryId, action, (AxisRange)1);
-						inputGrid.AddAction(mappingSet.mapCategoryId, action, (AxisRange)2);
+						inputGrid.AddAction(mappingSet.mapCategoryId, action, AxisRange.Positive);
+						inputGrid.AddAction(mappingSet.mapCategoryId, action, AxisRange.Negative);
 					}
 				}
-				else if ((int)action.type == 1)
+				else if (action.type == InputActionType.Button)
 				{
-					inputGrid.AddAction(mappingSet.mapCategoryId, action, (AxisRange)1);
+					inputGrid.AddAction(mappingSet.mapCategoryId, action, AxisRange.Positive);
 				}
 			}
 		}
-		((HorizontalOrVerticalLayoutGroup)((Component)references.inputGridInnerGroup).GetComponent<HorizontalLayoutGroup>()).spacing = _inputColumnSpacing;
+		references.inputGridInnerGroup.GetComponent<HorizontalLayoutGroup>().spacing = _inputColumnSpacing;
 		references.inputGridLayoutElement.flexibleWidth = 0f;
 		references.inputGridLayoutElement.preferredWidth = inputGridWidth;
 	}
@@ -5220,46 +4733,42 @@ public class ControlMapper : MonoBehaviour
 		{
 			inputGrid.HideAll();
 			inputGrid.Show(currentMappingSet.mapCategoryId);
-			((Component)references.inputGridInnerGroup).GetComponent<RectTransform>().SetSizeWithCurrentAnchors((Axis)1, inputGrid.GetColumnHeight(currentMappingSet.mapCategoryId));
+			references.inputGridInnerGroup.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, inputGrid.GetColumnHeight(currentMappingSet.mapCategoryId));
 		}
 	}
 
 	private void CreateHeaderLabels()
 	{
-		//IL_004e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00af: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0115: Unknown result type (might be due to invalid IL or missing references)
-		//IL_017b: Unknown result type (might be due to invalid IL or missing references)
 		references.inputGridHeader1 = CreateNewColumnGroup("ActionsHeader", references.inputGridHeadersGroup, _actionLabelWidth).transform;
 		CreateLabel(prefabs.inputGridHeaderLabel, _language.actionColumnLabel, references.inputGridHeader1, Vector2.zero);
 		if (_showKeyboard)
 		{
 			references.inputGridHeader2 = CreateNewColumnGroup("KeybordHeader", references.inputGridHeadersGroup, _keyboardColMaxWidth).transform;
-			CreateLabel(prefabs.inputGridHeaderLabel, _language.keyboardColumnLabel, references.inputGridHeader2, Vector2.zero).SetTextAlignment((TextAnchor)4);
+			CreateLabel(prefabs.inputGridHeaderLabel, _language.keyboardColumnLabel, references.inputGridHeader2, Vector2.zero).SetTextAlignment(TextAnchor.MiddleCenter);
 		}
 		if (_showMouse)
 		{
 			references.inputGridHeader3 = CreateNewColumnGroup("MouseHeader", references.inputGridHeadersGroup, _mouseColMaxWidth).transform;
-			CreateLabel(prefabs.inputGridHeaderLabel, _language.mouseColumnLabel, references.inputGridHeader3, Vector2.zero).SetTextAlignment((TextAnchor)4);
+			CreateLabel(prefabs.inputGridHeaderLabel, _language.mouseColumnLabel, references.inputGridHeader3, Vector2.zero).SetTextAlignment(TextAnchor.MiddleCenter);
 		}
 		if (_showControllers)
 		{
 			references.inputGridHeader4 = CreateNewColumnGroup("ControllerHeader", references.inputGridHeadersGroup, _controllerColMaxWidth).transform;
-			CreateLabel(prefabs.inputGridHeaderLabel, _language.controllerColumnLabel, references.inputGridHeader4, Vector2.zero).SetTextAlignment((TextAnchor)4);
+			CreateLabel(prefabs.inputGridHeaderLabel, _language.controllerColumnLabel, references.inputGridHeader4, Vector2.zero).SetTextAlignment(TextAnchor.MiddleCenter);
 		}
 	}
 
 	private void CreateActionLabelColumn()
 	{
-		Transform transform = CreateNewColumnGroup("ActionLabelColumn", references.inputGridInnerGroup, _actionLabelWidth).transform;
-		references.inputGridActionColumn = transform;
+		Transform inputGridActionColumn = CreateNewColumnGroup("ActionLabelColumn", references.inputGridInnerGroup, _actionLabelWidth).transform;
+		references.inputGridActionColumn = inputGridActionColumn;
 	}
 
 	private void CreateKeyboardInputFieldColumn()
 	{
 		if (_showKeyboard)
 		{
-			CreateInputFieldColumn("KeyboardColumn", (ControllerType)0, _keyboardColMaxWidth, _keyboardInputFieldCount, disableFullAxis: true);
+			CreateInputFieldColumn("KeyboardColumn", ControllerType.Keyboard, _keyboardColMaxWidth, _keyboardInputFieldCount, disableFullAxis: true);
 		}
 	}
 
@@ -5267,7 +4776,7 @@ public class ControlMapper : MonoBehaviour
 	{
 		if (_showMouse)
 		{
-			CreateInputFieldColumn("MouseColumn", (ControllerType)1, _mouseColMaxWidth, _mouseInputFieldCount, disableFullAxis: false);
+			CreateInputFieldColumn("MouseColumn", ControllerType.Mouse, _mouseColMaxWidth, _mouseInputFieldCount, disableFullAxis: false);
 		}
 	}
 
@@ -5275,24 +4784,22 @@ public class ControlMapper : MonoBehaviour
 	{
 		if (_showControllers)
 		{
-			CreateInputFieldColumn("ControllerColumn", (ControllerType)2, _controllerColMaxWidth, _controllerInputFieldCount, disableFullAxis: false);
+			CreateInputFieldColumn("ControllerColumn", ControllerType.Joystick, _controllerColMaxWidth, _controllerInputFieldCount, disableFullAxis: false);
 		}
 	}
 
 	private void CreateInputFieldColumn(string name, ControllerType controllerType, int maxWidth, int cols, bool disableFullAxis)
 	{
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002b: Expected I4, but got Unknown
 		Transform transform = CreateNewColumnGroup(name, references.inputGridInnerGroup, maxWidth).transform;
-		switch ((int)controllerType)
+		switch (controllerType)
 		{
-		case 2:
+		case ControllerType.Joystick:
 			references.inputGridControllerColumn = transform;
 			break;
-		case 0:
+		case ControllerType.Keyboard:
 			references.inputGridKeyboardColumn = transform;
 			break;
-		case 1:
+		case ControllerType.Mouse:
 			references.inputGridMouseColumn = transform;
 			break;
 		default:
@@ -5302,21 +4809,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void CreateInputActionLabels()
 	{
-		//IL_037f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04c0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04c6: Invalid comparison between Unknown and I4
-		//IL_00c2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04e3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03ad: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0418: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0478: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0136: Unknown result type (might be due to invalid IL or missing references)
-		//IL_027f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0285: Invalid comparison between Unknown and I4
-		//IL_02a2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0164: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01d3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0237: Unknown result type (might be due to invalid IL or missing references)
 		Transform inputGridActionColumn = references.inputGridActionColumn;
 		for (int i = 0; i < _mappingSets.Length; i++)
 		{
@@ -5343,42 +4835,42 @@ public class ControlMapper : MonoBehaviour
 						{
 							num -= _inputRowCategorySpacing;
 						}
-						GUILabel gUILabel = CreateLabel(_language.GetActionCategoryName(actionCategory.id), inputGridActionColumn, new Vector2(0f, (float)num));
-						gUILabel.SetFontStyle((FontStyle)1);
-						gUILabel.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
+						GUILabel gUILabel = CreateLabel(_language.GetActionCategoryName(actionCategory.id), inputGridActionColumn, new Vector2(0f, num));
+						gUILabel.SetFontStyle(FontStyle.Bold);
+						gUILabel.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
 						inputGrid.AddActionCategoryLabel(mappingSet.mapCategoryId, actionCategory.id, gUILabel);
 						num -= _inputRowHeight;
 					}
-					foreach (InputAction item in ReInput.mapping.UserAssignableActionsInCategory(actionCategory.id, true))
+					foreach (InputAction item in ReInput.mapping.UserAssignableActionsInCategory(actionCategory.id, sort: true))
 					{
-						if ((int)item.type == 0)
+						if (item.type == InputActionType.Axis)
 						{
 							if (_showFullAxisInputFields)
 							{
-								GUILabel gUILabel2 = CreateLabel(_language.GetActionName(item.id, (AxisRange)0), inputGridActionColumn, new Vector2(0f, (float)num));
-								gUILabel2.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-								inputGrid.AddActionLabel(mappingSet.mapCategoryId, item.id, (AxisRange)0, gUILabel2);
+								GUILabel gUILabel2 = CreateLabel(_language.GetActionName(item.id, AxisRange.Full), inputGridActionColumn, new Vector2(0f, num));
+								gUILabel2.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+								inputGrid.AddActionLabel(mappingSet.mapCategoryId, item.id, AxisRange.Full, gUILabel2);
 								num -= _inputRowHeight;
 							}
 							if (_showSplitAxisInputFields)
 							{
-								string actionName = _language.GetActionName(item.id, (AxisRange)1);
-								GUILabel gUILabel2 = CreateLabel(actionName, inputGridActionColumn, new Vector2(0f, (float)num));
-								gUILabel2.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-								inputGrid.AddActionLabel(mappingSet.mapCategoryId, item.id, (AxisRange)1, gUILabel2);
+								string actionName = _language.GetActionName(item.id, AxisRange.Positive);
+								GUILabel gUILabel2 = CreateLabel(actionName, inputGridActionColumn, new Vector2(0f, num));
+								gUILabel2.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+								inputGrid.AddActionLabel(mappingSet.mapCategoryId, item.id, AxisRange.Positive, gUILabel2);
 								num -= _inputRowHeight;
-								string actionName2 = _language.GetActionName(item.id, (AxisRange)2);
-								gUILabel2 = CreateLabel(actionName2, inputGridActionColumn, new Vector2(0f, (float)num));
-								gUILabel2.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-								inputGrid.AddActionLabel(mappingSet.mapCategoryId, item.id, (AxisRange)2, gUILabel2);
+								string actionName2 = _language.GetActionName(item.id, AxisRange.Negative);
+								gUILabel2 = CreateLabel(actionName2, inputGridActionColumn, new Vector2(0f, num));
+								gUILabel2.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+								inputGrid.AddActionLabel(mappingSet.mapCategoryId, item.id, AxisRange.Negative, gUILabel2);
 								num -= _inputRowHeight;
 							}
 						}
-						else if ((int)item.type == 1)
+						else if (item.type == InputActionType.Button)
 						{
-							GUILabel gUILabel2 = CreateLabel(_language.GetActionName(item.id), inputGridActionColumn, new Vector2(0f, (float)num));
-							gUILabel2.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-							inputGrid.AddActionLabel(mappingSet.mapCategoryId, item.id, (AxisRange)1, gUILabel2);
+							GUILabel gUILabel2 = CreateLabel(_language.GetActionName(item.id), inputGridActionColumn, new Vector2(0f, num));
+							gUILabel2.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+							inputGrid.AddActionLabel(mappingSet.mapCategoryId, item.id, AxisRange.Positive, gUILabel2);
 							num -= _inputRowHeight;
 						}
 					}
@@ -5400,32 +4892,32 @@ public class ControlMapper : MonoBehaviour
 					{
 						continue;
 					}
-					if ((int)action.type == 0)
+					if (action.type == InputActionType.Axis)
 					{
 						if (_showFullAxisInputFields)
 						{
-							GUILabel gUILabel3 = CreateLabel(_language.GetActionName(action.id, (AxisRange)0), inputGridActionColumn, new Vector2(0f, (float)num));
-							gUILabel3.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-							inputGrid.AddActionLabel(mappingSet.mapCategoryId, action.id, (AxisRange)0, gUILabel3);
+							GUILabel gUILabel3 = CreateLabel(_language.GetActionName(action.id, AxisRange.Full), inputGridActionColumn, new Vector2(0f, num));
+							gUILabel3.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+							inputGrid.AddActionLabel(mappingSet.mapCategoryId, action.id, AxisRange.Full, gUILabel3);
 							num -= _inputRowHeight;
 						}
 						if (_showSplitAxisInputFields)
 						{
-							GUILabel gUILabel3 = CreateLabel(_language.GetActionName(action.id, (AxisRange)1), inputGridActionColumn, new Vector2(0f, (float)num));
-							gUILabel3.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-							inputGrid.AddActionLabel(mappingSet.mapCategoryId, action.id, (AxisRange)1, gUILabel3);
+							GUILabel gUILabel3 = CreateLabel(_language.GetActionName(action.id, AxisRange.Positive), inputGridActionColumn, new Vector2(0f, num));
+							gUILabel3.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+							inputGrid.AddActionLabel(mappingSet.mapCategoryId, action.id, AxisRange.Positive, gUILabel3);
 							num -= _inputRowHeight;
-							gUILabel3 = CreateLabel(_language.GetActionName(action.id, (AxisRange)2), inputGridActionColumn, new Vector2(0f, (float)num));
-							gUILabel3.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-							inputGrid.AddActionLabel(mappingSet.mapCategoryId, action.id, (AxisRange)2, gUILabel3);
+							gUILabel3 = CreateLabel(_language.GetActionName(action.id, AxisRange.Negative), inputGridActionColumn, new Vector2(0f, num));
+							gUILabel3.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+							inputGrid.AddActionLabel(mappingSet.mapCategoryId, action.id, AxisRange.Negative, gUILabel3);
 							num -= _inputRowHeight;
 						}
 					}
-					else if ((int)action.type == 1)
+					else if (action.type == InputActionType.Button)
 					{
-						GUILabel gUILabel3 = CreateLabel(_language.GetActionName(action.id), inputGridActionColumn, new Vector2(0f, (float)num));
-						gUILabel3.rectTransform.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-						inputGrid.AddActionLabel(mappingSet.mapCategoryId, action.id, (AxisRange)1, gUILabel3);
+						GUILabel gUILabel3 = CreateLabel(_language.GetActionName(action.id), inputGridActionColumn, new Vector2(0f, num));
+						gUILabel3.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+						inputGrid.AddActionLabel(mappingSet.mapCategoryId, action.id, AxisRange.Positive, gUILabel3);
 						num -= _inputRowHeight;
 					}
 				}
@@ -5438,34 +4930,20 @@ public class ControlMapper : MonoBehaviour
 	{
 		if (_showControllers)
 		{
-			CreateInputFields(references.inputGridControllerColumn, (ControllerType)2, _controllerColMaxWidth, _controllerInputFieldCount, disableFullAxis: false);
+			CreateInputFields(references.inputGridControllerColumn, ControllerType.Joystick, _controllerColMaxWidth, _controllerInputFieldCount, disableFullAxis: false);
 		}
 		if (_showKeyboard)
 		{
-			CreateInputFields(references.inputGridKeyboardColumn, (ControllerType)0, _keyboardColMaxWidth, _keyboardInputFieldCount, disableFullAxis: true);
+			CreateInputFields(references.inputGridKeyboardColumn, ControllerType.Keyboard, _keyboardColMaxWidth, _keyboardInputFieldCount, disableFullAxis: true);
 		}
 		if (_showMouse)
 		{
-			CreateInputFields(references.inputGridMouseColumn, (ControllerType)1, _mouseColMaxWidth, _mouseInputFieldCount, disableFullAxis: false);
+			CreateInputFields(references.inputGridMouseColumn, ControllerType.Mouse, _mouseColMaxWidth, _mouseInputFieldCount, disableFullAxis: false);
 		}
 	}
 
 	private void CreateInputFields(Transform columnXform, ControllerType controllerType, int maxWidth, int cols, bool disableFullAxis)
 	{
-		//IL_01f1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0252: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0258: Invalid comparison between Unknown and I4
-		//IL_0265: Unknown result type (might be due to invalid IL or missing references)
-		//IL_020b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_022b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0242: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0139: Unknown result type (might be due to invalid IL or missing references)
-		//IL_013f: Invalid comparison between Unknown and I4
-		//IL_014c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0112: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0129: Unknown result type (might be due to invalid IL or missing references)
 		for (int i = 0; i < _mappingSets.Length; i++)
 		{
 			MappingSet mappingSet = _mappingSets[i];
@@ -5490,23 +4968,23 @@ public class ControlMapper : MonoBehaviour
 					{
 						yPos -= ((num > 0) ? (_inputRowHeight + _inputRowCategorySpacing) : _inputRowHeight);
 					}
-					foreach (InputAction item in ReInput.mapping.UserAssignableActionsInCategory(actionCategory.id, true))
+					foreach (InputAction item in ReInput.mapping.UserAssignableActionsInCategory(actionCategory.id, sort: true))
 					{
-						if ((int)item.type == 0)
+						if (item.type == InputActionType.Axis)
 						{
 							if (_showFullAxisInputFields)
 							{
-								CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, item, (AxisRange)0, controllerType, cols, fieldWidth, ref yPos, disableFullAxis);
+								CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, item, AxisRange.Full, controllerType, cols, fieldWidth, ref yPos, disableFullAxis);
 							}
 							if (_showSplitAxisInputFields)
 							{
-								CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, item, (AxisRange)1, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
-								CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, item, (AxisRange)2, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
+								CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, item, AxisRange.Positive, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
+								CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, item, AxisRange.Negative, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
 							}
 						}
-						else if ((int)item.type == 1)
+						else if (item.type == InputActionType.Button)
 						{
-							CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, item, (AxisRange)1, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
+							CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, item, AxisRange.Positive, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
 						}
 						num++;
 					}
@@ -5526,21 +5004,21 @@ public class ControlMapper : MonoBehaviour
 				{
 					continue;
 				}
-				if ((int)action.type == 0)
+				if (action.type == InputActionType.Axis)
 				{
 					if (_showFullAxisInputFields)
 					{
-						CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, action, (AxisRange)0, controllerType, cols, fieldWidth, ref yPos, disableFullAxis);
+						CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, action, AxisRange.Full, controllerType, cols, fieldWidth, ref yPos, disableFullAxis);
 					}
 					if (_showSplitAxisInputFields)
 					{
-						CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, action, (AxisRange)1, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
-						CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, action, (AxisRange)2, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
+						CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, action, AxisRange.Positive, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
+						CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, action, AxisRange.Negative, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
 					}
 				}
-				else if ((int)action.type == 1)
+				else if (action.type == InputActionType.Button)
 				{
-					CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, action, (AxisRange)1, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
+					CreateInputFieldSet(columnXform, mappingSet.mapCategoryId, action, AxisRange.Positive, controllerType, cols, fieldWidth, ref yPos, disableFullAxis: false);
 				}
 			}
 		}
@@ -5548,45 +5026,28 @@ public class ControlMapper : MonoBehaviour
 
 	private void CreateInputFieldSet(Transform parent, int mapCategoryId, InputAction action, AxisRange axisRange, ControllerType controllerType, int cols, int fieldWidth, ref int yPos, bool disableFullAxis)
 	{
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0076: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0081: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0102: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_012c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_012e: Unknown result type (might be due to invalid IL or missing references)
-		GameObject val = CreateNewGUIObject("FieldLayoutGroup", parent, new Vector2(0f, (float)yPos));
-		HorizontalLayoutGroup val2 = val.AddComponent<HorizontalLayoutGroup>();
-		((LayoutGroup)val2).padding = _inputRowPadding;
-		((HorizontalOrVerticalLayoutGroup)val2).spacing = _inputRowFieldSpacing;
-		RectTransform component = val.GetComponent<RectTransform>();
+		GameObject gameObject = CreateNewGUIObject("FieldLayoutGroup", parent, new Vector2(0f, yPos));
+		HorizontalLayoutGroup horizontalLayoutGroup = gameObject.AddComponent<HorizontalLayoutGroup>();
+		horizontalLayoutGroup.padding = _inputRowPadding;
+		horizontalLayoutGroup.spacing = _inputRowFieldSpacing;
+		RectTransform component = gameObject.GetComponent<RectTransform>();
 		component.anchorMin = new Vector2(0f, 1f);
 		component.anchorMax = new Vector2(1f, 1f);
 		component.pivot = new Vector2(0f, 1f);
 		component.sizeDelta = Vector2.zero;
-		component.SetSizeWithCurrentAnchors((Axis)1, (float)_inputRowHeight);
-		inputGrid.AddInputFieldSet(mapCategoryId, action, axisRange, controllerType, val);
+		component.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _inputRowHeight);
+		inputGrid.AddInputFieldSet(mapCategoryId, action, axisRange, controllerType, gameObject);
 		for (int i = 0; i < cols; i++)
 		{
-			int num = (((int)axisRange == 0) ? _invertToggleWidth : 0);
-			GUIInputField gUIInputField = CreateInputField(((Component)val2).transform, Vector2.zero, "", action.id, axisRange, controllerType, i);
+			int num = ((axisRange == AxisRange.Full) ? _invertToggleWidth : 0);
+			GUIInputField gUIInputField = CreateInputField(horizontalLayoutGroup.transform, Vector2.zero, "", action.id, axisRange, controllerType, i);
 			gUIInputField.SetFirstChildObjectWidth(LayoutElementSizeType.PreferredSize, fieldWidth - num);
 			inputGrid.AddInputField(mapCategoryId, action, axisRange, controllerType, i, gUIInputField);
-			if ((int)axisRange == 0)
+			if (axisRange == AxisRange.Full)
 			{
 				if (!disableFullAxis)
 				{
-					GUIToggle gUIToggle = CreateToggle(prefabs.inputGridFieldInvertToggle, ((Component)val2).transform, Vector2.zero, "", action.id, axisRange, controllerType, i);
+					GUIToggle gUIToggle = CreateToggle(prefabs.inputGridFieldInvertToggle, horizontalLayoutGroup.transform, Vector2.zero, "", action.id, axisRange, controllerType, i);
 					gUIToggle.SetFirstChildObjectWidth(LayoutElementSizeType.MinSize, num);
 					gUIInputField.AddToggle(gUIToggle);
 				}
@@ -5601,15 +5062,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void PopulateInputFields()
 	{
-		//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0105: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0114: Unknown result type (might be due to invalid IL or missing references)
 		inputGrid.InitializeFields(currentMapCategoryId);
 		if (currentPlayer == null)
 		{
@@ -5620,7 +5072,7 @@ public class ControlMapper : MonoBehaviour
 		{
 			if (_showKeyboard)
 			{
-				ControllerType controllerType = (ControllerType)0;
+				ControllerType controllerType = ControllerType.Keyboard;
 				int controllerId = 0;
 				int layoutId = _keyboardMapDefaultLayout;
 				int maxFields = _keyboardInputFieldCount;
@@ -5629,7 +5081,7 @@ public class ControlMapper : MonoBehaviour
 			}
 			if (_showMouse)
 			{
-				ControllerType controllerType = (ControllerType)1;
+				ControllerType controllerType = ControllerType.Mouse;
 				int controllerId = 0;
 				int layoutId = _mouseMapDefaultLayout;
 				int maxFields = _mouseInputFieldCount;
@@ -5641,8 +5093,8 @@ public class ControlMapper : MonoBehaviour
 			}
 			if (isJoystickSelected && currentPlayer.controllers.joystickCount > 0)
 			{
-				ControllerType controllerType = (ControllerType)2;
-				int controllerId = ((Controller)currentJoystick).id;
+				ControllerType controllerType = ControllerType.Joystick;
+				int controllerId = currentJoystick.id;
 				int layoutId = _joystickMapDefaultLayout;
 				int maxFields = _controllerInputFieldCount;
 				ControllerMap controllerMapOrCreateNew3 = GetControllerMapOrCreateNew(controllerType, controllerId, layoutId);
@@ -5650,47 +5102,13 @@ public class ControlMapper : MonoBehaviour
 			}
 			else
 			{
-				DisableInputFieldGroup(actionSet, (ControllerType)2, _controllerInputFieldCount);
+				DisableInputFieldGroup(actionSet, ControllerType.Joystick, _controllerInputFieldCount);
 			}
 		}
 	}
 
 	private void PopulateInputFieldGroup(InputActionSet actionSet, ControllerMap controllerMap, ControllerType controllerType, int controllerId, int maxFields)
 	{
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004b: Invalid comparison between Unknown and I4
-		//IL_00bd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005f: Invalid comparison between Unknown and I4
-		//IL_0119: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011f: Invalid comparison between Unknown and I4
-		//IL_00d0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0070: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0076: Invalid comparison between Unknown and I4
-		//IL_0062: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0068: Invalid comparison between Unknown and I4
-		//IL_0187: Unknown result type (might be due to invalid IL or missing references)
-		//IL_018d: Invalid comparison between Unknown and I4
-		//IL_0122: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ed: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0096: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0079: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0190: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0145: Unknown result type (might be due to invalid IL or missing references)
-		//IL_014b: Invalid comparison between Unknown and I4
-		//IL_0139: Unknown result type (might be due to invalid IL or missing references)
-		//IL_013f: Invalid comparison between Unknown and I4
-		//IL_0198: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0163: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0168: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b7: Unknown result type (might be due to invalid IL or missing references)
 		if (controllerMap == null)
 		{
 			return;
@@ -5699,46 +5117,46 @@ public class ControlMapper : MonoBehaviour
 		inputGrid.SetFixedFieldData(currentMapCategoryId, actionSet.actionId, actionSet.axisRange, controllerType, controllerId);
 		foreach (ActionElementMap item in controllerMap.ElementMapsWithAction(actionSet.actionId))
 		{
-			if ((int)item.elementType == 1)
+			if (item.elementType == ControllerElementType.Button)
 			{
-				if ((int)actionSet.axisRange == 0)
+				if (actionSet.axisRange == AxisRange.Full)
 				{
 					continue;
 				}
-				if ((int)actionSet.axisRange == 1)
+				if (actionSet.axisRange == AxisRange.Positive)
 				{
-					if ((int)item.axisContribution == 1)
+					if (item.axisContribution == Pole.Negative)
 					{
 						continue;
 					}
 				}
-				else if ((int)actionSet.axisRange == 2 && (int)item.axisContribution == 0)
+				else if (actionSet.axisRange == AxisRange.Negative && item.axisContribution == Pole.Positive)
 				{
 					continue;
 				}
 				inputGrid.PopulateField(currentMapCategoryId, actionSet.actionId, actionSet.axisRange, controllerType, controllerId, num, item.id, _language.GetElementIdentifierName(item), invert: false);
 			}
-			else if ((int)item.elementType == 0)
+			else if (item.elementType == ControllerElementType.Axis)
 			{
-				if ((int)actionSet.axisRange == 0)
+				if (actionSet.axisRange == AxisRange.Full)
 				{
-					if ((int)item.axisRange != 0)
+					if (item.axisRange != AxisRange.Full)
 					{
 						continue;
 					}
 					inputGrid.PopulateField(currentMapCategoryId, actionSet.actionId, actionSet.axisRange, controllerType, controllerId, num, item.id, _language.GetElementIdentifierName(item), item.invert);
 				}
-				else if ((int)actionSet.axisRange == 1)
+				else if (actionSet.axisRange == AxisRange.Positive)
 				{
-					if (((int)item.axisRange == 0 && (int)ReInput.mapping.GetAction(actionSet.actionId).type != 1) || (int)item.axisContribution == 1)
+					if ((item.axisRange == AxisRange.Full && ReInput.mapping.GetAction(actionSet.actionId).type != InputActionType.Button) || item.axisContribution == Pole.Negative)
 					{
 						continue;
 					}
 					inputGrid.PopulateField(currentMapCategoryId, actionSet.actionId, actionSet.axisRange, controllerType, controllerId, num, item.id, _language.GetElementIdentifierName(item), invert: false);
 				}
-				else if ((int)actionSet.axisRange == 2)
+				else if (actionSet.axisRange == AxisRange.Negative)
 				{
-					if ((int)item.axisRange == 0 || (int)item.axisContribution == 0)
+					if (item.axisRange == AxisRange.Full || item.axisContribution == Pole.Positive)
 					{
 						continue;
 					}
@@ -5755,8 +5173,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void DisableInputFieldGroup(InputActionSet actionSet, ControllerType controllerType, int fieldCount)
 	{
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
 		for (int i = 0; i < fieldCount; i++)
 		{
 			inputGrid.GetGUIInputField(currentMapCategoryId, actionSet.actionId, actionSet.axisRange, controllerType, i)?.SetInteractible(state: false, playTransition: false);
@@ -5765,20 +5181,19 @@ public class ControlMapper : MonoBehaviour
 
 	private void ResetInputGridScrollBar()
 	{
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-		((Component)references.inputGridInnerGroup).GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+		references.inputGridInnerGroup.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 		references.inputGridVScrollbar.value = 1f;
-		references.inputGridScrollRect.verticalScrollbarVisibility = (ScrollbarVisibility)1;
+		references.inputGridScrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
 	}
 
 	private void CreateLayout()
 	{
-		((Component)references.playersGroup).gameObject.SetActive(showPlayers);
-		((Component)references.controllerGroup).gameObject.SetActive(_showControllers);
-		((Component)references.assignedControllersGroup).gameObject.SetActive(_showControllers && ShowAssignedControllers());
-		((Component)references.settingsAndMapCategoriesGroup).gameObject.SetActive(showSettings || showMapCategories);
-		((Component)references.settingsGroup).gameObject.SetActive(showSettings);
-		((Component)references.mapCategoriesGroup).gameObject.SetActive(showMapCategories);
+		references.playersGroup.gameObject.SetActive(showPlayers);
+		references.controllerGroup.gameObject.SetActive(_showControllers);
+		references.assignedControllersGroup.gameObject.SetActive(_showControllers && ShowAssignedControllers());
+		references.settingsAndMapCategoriesGroup.gameObject.SetActive(showSettings || showMapCategories);
+		references.settingsGroup.gameObject.SetActive(showSettings);
+		references.mapCategoriesGroup.gameObject.SetActive(showMapCategories);
 	}
 
 	private void Draw()
@@ -5815,21 +5230,20 @@ public class ControlMapper : MonoBehaviour
 
 	private void DrawControllersGroup()
 	{
-		//IL_013f: Unknown result type (might be due to invalid IL or missing references)
 		if (_showControllers)
 		{
 			references.controllerSettingsGroup.labelText = _language.controllerSettingsGroupLabel;
 			references.controllerSettingsGroup.SetLabelActive(_showControllerGroupLabel);
-			((Component)references.controllerNameLabel).gameObject.SetActive(_showControllerNameLabel);
-			((Component)references.controllerGroupLabelGroup).gameObject.SetActive(_showControllerGroupLabel || _showControllerNameLabel);
+			references.controllerNameLabel.gameObject.SetActive(_showControllerNameLabel);
+			references.controllerGroupLabelGroup.gameObject.SetActive(_showControllerGroupLabel || _showControllerNameLabel);
 			if (ShowAssignedControllers())
 			{
 				references.assignedControllersGroup.labelText = _language.assignedControllersGroupLabel;
 				references.assignedControllersGroup.SetLabelActive(_showAssignedControllersGroupLabel);
 			}
-			((Component)references.removeControllerButton).GetComponent<ButtonInfo>().text.text = _language.removeControllerButtonLabel;
-			((Component)references.calibrateControllerButton).GetComponent<ButtonInfo>().text.text = _language.calibrateControllerButtonLabel;
-			((Component)references.assignControllerButton).GetComponent<ButtonInfo>().text.text = _language.assignControllerButtonLabel;
+			references.removeControllerButton.GetComponent<ButtonInfo>().text.text = _language.removeControllerButtonLabel;
+			references.calibrateControllerButton.GetComponent<ButtonInfo>().text.text = _language.calibrateControllerButtonLabel;
+			references.assignControllerButton.GetComponent<ButtonInfo>().text.text = _language.assignControllerButtonLabel;
 			GUIButton gUIButton = CreateButton(_language.none, references.assignedControllersGroup.content, Vector2.zero);
 			gUIButton.SetInteractible(state: false, playTransition: false, permanent: true);
 			assignedControllerButtonsPlaceholder = gUIButton;
@@ -5838,7 +5252,6 @@ public class ControlMapper : MonoBehaviour
 
 	private void DrawSettingsGroup()
 	{
-		//IL_0056: Unknown result type (might be due to invalid IL or missing references)
 		if (showSettings)
 		{
 			references.settingsGroup.labelText = _language.settingsGroupLabel;
@@ -5867,9 +5280,9 @@ public class ControlMapper : MonoBehaviour
 				InputMapCategory mapCategory = ReInput.mapping.GetMapCategory(mappingSet.mapCategoryId);
 				if (mapCategory != null)
 				{
-					GUIButton gUIButton = new GUIButton(UITools.InstantiateGUIObject<ButtonInfo>(prefabs.button, references.mapCategoriesGroup.content, ((InputCategory)mapCategory).name + "Button"));
-					gUIButton.SetLabel(_language.GetMapCategoryName(((InputCategory)mapCategory).id));
-					gUIButton.SetButtonInfoData("MapCategorySelection", ((InputCategory)mapCategory).id);
+					GUIButton gUIButton = new GUIButton(UITools.InstantiateGUIObject<ButtonInfo>(prefabs.button, references.mapCategoriesGroup.content, mapCategory.name + "Button"));
+					gUIButton.SetLabel(_language.GetMapCategoryName(mapCategory.id));
+					gUIButton.SetButtonInfoData("MapCategorySelection", mapCategory.id);
 					gUIButton.SetOnClickCallback(OnButtonActivated);
 					gUIButton.buttonInfo.OnSelectedEvent += OnUIElementSelected;
 					mapCategoryButtons.Add(gUIButton);
@@ -5880,8 +5293,8 @@ public class ControlMapper : MonoBehaviour
 
 	private void DrawWindowButtonsGroup()
 	{
-		((Component)references.doneButton).GetComponent<ButtonInfo>().text.text = _language.doneButtonLabel;
-		((Component)references.restoreDefaultsButton).GetComponent<ButtonInfo>().text.text = _language.restoreDefaultsButtonLabel;
+		references.doneButton.GetComponent<ButtonInfo>().text.text = _language.doneButtonLabel;
+		references.restoreDefaultsButton.GetComponent<ButtonInfo>().text.text = _language.restoreDefaultsButtonLabel;
 	}
 
 	private void Redraw(bool listsChanged, bool playTransitions)
@@ -5890,7 +5303,7 @@ public class ControlMapper : MonoBehaviour
 		RedrawControllerGroup();
 		RedrawMapCategoriesGroup(playTransitions);
 		RedrawInputGrid(listsChanged);
-		if ((Object)(object)currentUISelection == (Object)null || !currentUISelection.activeInHierarchy)
+		if (currentUISelection == null || !currentUISelection.activeInHierarchy)
 		{
 			RestoreLastUISelection();
 		}
@@ -5910,23 +5323,22 @@ public class ControlMapper : MonoBehaviour
 
 	private void RedrawControllerGroup()
 	{
-		//IL_015a: Unknown result type (might be due to invalid IL or missing references)
 		int num = -1;
 		references.controllerNameLabel.text = _language.none;
-		UITools.SetInteractable((Selectable)(object)references.removeControllerButton, state: false, playTransition: false);
-		UITools.SetInteractable((Selectable)(object)references.assignControllerButton, state: false, playTransition: false);
-		UITools.SetInteractable((Selectable)(object)references.calibrateControllerButton, state: false, playTransition: false);
+		UITools.SetInteractable(references.removeControllerButton, state: false, playTransition: false);
+		UITools.SetInteractable(references.assignControllerButton, state: false, playTransition: false);
+		UITools.SetInteractable(references.calibrateControllerButton, state: false, playTransition: false);
 		if (ShowAssignedControllers())
 		{
 			foreach (GUIButton assignedControllerButton in assignedControllerButtons)
 			{
-				if (!((Object)(object)assignedControllerButton.gameObject == (Object)null))
+				if (!(assignedControllerButton.gameObject == null))
 				{
-					if ((Object)(object)currentUISelection == (Object)(object)assignedControllerButton.gameObject)
+					if (currentUISelection == assignedControllerButton.gameObject)
 					{
 						num = assignedControllerButton.buttonInfo.intData;
 					}
-					Object.Destroy((Object)(object)assignedControllerButton.gameObject);
+					UnityEngine.Object.Destroy(assignedControllerButton.gameObject);
 				}
 			}
 			assignedControllerButtons.Clear();
@@ -5945,19 +5357,19 @@ public class ControlMapper : MonoBehaviour
 			}
 			foreach (Joystick joystick in player.controllers.Joysticks)
 			{
-				GUIButton gUIButton = CreateButton(_language.GetControllerName((Controller)(object)joystick), references.assignedControllersGroup.content, Vector2.zero);
-				gUIButton.SetButtonInfoData("AssignedControllerSelection", ((Controller)joystick).id);
+				GUIButton gUIButton = CreateButton(_language.GetControllerName(joystick), references.assignedControllersGroup.content, Vector2.zero);
+				gUIButton.SetButtonInfoData("AssignedControllerSelection", joystick.id);
 				gUIButton.SetOnClickCallback(OnButtonActivated);
 				gUIButton.buttonInfo.OnSelectedEvent += OnUIElementSelected;
 				assignedControllerButtons.Add(gUIButton);
-				if (((Controller)joystick).id == currentJoystickId)
+				if (joystick.id == currentJoystickId)
 				{
 					gUIButton.SetInteractible(state: false, playTransition: true);
 				}
 			}
 			if (player.controllers.joystickCount > 0 && !isJoystickSelected)
 			{
-				currentJoystickId = ((Controller)player.controllers.Joysticks[0]).id;
+				currentJoystickId = player.controllers.Joysticks[0].id;
 				assignedControllerButtons[0].SetInteractible(state: false, playTransition: false);
 			}
 			if (num >= 0)
@@ -5974,15 +5386,15 @@ public class ControlMapper : MonoBehaviour
 		}
 		else if (player.controllers.joystickCount > 0 && !isJoystickSelected)
 		{
-			currentJoystickId = ((Controller)player.controllers.Joysticks[0]).id;
+			currentJoystickId = player.controllers.Joysticks[0].id;
 		}
 		if (isJoystickSelected && player.controllers.joystickCount > 0)
 		{
-			((Selectable)references.removeControllerButton).interactable = true;
-			references.controllerNameLabel.text = _language.GetControllerName((Controller)(object)currentJoystick);
-			if (((ControllerWithAxes)currentJoystick).axisCount > 0)
+			references.removeControllerButton.interactable = true;
+			references.controllerNameLabel.text = _language.GetControllerName(currentJoystick);
+			if (currentJoystick.axisCount > 0)
 			{
-				((Selectable)references.calibrateControllerButton).interactable = true;
+				references.calibrateControllerButton.interactable = true;
 			}
 		}
 		int joystickCount = player.controllers.joystickCount;
@@ -5991,7 +5403,7 @@ public class ControlMapper : MonoBehaviour
 		bool flag = num2 == 0;
 		if (joystickCount2 > 0 && joystickCount < joystickCount2 && (num2 == 1 || flag || joystickCount < num2))
 		{
-			UITools.SetInteractable((Selectable)(object)references.assignControllerButton, state: true, playTransition: false);
+			UITools.SetInteractable(references.assignControllerButton, state: true, playTransition: false);
 		}
 	}
 
@@ -6034,34 +5446,30 @@ public class ControlMapper : MonoBehaviour
 
 	private void CreateInputCategoryRow(ref int rowCount, InputCategory category)
 	{
-		//IL_0032: Unknown result type (might be due to invalid IL or missing references)
 		CreateLabel(_language.GetMapCategoryName(category.id), references.inputGridActionColumn, new Vector2(0f, (float)(rowCount * _inputRowHeight) * -1f));
 		rowCount++;
 	}
 
 	private GUILabel CreateLabel(string labelText, Transform parent, Vector2 offset)
 	{
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
 		return CreateLabel(prefabs.inputGridLabel, labelText, parent, offset);
 	}
 
 	private GUILabel CreateLabel(GameObject prefab, string labelText, Transform parent, Vector2 offset)
 	{
-		//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-		GameObject val = InstantiateGUIObject(prefab, parent, offset);
-		Text componentInSelfOrChildren = UnityTools.GetComponentInSelfOrChildren<Text>(val);
-		if ((Object)(object)componentInSelfOrChildren == (Object)null)
+		GameObject gameObject = InstantiateGUIObject(prefab, parent, offset);
+		Text componentInSelfOrChildren = UnityTools.GetComponentInSelfOrChildren<Text>(gameObject);
+		if (componentInSelfOrChildren == null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: Label prefab is missing Text component!");
+			Debug.LogError("Rewired Control Mapper: Label prefab is missing Text component!");
 			return null;
 		}
 		componentInSelfOrChildren.text = labelText;
-		return new GUILabel(val);
+		return new GUILabel(gameObject);
 	}
 
 	private GUIButton CreateButton(string labelText, Transform parent, Vector2 offset)
 	{
-		//IL_000d: Unknown result type (might be due to invalid IL or missing references)
 		GUIButton gUIButton = new GUIButton(InstantiateGUIObject(prefabs.button, parent, offset));
 		gUIButton.SetLabel(labelText);
 		return gUIButton;
@@ -6069,7 +5477,6 @@ public class ControlMapper : MonoBehaviour
 
 	private GUIButton CreateFitButton(string labelText, Transform parent, Vector2 offset)
 	{
-		//IL_000d: Unknown result type (might be due to invalid IL or missing references)
 		GUIButton gUIButton = new GUIButton(InstantiateGUIObject(prefabs.fitButton, parent, offset));
 		gUIButton.SetLabel(labelText);
 		return gUIButton;
@@ -6077,9 +5484,6 @@ public class ControlMapper : MonoBehaviour
 
 	private GUIInputField CreateInputField(Transform parent, Vector2 offset, string label, int actionId, AxisRange axisRange, ControllerType controllerType, int fieldIndex)
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
 		GUIInputField gUIInputField = CreateInputField(parent, offset);
 		gUIInputField.SetLabel("");
 		gUIInputField.SetFieldInfoData(actionId, axisRange, controllerType, fieldIndex);
@@ -6090,15 +5494,11 @@ public class ControlMapper : MonoBehaviour
 
 	private GUIInputField CreateInputField(Transform parent, Vector2 offset)
 	{
-		//IL_000d: Unknown result type (might be due to invalid IL or missing references)
 		return new GUIInputField(InstantiateGUIObject(prefabs.inputGridFieldButton, parent, offset));
 	}
 
 	private GUIToggle CreateToggle(GameObject prefab, Transform parent, Vector2 offset, string label, int actionId, AxisRange axisRange, ControllerType controllerType, int fieldIndex)
 	{
-		//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
 		GUIToggle gUIToggle = CreateToggle(prefab, parent, offset);
 		gUIToggle.SetToggleInfoData(actionId, axisRange, controllerType, fieldIndex);
 		gUIToggle.SetOnSubmitCallback(inputFieldInvertToggleStateChangedDelegate);
@@ -6108,50 +5508,44 @@ public class ControlMapper : MonoBehaviour
 
 	private GUIToggle CreateToggle(GameObject prefab, Transform parent, Vector2 offset)
 	{
-		//IL_0003: Unknown result type (might be due to invalid IL or missing references)
 		return new GUIToggle(InstantiateGUIObject(prefab, parent, offset));
 	}
 
 	private GameObject InstantiateGUIObject(GameObject prefab, Transform parent, Vector2 offset)
 	{
-		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-		if ((Object)(object)prefab == (Object)null)
+		if (prefab == null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: Prefab is null!");
+			Debug.LogError("Rewired Control Mapper: Prefab is null!");
 			return null;
 		}
-		GameObject gameObject = Object.Instantiate<GameObject>(prefab);
+		GameObject gameObject = UnityEngine.Object.Instantiate(prefab);
 		return InitializeNewGUIGameObject(gameObject, parent, offset);
 	}
 
 	private GameObject CreateNewGUIObject(string name, Transform parent, Vector2 offset)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Expected O, but got Unknown
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		GameObject val = new GameObject();
-		((Object)val).name = name;
-		val.AddComponent<RectTransform>();
-		return InitializeNewGUIGameObject(val, parent, offset);
+		GameObject gameObject = new GameObject();
+		gameObject.name = name;
+		gameObject.AddComponent<RectTransform>();
+		return InitializeNewGUIGameObject(gameObject, parent, offset);
 	}
 
 	private GameObject InitializeNewGUIGameObject(GameObject gameObject, Transform parent, Vector2 offset)
 	{
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-		if ((Object)(object)gameObject == (Object)null)
+		if (gameObject == null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: GameObject is null!");
+			Debug.LogError("Rewired Control Mapper: GameObject is null!");
 			return null;
 		}
 		RectTransform component = gameObject.GetComponent<RectTransform>();
-		if ((Object)(object)component == (Object)null)
+		if (component == null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: GameObject does not have a RectTransform component!");
+			Debug.LogError("Rewired Control Mapper: GameObject does not have a RectTransform component!");
 			return gameObject;
 		}
-		if ((Object)(object)parent != (Object)null)
+		if (parent != null)
 		{
-			((Transform)component).SetParent(parent, false);
+			component.SetParent(parent, worldPositionStays: false);
 		}
 		component.anchoredPosition = offset;
 		return gameObject;
@@ -6159,20 +5553,17 @@ public class ControlMapper : MonoBehaviour
 
 	private GameObject CreateNewColumnGroup(string name, Transform parent, int maxWidth)
 	{
-		//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0052: Unknown result type (might be due to invalid IL or missing references)
-		GameObject val = CreateNewGUIObject(name, parent, Vector2.zero);
-		inputGrid.AddGroup(val);
-		LayoutElement val2 = val.AddComponent<LayoutElement>();
+		GameObject gameObject = CreateNewGUIObject(name, parent, Vector2.zero);
+		inputGrid.AddGroup(gameObject);
+		LayoutElement layoutElement = gameObject.AddComponent<LayoutElement>();
 		if (maxWidth >= 0)
 		{
-			val2.preferredWidth = maxWidth;
+			layoutElement.preferredWidth = maxWidth;
 		}
-		RectTransform component = val.GetComponent<RectTransform>();
+		RectTransform component = gameObject.GetComponent<RectTransform>();
 		component.anchorMin = new Vector2(0f, 0f);
 		component.anchorMax = new Vector2(1f, 0f);
-		return val;
+		return gameObject;
 	}
 
 	private Window OpenWindow(bool closeOthers)
@@ -6187,7 +5578,7 @@ public class ControlMapper : MonoBehaviour
 			windowManager.CancelAll();
 		}
 		Window window = windowManager.OpenWindow(name, _defaultWindowWidth, _defaultWindowHeight);
-		if ((Object)(object)window == (Object)null)
+		if (window == null)
 		{
 			return null;
 		}
@@ -6207,7 +5598,7 @@ public class ControlMapper : MonoBehaviour
 			windowManager.CancelAll();
 		}
 		Window window = windowManager.OpenWindow(windowPrefab, name);
-		if ((Object)(object)window == (Object)null)
+		if (window == null)
 		{
 			return null;
 		}
@@ -6217,35 +5608,21 @@ public class ControlMapper : MonoBehaviour
 
 	private void OpenModal(string title, string message, string confirmText, Action<int> confirmAction, string cancelText, Action<int> cancelAction, bool closeOthers)
 	{
-		//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0057: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0083: Expected O, but got Unknown
-		//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00aa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c3: Expected O, but got Unknown
-		//IL_00d4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00de: Unknown result type (might be due to invalid IL or missing references)
 		Window window = OpenWindow(closeOthers);
-		if (!((Object)(object)window == (Object)null))
+		if (!(window == null))
 		{
 			window.CreateTitleText(prefabs.windowTitleText, Vector2.zero, title);
 			window.AddContentText(prefabs.windowContentText, UIPivot.TopCenter, UIAnchor.TopHStretch, new Vector2(0f, -100f), message);
-			UnityAction val = (UnityAction)delegate
+			UnityAction unityAction = delegate
 			{
 				OnWindowCancel(window.id);
 			};
-			window.cancelCallback = val;
-			window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, confirmText, (UnityAction)delegate
+			window.cancelCallback = unityAction;
+			window.CreateButton(prefabs.fitButton, UIPivot.BottomLeft, UIAnchor.BottomLeft, Vector2.zero, confirmText, delegate
 			{
 				OnRestoreDefaultsConfirmed(window.id);
-			}, val, setDefault: false);
-			window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, cancelText, val, val, setDefault: true);
+			}, unityAction, setDefault: false);
+			window.CreateButton(prefabs.fitButton, UIPivot.BottomRight, UIAnchor.BottomRight, Vector2.zero, cancelText, unityAction, unityAction, setDefault: true);
 			windowManager.Focus(window);
 		}
 	}
@@ -6312,10 +5689,6 @@ public class ControlMapper : MonoBehaviour
 
 	private bool HasElementAssignmentConflicts(Player player, InputMapping mapping, ElementAssignment assignment, bool skipOtherPlayers)
 	{
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
 		if (player == null || mapping == null)
 		{
 			return false;
@@ -6341,16 +5714,6 @@ public class ControlMapper : MonoBehaviour
 
 	private bool IsBlockingAssignmentConflict(InputMapping mapping, ElementAssignment assignment, bool skipOtherPlayers)
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0071: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0080: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0085: Unknown result type (might be due to invalid IL or missing references)
 		if (!CreateConflictCheck(mapping, assignment, out var conflictCheck))
 		{
 			return false;
@@ -6359,16 +5722,14 @@ public class ControlMapper : MonoBehaviour
 		{
 			foreach (ElementAssignmentConflictInfo item in ReInput.players.SystemPlayer.controllers.conflictChecking.ElementAssignmentConflicts(conflictCheck))
 			{
-				ElementAssignmentConflictInfo current = item;
-				if (!((ElementAssignmentConflictInfo)(ref current)).isUserAssignable)
+				if (!item.isUserAssignable)
 				{
 					return true;
 				}
 			}
 			foreach (ElementAssignmentConflictInfo item2 in currentPlayer.controllers.conflictChecking.ElementAssignmentConflicts(conflictCheck))
 			{
-				ElementAssignmentConflictInfo current2 = item2;
-				if (!((ElementAssignmentConflictInfo)(ref current2)).isUserAssignable)
+				if (!item2.isUserAssignable)
 				{
 					return true;
 				}
@@ -6378,8 +5739,7 @@ public class ControlMapper : MonoBehaviour
 		{
 			foreach (ElementAssignmentConflictInfo item3 in ReInput.controllers.conflictChecking.ElementAssignmentConflicts(conflictCheck))
 			{
-				ElementAssignmentConflictInfo current3 = item3;
-				if (!((ElementAssignmentConflictInfo)(ref current3)).isUserAssignable)
+				if (!item3.isUserAssignable)
 				{
 					return true;
 				}
@@ -6390,8 +5750,6 @@ public class ControlMapper : MonoBehaviour
 
 	private IEnumerable<ElementAssignmentConflictInfo> ElementAssignmentConflicts(Player player, InputMapping mapping, ElementAssignment assignment, bool skipOtherPlayers)
 	{
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
 		if (player == null || mapping == null || !CreateConflictCheck(mapping, assignment, out var conflictCheck))
 		{
 			yield break;
@@ -6400,133 +5758,91 @@ public class ControlMapper : MonoBehaviour
 		{
 			foreach (ElementAssignmentConflictInfo item in ReInput.players.SystemPlayer.controllers.conflictChecking.ElementAssignmentConflicts(conflictCheck))
 			{
-				ElementAssignmentConflictInfo current = item;
-				if (!((ElementAssignmentConflictInfo)(ref current)).isUserAssignable)
+				if (!item.isUserAssignable)
 				{
-					yield return current;
+					yield return item;
 				}
 			}
 			foreach (ElementAssignmentConflictInfo item2 in player.controllers.conflictChecking.ElementAssignmentConflicts(conflictCheck))
 			{
-				ElementAssignmentConflictInfo current2 = item2;
-				if (!((ElementAssignmentConflictInfo)(ref current2)).isUserAssignable)
+				if (!item2.isUserAssignable)
 				{
-					yield return current2;
+					yield return item2;
 				}
 			}
 			yield break;
 		}
 		foreach (ElementAssignmentConflictInfo item3 in ReInput.controllers.conflictChecking.ElementAssignmentConflicts(conflictCheck))
 		{
-			ElementAssignmentConflictInfo current3 = item3;
-			if (!((ElementAssignmentConflictInfo)(ref current3)).isUserAssignable)
+			if (!item3.isUserAssignable)
 			{
-				yield return current3;
+				yield return item3;
 			}
 		}
 	}
 
 	private bool CreateConflictCheck(InputMapping mapping, ElementAssignment assignment, out ElementAssignmentConflictCheck conflictCheck)
 	{
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
 		if (mapping == null || currentPlayer == null)
 		{
 			conflictCheck = default(ElementAssignmentConflictCheck);
 			return false;
 		}
-		conflictCheck = ((ElementAssignment)(ref assignment)).ToElementAssignmentConflictCheck();
-		((ElementAssignmentConflictCheck)(ref conflictCheck)).playerId = currentPlayer.id;
-		((ElementAssignmentConflictCheck)(ref conflictCheck)).controllerType = mapping.controllerType;
-		((ElementAssignmentConflictCheck)(ref conflictCheck)).controllerId = mapping.controllerId;
-		((ElementAssignmentConflictCheck)(ref conflictCheck)).controllerMapId = mapping.map.id;
-		((ElementAssignmentConflictCheck)(ref conflictCheck)).controllerMapCategoryId = mapping.map.categoryId;
+		conflictCheck = assignment.ToElementAssignmentConflictCheck();
+		conflictCheck.playerId = currentPlayer.id;
+		conflictCheck.controllerType = mapping.controllerType;
+		conflictCheck.controllerId = mapping.controllerId;
+		conflictCheck.controllerMapId = mapping.map.id;
+		conflictCheck.controllerMapCategoryId = mapping.map.categoryId;
 		if (mapping.aem != null)
 		{
-			((ElementAssignmentConflictCheck)(ref conflictCheck)).elementMapId = mapping.aem.id;
+			conflictCheck.elementMapId = mapping.aem.id;
 		}
 		return true;
 	}
 
 	private void PollKeyboardForAssignment(out ControllerPollingInfo pollingInfo, out bool modifierKeyPressed, out ModifierKeyFlags modifierFlags, out string label)
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0051: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0053: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005a: Invalid comparison between Unknown and I4
-		//IL_005e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0082: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0089: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0070: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0071: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0073: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0078: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0079: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0127: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00da: Expected I4, but got Unknown
-		//IL_00c9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0113: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0108: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0109: Unknown result type (might be due to invalid IL or missing references)
 		pollingInfo = default(ControllerPollingInfo);
 		label = string.Empty;
 		modifierKeyPressed = false;
-		modifierFlags = (ModifierKeyFlags)0;
+		modifierFlags = ModifierKeyFlags.None;
 		int num = 0;
-		ControllerPollingInfo val = default(ControllerPollingInfo);
-		ControllerPollingInfo val2 = default(ControllerPollingInfo);
-		ModifierKeyFlags val3 = (ModifierKeyFlags)0;
+		ControllerPollingInfo controllerPollingInfo = default(ControllerPollingInfo);
+		ControllerPollingInfo controllerPollingInfo2 = default(ControllerPollingInfo);
+		ModifierKeyFlags modifierKeyFlags = ModifierKeyFlags.None;
 		foreach (ControllerPollingInfo item in ReInput.controllers.Keyboard.PollForAllKeys())
 		{
-			ControllerPollingInfo current = item;
-			KeyCode keyboardKey = ((ControllerPollingInfo)(ref current)).keyboardKey;
-			if ((int)keyboardKey == 313)
+			KeyCode keyboardKey = item.keyboardKey;
+			if (keyboardKey == KeyCode.AltGr)
 			{
 				continue;
 			}
-			if (Keyboard.IsModifierKey(((ControllerPollingInfo)(ref current)).keyboardKey))
+			if (Keyboard.IsModifierKey(item.keyboardKey))
 			{
 				if (num == 0)
 				{
-					val2 = current;
+					controllerPollingInfo2 = item;
 				}
-				val3 |= Keyboard.KeyCodeToModifierKeyFlags(keyboardKey);
+				modifierKeyFlags |= Keyboard.KeyCodeToModifierKeyFlags(keyboardKey);
 				num++;
 			}
-			else if ((int)((ControllerPollingInfo)(ref val)).keyboardKey == 0)
+			else if (controllerPollingInfo.keyboardKey == KeyCode.None)
 			{
-				val = current;
+				controllerPollingInfo = item;
 			}
 		}
-		if ((int)((ControllerPollingInfo)(ref val)).keyboardKey != 0)
+		if (controllerPollingInfo.keyboardKey != KeyCode.None)
 		{
-			if (ReInput.controllers.Keyboard.GetKeyDown(((ControllerPollingInfo)(ref val)).keyboardKey))
+			if (ReInput.controllers.Keyboard.GetKeyDown(controllerPollingInfo.keyboardKey))
 			{
 				if (num == 0)
 				{
-					pollingInfo = val;
+					pollingInfo = controllerPollingInfo;
 					return;
 				}
-				pollingInfo = val;
-				modifierFlags = (ModifierKeyFlags)(int)val3;
+				pollingInfo = controllerPollingInfo;
+				modifierFlags = modifierKeyFlags;
 			}
 		}
 		else
@@ -6538,27 +5854,24 @@ public class ControlMapper : MonoBehaviour
 			modifierKeyPressed = true;
 			if (num == 1)
 			{
-				if (ReInput.controllers.Keyboard.GetKeyTimePressed(((ControllerPollingInfo)(ref val2)).keyboardKey) > 1.0)
+				if (ReInput.controllers.Keyboard.GetKeyTimePressed(controllerPollingInfo2.keyboardKey) > 1.0)
 				{
-					pollingInfo = val2;
+					pollingInfo = controllerPollingInfo2;
 				}
 				else
 				{
-					label = Keyboard.GetKeyName(((ControllerPollingInfo)(ref val2)).keyboardKey);
+					label = Keyboard.GetKeyName(controllerPollingInfo2.keyboardKey);
 				}
 			}
 			else
 			{
-				label = _language.ModifierKeyFlagsToString(val3);
+				label = _language.ModifierKeyFlagsToString(modifierKeyFlags);
 			}
 		}
 	}
 
 	private bool GetFirstElementAssignmentConflict(ElementAssignmentConflictCheck conflictCheck, out ElementAssignmentConflictInfo conflict, bool skipOtherPlayers)
 	{
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
 		if (GetFirstElementAssignmentConflict(currentPlayer, conflictCheck, out conflict))
 		{
 			return true;
@@ -6572,8 +5885,8 @@ public class ControlMapper : MonoBehaviour
 			IList<Player> players = ReInput.players.Players;
 			for (int i = 0; i < players.Count; i++)
 			{
-				Player val = players[i];
-				if (val != currentPlayer && GetFirstElementAssignmentConflict(val, conflictCheck, out conflict))
+				Player player = players[i];
+				if (player != currentPlayer && GetFirstElementAssignmentConflict(player, conflictCheck, out conflict))
 				{
 					return true;
 				}
@@ -6584,12 +5897,6 @@ public class ControlMapper : MonoBehaviour
 
 	private bool GetFirstElementAssignmentConflict(Player player, ElementAssignmentConflictCheck conflictCheck, out ElementAssignmentConflictInfo conflict)
 	{
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0040: Unknown result type (might be due to invalid IL or missing references)
 		using (IEnumerator<ElementAssignmentConflictInfo> enumerator = player.controllers.conflictChecking.ElementAssignmentConflicts(conflictCheck).GetEnumerator())
 		{
 			if (enumerator.MoveNext())
@@ -6607,10 +5914,10 @@ public class ControlMapper : MonoBehaviour
 	{
 		if (currentPlayer != null && currentPlayer.controllers.joystickCount != 0)
 		{
-			Joystick val = currentJoystick;
-			if (axisIndex >= 0 && axisIndex < ((ControllerWithAxes)val).axisCount)
+			Joystick joystick = currentJoystick;
+			if (axisIndex >= 0 && axisIndex < joystick.axisCount)
 			{
-				pendingAxisCalibration = new AxisCalibrator(val, axisIndex);
+				pendingAxisCalibration = new AxisCalibrator(joystick, axisIndex);
 				ShowCalibrateAxisStep1Window();
 			}
 		}
@@ -6627,7 +5934,7 @@ public class ControlMapper : MonoBehaviour
 
 	private void SetUISelection(GameObject selection)
 	{
-		if (!((Object)(object)EventSystem.current == (Object)null))
+		if (!(EventSystem.current == null))
 		{
 			EventSystem.current.SetSelectedGameObject(selection);
 		}
@@ -6635,7 +5942,7 @@ public class ControlMapper : MonoBehaviour
 
 	private void RestoreLastUISelection()
 	{
-		if ((Object)(object)lastUISelection == (Object)null || !lastUISelection.activeInHierarchy)
+		if (lastUISelection == null || !lastUISelection.activeInHierarchy)
 		{
 			SetDefaultUISelection();
 		}
@@ -6649,13 +5956,13 @@ public class ControlMapper : MonoBehaviour
 	{
 		if (isOpen)
 		{
-			if ((Object)(object)references.defaultSelection == (Object)null)
+			if (references.defaultSelection == null)
 			{
 				SetUISelection(null);
 			}
 			else
 			{
-				SetUISelection(((Component)references.defaultSelection).gameObject);
+				SetUISelection(references.defaultSelection.gameObject);
 			}
 		}
 	}
@@ -6688,7 +5995,7 @@ public class ControlMapper : MonoBehaviour
 
 	private void CheckUISelection()
 	{
-		if (isFocused && (Object)(object)currentUISelection == (Object)null)
+		if (isFocused && currentUISelection == null)
 		{
 			RestoreLastUISelection();
 		}
@@ -6736,7 +6043,7 @@ public class ControlMapper : MonoBehaviour
 		if (initialized && (force || !isOpen))
 		{
 			Clear();
-			canvas.SetActive(true);
+			canvas.SetActive(value: true);
 			OnPlayerSelected(0, redraw: false);
 			SelectDefaultMapCategory(redraw: false);
 			SetDefaultUISelection();
@@ -6761,7 +6068,7 @@ public class ControlMapper : MonoBehaviour
 				ReInput.userDataStore.Save();
 			}
 			Clear();
-			canvas.SetActive(false);
+			canvas.SetActive(value: false);
 			SetUISelection(null);
 			if (_ScreenClosedEvent != null)
 			{
@@ -6796,27 +6103,27 @@ public class ControlMapper : MonoBehaviour
 		inputGrid.ClearAll();
 		foreach (GUIButton playerButton in playerButtons)
 		{
-			Object.Destroy((Object)(object)playerButton.gameObject);
+			UnityEngine.Object.Destroy(playerButton.gameObject);
 		}
 		playerButtons.Clear();
 		foreach (GUIButton mapCategoryButton in mapCategoryButtons)
 		{
-			Object.Destroy((Object)(object)mapCategoryButton.gameObject);
+			UnityEngine.Object.Destroy(mapCategoryButton.gameObject);
 		}
 		mapCategoryButtons.Clear();
 		foreach (GUIButton assignedControllerButton in assignedControllerButtons)
 		{
-			Object.Destroy((Object)(object)assignedControllerButton.gameObject);
+			UnityEngine.Object.Destroy(assignedControllerButton.gameObject);
 		}
 		assignedControllerButtons.Clear();
 		if (assignedControllerButtonsPlaceholder != null)
 		{
-			Object.Destroy((Object)(object)assignedControllerButtonsPlaceholder.gameObject);
+			UnityEngine.Object.Destroy(assignedControllerButtonsPlaceholder.gameObject);
 			assignedControllerButtonsPlaceholder = null;
 		}
 		foreach (GameObject miscInstantiatedObject in miscInstantiatedObjects)
 		{
-			Object.Destroy((Object)(object)miscInstantiatedObject);
+			UnityEngine.Object.Destroy(miscInstantiatedObject);
 		}
 		miscInstantiatedObjects.Clear();
 	}
@@ -6868,16 +6175,9 @@ public class ControlMapper : MonoBehaviour
 
 	private void SetActionAxisInverted(bool state, ControllerType controllerType, int actionElementMapId)
 	{
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-		if (currentPlayer == null)
+		if (currentPlayer != null && GetControllerMap(controllerType) is ControllerMapWithAxes controllerMapWithAxes)
 		{
-			return;
-		}
-		ControllerMap controllerMap = GetControllerMap(controllerType);
-		ControllerMapWithAxes val = (ControllerMapWithAxes)(object)((controllerMap is ControllerMapWithAxes) ? controllerMap : null);
-		if (val != null)
-		{
-			ActionElementMap elementMap = ((ControllerMap)val).GetElementMap(actionElementMapId);
+			ActionElementMap elementMap = controllerMapWithAxes.GetElementMap(actionElementMapId);
 			if (elementMap != null)
 			{
 				elementMap.invert = state;
@@ -6887,44 +6187,38 @@ public class ControlMapper : MonoBehaviour
 
 	private ControllerMap GetControllerMap(ControllerType type)
 	{
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Expected I4, but got Unknown
-		//IL_0059: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return null;
 		}
-		int num = 0;
-		switch ((int)type)
+		int controllerId = 0;
+		switch (type)
 		{
-		case 2:
+		case ControllerType.Joystick:
 			if (currentPlayer.controllers.joystickCount > 0)
 			{
-				num = ((Controller)currentJoystick).id;
+				controllerId = currentJoystick.id;
 				break;
 			}
 			return null;
 		default:
 			throw new NotImplementedException();
-		case 0:
-		case 1:
+		case ControllerType.Keyboard:
+		case ControllerType.Mouse:
 			break;
 		}
-		return currentPlayer.controllers.maps.GetFirstMapInCategory(type, num, currentMapCategoryId);
+		return currentPlayer.controllers.maps.GetFirstMapInCategory(type, controllerId, currentMapCategoryId);
 	}
 
 	private ControllerMap GetControllerMapOrCreateNew(ControllerType controllerType, int controllerId, int layoutId)
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0039: Unknown result type (might be due to invalid IL or missing references)
-		ControllerMap val = GetControllerMap(controllerType);
-		if (val == null)
+		ControllerMap controllerMap = GetControllerMap(controllerType);
+		if (controllerMap == null)
 		{
 			currentPlayer.controllers.maps.AddEmptyMap(controllerType, controllerId, currentMapCategoryId, layoutId);
-			val = currentPlayer.controllers.maps.GetMap(controllerType, controllerId, currentMapCategoryId, layoutId);
+			controllerMap = currentPlayer.controllers.maps.GetMap(controllerType, controllerId, currentMapCategoryId, layoutId);
 		}
-		return val;
+		return controllerMap;
 	}
 
 	private int CountIEnumerable<T>(IEnumerable<T> enumerable)
@@ -6972,7 +6266,7 @@ public class ControlMapper : MonoBehaviour
 		for (int i = 0; i < fixedSelectableUIElements.Length; i++)
 		{
 			UIElementInfo component = UnityTools.GetComponent<UIElementInfo>(fixedSelectableUIElements[i]);
-			if (!((Object)(object)component == (Object)null))
+			if (!(component == null))
 			{
 				component.OnSelectedEvent += OnUIElementSelected;
 			}
@@ -7003,12 +6297,12 @@ public class ControlMapper : MonoBehaviour
 		}
 		if (ReInput.mapping.GetAction(actionId) == null)
 		{
-			Debug.LogWarning((object)("Rewired Control Mapper: " + actionId + " is not a valid Action id!"));
+			Debug.LogWarning("Rewired Control Mapper: " + actionId + " is not a valid Action id!");
 			return;
 		}
 		foreach (Player allPlayer in ReInput.players.AllPlayers)
 		{
-			allPlayer.AddInputEventDelegate(callback, (UpdateLoopType)0, (InputActionEventType)3, actionId);
+			allPlayer.AddInputEventDelegate(callback, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, actionId);
 		}
 	}
 
@@ -7020,20 +6314,20 @@ public class ControlMapper : MonoBehaviour
 		}
 		if (ReInput.mapping.GetAction(actionId) == null)
 		{
-			Debug.LogWarning((object)("Rewired Control Mapper: " + actionId + " is not a valid Action id!"));
+			Debug.LogWarning("Rewired Control Mapper: " + actionId + " is not a valid Action id!");
 			return;
 		}
 		foreach (Player allPlayer in ReInput.players.AllPlayers)
 		{
-			allPlayer.RemoveInputEventDelegate(callback, (UpdateLoopType)0, (InputActionEventType)3, actionId);
+			allPlayer.RemoveInputEventDelegate(callback, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, actionId);
 		}
 	}
 
 	private int GetMaxControllersPerPlayer()
 	{
-		if (((InputManager_Base)_rewiredInputManager).userData.ConfigVars.autoAssignJoysticks)
+		if (_rewiredInputManager.userData.ConfigVars.autoAssignJoysticks)
 		{
-			return ((InputManager_Base)_rewiredInputManager).userData.ConfigVars.maxJoysticksPerPlayer;
+			return _rewiredInputManager.userData.ConfigVars.maxJoysticksPerPlayer;
 		}
 		return _maxControllersPerPlayer;
 	}
@@ -7065,7 +6359,7 @@ public class ControlMapper : MonoBehaviour
 
 	private void AssignController(Player player, int controllerId)
 	{
-		if (player == null || player.controllers.ContainsController((ControllerType)2, controllerId))
+		if (player == null || player.controllers.ContainsController(ControllerType.Joystick, controllerId))
 		{
 			return;
 		}
@@ -7081,10 +6375,10 @@ public class ControlMapper : MonoBehaviour
 				RemoveController(player2, controllerId);
 			}
 		}
-		player.controllers.AddController((ControllerType)2, controllerId, false);
+		player.controllers.AddController(ControllerType.Joystick, controllerId, removeFromOtherPlayers: false);
 		if (ReInput.userDataStore != null)
 		{
-			ReInput.userDataStore.LoadControllerData(player.id, (ControllerType)2, controllerId);
+			ReInput.userDataStore.LoadControllerData(player.id, ControllerType.Joystick, controllerId);
 		}
 	}
 
@@ -7095,33 +6389,30 @@ public class ControlMapper : MonoBehaviour
 			IList<Joystick> joysticks = player.controllers.Joysticks;
 			for (int num = joysticks.Count - 1; num >= 0; num--)
 			{
-				RemoveController(player, ((Controller)joysticks[num]).id);
+				RemoveController(player, joysticks[num].id);
 			}
 		}
 	}
 
 	private void RemoveController(Player player, int controllerId)
 	{
-		if (player != null && player.controllers.ContainsController((ControllerType)2, controllerId))
+		if (player != null && player.controllers.ContainsController(ControllerType.Joystick, controllerId))
 		{
 			if (ReInput.userDataStore != null)
 			{
-				ReInput.userDataStore.SaveControllerData(player.id, (ControllerType)2, controllerId);
+				ReInput.userDataStore.SaveControllerData(player.id, ControllerType.Joystick, controllerId);
 			}
-			player.controllers.RemoveController((ControllerType)2, controllerId);
+			player.controllers.RemoveController(ControllerType.Joystick, controllerId);
 		}
 	}
 
 	private bool IsAllowedAssignment(InputMapping pendingInputMapping, ControllerPollingInfo pollingInfo)
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Invalid comparison between Unknown and I4
 		if (pendingInputMapping == null)
 		{
 			return false;
 		}
-		if ((int)pendingInputMapping.axisRange == 0 && !_showSplitAxisInputFields && (int)((ControllerPollingInfo)(ref pollingInfo)).elementType == 1)
+		if (pendingInputMapping.axisRange == AxisRange.Full && !_showSplitAxisInputFields && pollingInfo.elementType == ControllerElementType.Button)
 		{
 			return false;
 		}
@@ -7164,63 +6455,17 @@ public class ControlMapper : MonoBehaviour
 
 	private int GetControllerInputFieldCount(ControllerType controllerType)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0012: Expected I4, but got Unknown
-		return (int)controllerType switch
+		return controllerType switch
 		{
-			0 => _keyboardInputFieldCount, 
-			1 => _mouseInputFieldCount, 
-			2 => _controllerInputFieldCount, 
+			ControllerType.Keyboard => _keyboardInputFieldCount, 
+			ControllerType.Mouse => _mouseInputFieldCount, 
+			ControllerType.Joystick => _controllerInputFieldCount, 
 			_ => throw new NotImplementedException(), 
 		};
 	}
 
 	private bool ShowSwapButton(int windowId, InputMapping mapping, ElementAssignment assignment, bool skipOtherPlayers)
 	{
-		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0070: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0093: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ae: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00be: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0136: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0108: Unknown result type (might be due to invalid IL or missing references)
-		//IL_010e: Invalid comparison between Unknown and I4
-		//IL_00d4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00dd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_012c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0117: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_015a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_016d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_016f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0171: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0175: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0180: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0185: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0186: Unknown result type (might be due to invalid IL or missing references)
-		//IL_018b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_018c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0131: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0125: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0247: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0202: Unknown result type (might be due to invalid IL or missing references)
-		//IL_020e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_021a: Unknown result type (might be due to invalid IL or missing references)
 		if (currentPlayer == null)
 		{
 			return false;
@@ -7235,7 +6480,7 @@ public class ControlMapper : MonoBehaviour
 		}
 		if (!CreateConflictCheck(mapping, assignment, out var conflictCheck))
 		{
-			Debug.LogError((object)"Rewired Control Mapper: Error creating conflict check!");
+			Debug.LogError("Rewired Control Mapper: Error creating conflict check!");
 			return false;
 		}
 		List<ElementAssignmentConflictInfo> list = new List<ElementAssignmentConflictInfo>();
@@ -7246,40 +6491,40 @@ public class ControlMapper : MonoBehaviour
 			return false;
 		}
 		ActionElementMap aem = mapping.aem;
-		ElementAssignmentConflictInfo val = list[0];
-		int actionId = ((ElementAssignmentConflictInfo)(ref val)).elementMap.actionId;
-		Pole axisContribution = ((ElementAssignmentConflictInfo)(ref val)).elementMap.axisContribution;
-		AxisRange val2 = aem.axisRange;
+		ElementAssignmentConflictInfo elementAssignmentConflictInfo = list[0];
+		int actionId = elementAssignmentConflictInfo.elementMap.actionId;
+		Pole axisContribution = elementAssignmentConflictInfo.elementMap.axisContribution;
+		AxisRange axisRange = aem.axisRange;
 		ControllerElementType elementType = aem.elementType;
-		if (elementType == ((ElementAssignmentConflictInfo)(ref val)).elementMap.elementType && (int)elementType == 0)
+		if (elementType == elementAssignmentConflictInfo.elementMap.elementType && elementType == ControllerElementType.Axis)
 		{
-			if (val2 != ((ElementAssignmentConflictInfo)(ref val)).elementMap.axisRange)
+			if (axisRange != elementAssignmentConflictInfo.elementMap.axisRange)
 			{
-				if ((int)val2 == 0)
+				if (axisRange == AxisRange.Full)
 				{
-					val2 = (AxisRange)1;
+					axisRange = AxisRange.Positive;
 				}
-				else if ((int)((ElementAssignmentConflictInfo)(ref val)).elementMap.axisRange != 0)
+				else if (elementAssignmentConflictInfo.elementMap.axisRange != AxisRange.Full)
 				{
 				}
 			}
 		}
-		else if ((int)elementType == 0 && ((int)((ElementAssignmentConflictInfo)(ref val)).elementMap.elementType == 1 || ((int)((ElementAssignmentConflictInfo)(ref val)).elementMap.elementType == 0 && (int)((ElementAssignmentConflictInfo)(ref val)).elementMap.axisRange != 0)) && (int)val2 == 0)
+		else if (elementType == ControllerElementType.Axis && (elementAssignmentConflictInfo.elementMap.elementType == ControllerElementType.Button || (elementAssignmentConflictInfo.elementMap.elementType == ControllerElementType.Axis && elementAssignmentConflictInfo.elementMap.axisRange != AxisRange.Full)) && axisRange == AxisRange.Full)
 		{
-			val2 = (AxisRange)1;
+			axisRange = AxisRange.Positive;
 		}
 		int num = 0;
-		if (assignment.actionId == ((ElementAssignmentConflictInfo)(ref val)).actionId && mapping.map == ((ElementAssignmentConflictInfo)(ref val)).controllerMap)
+		if (assignment.actionId == elementAssignmentConflictInfo.actionId && mapping.map == elementAssignmentConflictInfo.controllerMap)
 		{
 			Controller controller = ReInput.controllers.GetController(mapping.controllerType, mapping.controllerId);
-			if (SwapIsSameInputRange(elementType, val2, axisContribution, controller.GetElementById(assignment.elementIdentifierId).type, assignment.axisRange, assignment.axisContribution))
+			if (SwapIsSameInputRange(elementType, axisRange, axisContribution, controller.GetElementById(assignment.elementIdentifierId).type, assignment.axisRange, assignment.axisContribution))
 			{
 				num++;
 			}
 		}
-		foreach (ActionElementMap aem2 in ((ElementAssignmentConflictInfo)(ref val)).controllerMap.ElementMapsWithAction(actionId))
+		foreach (ActionElementMap aem2 in elementAssignmentConflictInfo.controllerMap.ElementMapsWithAction(actionId))
 		{
-			if (aem2.id != aem.id && list.FindIndex((ElementAssignmentConflictInfo x) => ((ElementAssignmentConflictInfo)(ref x)).elementMapId == aem2.id) < 0 && SwapIsSameInputRange(elementType, val2, axisContribution, aem2.elementType, aem2.axisRange, aem2.axisContribution))
+			if (aem2.id != aem.id && list.FindIndex((ElementAssignmentConflictInfo x) => x.elementMapId == aem2.id) < 0 && SwapIsSameInputRange(elementType, axisRange, axisContribution, aem2.elementType, aem2.axisRange, aem2.axisContribution))
 			{
 				num++;
 			}
@@ -7289,25 +6534,11 @@ public class ControlMapper : MonoBehaviour
 
 	private bool SwapIsSameInputRange(ControllerElementType origElementType, AxisRange origAxisRange, Pole origAxisContribution, ControllerElementType conflictElementType, AxisRange conflictAxisRange, Pole conflictAxisContribution)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0002: Invalid comparison between Unknown and I4
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000d: Invalid comparison between Unknown and I4
-		//IL_0004: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-		if (((int)origElementType == 1 || ((int)origElementType == 0 && (int)origAxisRange != 0)) && ((int)conflictElementType == 1 || ((int)conflictElementType == 0 && (int)conflictAxisRange != 0)) && conflictAxisContribution == origAxisContribution)
+		if ((origElementType == ControllerElementType.Button || (origElementType == ControllerElementType.Axis && origAxisRange != AxisRange.Full)) && (conflictElementType == ControllerElementType.Button || (conflictElementType == ControllerElementType.Axis && conflictAxisRange != AxisRange.Full)) && conflictAxisContribution == origAxisContribution)
 		{
 			return true;
 		}
-		if ((int)origElementType == 0 && (int)origAxisRange == 0 && (int)conflictElementType == 0 && (int)conflictAxisRange == 0)
+		if (origElementType == ControllerElementType.Axis && origAxisRange == AxisRange.Full && conflictElementType == ControllerElementType.Axis && conflictAxisRange == AxisRange.Full)
 		{
 			return true;
 		}
@@ -7316,7 +6547,7 @@ public class ControlMapper : MonoBehaviour
 
 	public static void ApplyTheme(ThemedElement.ElementInfo[] elementInfo)
 	{
-		if (!((Object)(object)Instance == (Object)null) && !((Object)(object)Instance._themeSettings == (Object)null) && Instance._useThemeSettings)
+		if (!(Instance == null) && !(Instance._themeSettings == null) && Instance._useThemeSettings)
 		{
 			Instance._themeSettings.Apply(elementInfo);
 		}
@@ -7324,7 +6555,7 @@ public class ControlMapper : MonoBehaviour
 
 	public static LanguageDataBase GetLanguage()
 	{
-		if ((Object)(object)Instance == (Object)null)
+		if (Instance == null)
 		{
 			return null;
 		}

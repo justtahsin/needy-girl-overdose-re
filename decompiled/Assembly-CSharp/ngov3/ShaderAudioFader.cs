@@ -1,10 +1,4 @@
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -13,96 +7,12 @@ namespace ngov3;
 
 public class ShaderAudioFader : MonoBehaviour
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CSlippingSliderAsync_003Ed__6 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskVoidMethodBuilder _003C_003Et__builder;
-
-		public ShaderAudioFader _003C_003E4__this;
-
-		private Awaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0066: Unknown result type (might be due to invalid IL or missing references)
-			//IL_006d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0033: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0047: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0048: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			ShaderAudioFader shaderAudioFader = _003C_003E4__this;
-			try
-			{
-				if (num != 0)
-				{
-					goto IL_00b2;
-				}
-				Awaiter val = _003C_003Eu__1;
-				_003C_003Eu__1 = default(Awaiter);
-				num = (_003C_003E1__state = -1);
-				goto IL_007c;
-				IL_007c:
-				((Awaiter)(ref val)).GetResult();
-				float num2 = (shaderAudioFader._isHiding ? 50f : 100f);
-				shaderAudioFader._ageSlider -= Mathf.Sqrt(shaderAudioFader._ageSlider) / num2;
-				goto IL_00b2;
-				IL_00b2:
-				if (((ReactiveProperty<bool>)(object)shaderAudioFader._isSlipping).Value)
-				{
-					UniTask val2 = UniTask.Delay(100, false, (PlayerLoopTiming)8, default(CancellationToken), false);
-					val = ((UniTask)(ref val2)).GetAwaiter();
-					if (!((Awaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskVoidMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CSlippingSliderAsync_003Ed__6>(ref val, ref this);
-						return;
-					}
-					goto IL_007c;
-				}
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskVoidMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskVoidMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskVoidMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	[SerializeField]
 	private AudioMixer _audioMixer;
 
 	private float _ageSlider = 1f;
 
-	private BoolReactiveProperty _isSlipping = new BoolReactiveProperty(false);
+	private BoolReactiveProperty _isSlipping = new BoolReactiveProperty(initialValue: false);
 
 	private bool _isHiding;
 
@@ -113,18 +23,14 @@ public class ShaderAudioFader : MonoBehaviour
 		ResetAudioEffect();
 	}
 
-	[AsyncStateMachine(typeof(_003CSlippingSliderAsync_003Ed__6))]
-	private UniTaskVoid SlippingSliderAsync()
+	private async UniTaskVoid SlippingSliderAsync()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CSlippingSliderAsync_003Ed__6 _003CSlippingSliderAsync_003Ed__7 = default(_003CSlippingSliderAsync_003Ed__6);
-		_003CSlippingSliderAsync_003Ed__7._003C_003Et__builder = AsyncUniTaskVoidMethodBuilder.Create();
-		_003CSlippingSliderAsync_003Ed__7._003C_003E4__this = this;
-		_003CSlippingSliderAsync_003Ed__7._003C_003E1__state = -1;
-		((AsyncUniTaskVoidMethodBuilder)(ref _003CSlippingSliderAsync_003Ed__7._003C_003Et__builder)).Start<_003CSlippingSliderAsync_003Ed__6>(ref _003CSlippingSliderAsync_003Ed__7);
-		return ((AsyncUniTaskVoidMethodBuilder)(ref _003CSlippingSliderAsync_003Ed__7._003C_003Et__builder)).Task;
+		while (_isSlipping.Value)
+		{
+			await UniTask.Delay(100);
+			float num = (_isHiding ? 50f : 100f);
+			_ageSlider -= Mathf.Sqrt(_ageSlider) / num;
+		}
 	}
 
 	public void ResetAudioEffect()

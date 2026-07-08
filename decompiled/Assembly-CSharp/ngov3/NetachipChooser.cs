@@ -85,8 +85,8 @@ public class NetachipChooser : MonoBehaviour
 
 	private void Awake()
 	{
-		_tooltipCaller = ((Component)this).GetComponent<TooltipCaller>();
-		AlphaButton.gameObject.SetActive(false);
+		_tooltipCaller = GetComponent<TooltipCaller>();
+		AlphaButton.gameObject.SetActive(value: false);
 		ChoosedAlphaType = AlphaType.none;
 		level = 0;
 		status = ChoosingStatus.alpha;
@@ -98,7 +98,7 @@ public class NetachipChooser : MonoBehaviour
 		{
 			ShowAlphaChip(0);
 		}
-		((Component)backButton).gameObject.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Reselect, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		backButton.gameObject.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Reselect, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 	}
 
 	private void CleanChilds()
@@ -106,7 +106,7 @@ public class NetachipChooser : MonoBehaviour
 		_selectableObjects.Clear();
 		for (int num = ChipChoosingParent.childCount - 1; num >= 0; num--)
 		{
-			Object.Destroy((Object)(object)((Component)ChipChoosingParent.GetChild(num)).gameObject);
+			UnityEngine.Object.Destroy(ChipChoosingParent.GetChild(num).gameObject);
 		}
 	}
 
@@ -114,17 +114,17 @@ public class NetachipChooser : MonoBehaviour
 	{
 		ChoosedAlphaType = AlphaType.none;
 		level = 0;
-		AlphaButton.gameObject.SetActive(false);
+		AlphaButton.gameObject.SetActive(value: false);
 		status = ChoosingStatus.alpha;
-		((Component)ChipChoosingParent).gameObject.SetActive(true);
-		KaimakuParent.SetActive(false);
+		ChipChoosingParent.gameObject.SetActive(value: true);
+		KaimakuParent.SetActive(value: false);
 		CleanChilds();
 		int num = Enum.GetNames(typeof(AlphaType)).Length - 1;
 		for (int i = 0; i < MAXCHIPSHOWING; i++)
 		{
 			if (i <= num)
 			{
-				GameObject obj = Object.Instantiate<GameObject>(AlphaPrefab, ChipChoosingParent);
+				GameObject obj = UnityEngine.Object.Instantiate(AlphaPrefab, ChipChoosingParent);
 				int alphaLevel = SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.testAlphaLevel);
 				bool isUsed = false;
 				obj.GetComponent<NetaChipAlpha>().SetData(i, alphaLevel, isUsed);
@@ -146,26 +146,26 @@ public class NetachipChooser : MonoBehaviour
 		}
 		ChoosedAlphaType = AlphaType.none;
 		this.level = 0;
-		AlphaButton.gameObject.SetActive(false);
+		AlphaButton.gameObject.SetActive(value: false);
 		status = ChoosingStatus.alpha;
-		((Component)ChipChoosingParent).gameObject.SetActive(true);
-		KaimakuParent.SetActive(false);
+		ChipChoosingParent.gameObject.SetActive(value: true);
+		KaimakuParent.SetActive(value: false);
 		CleanChilds();
 		int num = Enum.GetNames(typeof(AlphaType)).Length - 1;
 		for (int i = page * MAXCHIPSHOWING; i < (page + 1) * MAXCHIPSHOWING; i++)
 		{
 			if (i <= num)
 			{
-				GameObject val = Object.Instantiate<GameObject>(AlphaPrefab, ChipChoosingParent);
+				GameObject gameObject = UnityEngine.Object.Instantiate(AlphaPrefab, ChipChoosingParent);
 				int level = SingletonMonoBehaviour<NetaManager>.Instance.GetAlphaChipLevel((AlphaType)Enum.ToObject(typeof(AlphaType), i));
 				bool isUsed = SingletonMonoBehaviour<NetaManager>.Instance.usedAlpha.Exists((AlphaLevel a) => a.alphaType == (AlphaType)Enum.ToObject(typeof(AlphaType), i) && a.level == level);
-				val.GetComponent<NetaChipAlpha>().SetData(i, level, isUsed);
-				_selectableObjects.Add(val);
+				gameObject.GetComponent<NetaChipAlpha>().SetData(i, level, isUsed);
+				_selectableObjects.Add(gameObject);
 			}
 		}
 		List<GameObject> list = new List<GameObject>(_selectableObjects.Count);
 		int num2 = 2;
-		int num3 = Mathf.CeilToInt((float)(_selectableObjects.Count / num2));
+		int num3 = Mathf.CeilToInt(_selectableObjects.Count / num2);
 		for (int num4 = 0; num4 < num3; num4++)
 		{
 			for (int num5 = 0; num5 < num2; num5++)
@@ -184,17 +184,17 @@ public class NetachipChooser : MonoBehaviour
 	private void ShowKaimaku()
 	{
 		status = ChoosingStatus.go;
-		((Component)ChipChoosingParent).gameObject.SetActive(false);
-		KaimakuParent.SetActive(true);
+		ChipChoosingParent.gameObject.SetActive(value: false);
+		KaimakuParent.SetActive(value: true);
 		_selectableObjects.Clear();
-		_selectableObjects.Add(((Component)backButton).gameObject);
-		_selectableObjects.Add(((Component)StartButton).gameObject);
+		_selectableObjects.Add(backButton.gameObject);
+		_selectableObjects.Add(StartButton.gameObject);
 		string text = NgoEx.SystemTextFromType(SystemTextType.haisin_start_button, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		StartButtonText.text = text;
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(StartButton), (Action<Unit>)delegate
+		StartButton.OnClickAsObservable().Subscribe(delegate
 		{
 			StartHaisin(ChoosedAlphaType, level, ChoosedBetaType);
-		}), (Component)(object)StartButton);
+		}).AddTo(StartButton);
 	}
 
 	private void ShowPager(int page)
@@ -218,15 +218,16 @@ public class NetachipChooser : MonoBehaviour
 		{
 			if (i == page)
 			{
-				Object.Instantiate<GameObject>(PageNowPrefab, PagingParent);
+				UnityEngine.Object.Instantiate(PageNowPrefab, PagingParent);
 				continue;
 			}
-			GameObject val = Object.Instantiate<GameObject>(PagePrefab, PagingParent);
+			GameObject gameObject = UnityEngine.Object.Instantiate(PagePrefab, PagingParent);
 			int index = i;
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(val.GetComponent<Button>()), (Action<Unit>)delegate
+			gameObject.GetComponent<Button>().OnClickAsObservable().Subscribe(delegate
 			{
 				PageTo(index);
-			}), val);
+			})
+				.AddTo(gameObject);
 		}
 	}
 
@@ -234,7 +235,7 @@ public class NetachipChooser : MonoBehaviour
 	{
 		for (int num = PagingParent.childCount - 1; num >= 0; num--)
 		{
-			Object.Destroy((Object)(object)((Component)PagingParent.GetChild(num)).gameObject);
+			UnityEngine.Object.Destroy(PagingParent.GetChild(num).gameObject);
 		}
 	}
 
@@ -250,9 +251,9 @@ public class NetachipChooser : MonoBehaviour
 	{
 		ChoosedAlphaType = alpha;
 		this.level = level;
-		AlphaButton.gameObject.SetActive(true);
+		AlphaButton.gameObject.SetActive(value: true);
 		AlphaButton.gameObject.GetComponent<NetaChipAlpha>().ShowType(alpha, level, isDiscovered: true);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(backButton), (Action<Unit>)delegate
+		backButton.OnClickAsObservable().Subscribe(delegate
 		{
 			if (SingletonMonoBehaviour<EventManager>.Instance.isTestScene)
 			{
@@ -262,7 +263,7 @@ public class NetachipChooser : MonoBehaviour
 			{
 				ShowAlphaChip((int)alpha / MAXCHIPSHOWING);
 			}
-		}), AlphaButton);
+		}).AddTo(AlphaButton);
 		ChooseNext();
 	}
 

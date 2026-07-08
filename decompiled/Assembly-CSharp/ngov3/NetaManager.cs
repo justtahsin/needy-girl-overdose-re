@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UniRx;
 using UnityEngine;
@@ -9,13 +8,19 @@ namespace ngov3;
 
 public class NetaManager : SingletonMonoBehaviour<NetaManager>
 {
-	private readonly ReactiveCollection<AlphaLevel> _gotAlpha;
+	private readonly ReactiveCollection<AlphaLevel> _gotAlpha = new ReactiveCollection<AlphaLevel>
+	{
+		new AlphaLevel(AlphaType.Zatudan, 1)
+	};
 
-	public List<AlphaLevel> GotAlpha;
+	public List<AlphaLevel> GotAlpha = new List<AlphaLevel>
+	{
+		new AlphaLevel(AlphaType.Zatudan, 1)
+	};
 
-	private readonly ReactiveCollection<AlphaLevel> _usedAlpha;
+	private readonly ReactiveCollection<AlphaLevel> _usedAlpha = new ReactiveCollection<AlphaLevel>();
 
-	public List<AlphaLevel> usedAlpha;
+	public List<AlphaLevel> usedAlpha = new List<AlphaLevel>();
 
 	private ChipGetCover _chipGet;
 
@@ -31,14 +36,14 @@ public class NetaManager : SingletonMonoBehaviour<NetaManager>
 	{
 		base.Awake();
 		_chipGet = GameObject.Find("ChipGetCover").GetComponent<ChipGetCover>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<CollectionAddEvent<AlphaLevel>>(OnAddAlpha, (Action<CollectionAddEvent<AlphaLevel>>)delegate(CollectionAddEvent<AlphaLevel> value)
+		OnAddAlpha.Subscribe(delegate(CollectionAddEvent<AlphaLevel> value)
 		{
 			GotAlpha.Add(value.Value);
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<CollectionAddEvent<AlphaLevel>>(OnUseAlpha, (Action<CollectionAddEvent<AlphaLevel>>)delegate(CollectionAddEvent<AlphaLevel> value)
+		}).AddTo(this);
+		OnUseAlpha.Subscribe(delegate(CollectionAddEvent<AlphaLevel> value)
 		{
 			usedAlpha.Add(value.Value);
-		}), (Component)(object)this);
+		}).AddTo(this);
 	}
 
 	public void ShowingGettingChip(AlphaType gotChip, int level)
@@ -62,12 +67,12 @@ public class NetaManager : SingletonMonoBehaviour<NetaManager>
 
 	public void GetChip(AlphaType gotChip, int level)
 	{
-		((Collection<AlphaLevel>)(object)_gotAlpha).Add(new AlphaLevel(gotChip, level));
+		_gotAlpha.Add(new AlphaLevel(gotChip, level));
 	}
 
 	public void Haishined(AlphaType alpha, int level)
 	{
-		((Collection<AlphaLevel>)(object)_usedAlpha).Add(new AlphaLevel(alpha, level));
+		_usedAlpha.Add(new AlphaLevel(alpha, level));
 	}
 
 	public List<Tuple<ActionType, AlphaLevel>> fetchNextActionHint()
@@ -100,19 +105,5 @@ public class NetaManager : SingletonMonoBehaviour<NetaManager>
 			}
 		}
 		return list;
-	}
-
-	public NetaManager()
-	{
-		ReactiveCollection<AlphaLevel> obj = new ReactiveCollection<AlphaLevel>();
-		((Collection<AlphaLevel>)(object)obj).Add(new AlphaLevel(AlphaType.Zatudan, 1));
-		_gotAlpha = obj;
-		GotAlpha = new List<AlphaLevel>
-		{
-			new AlphaLevel(AlphaType.Zatudan, 1)
-		};
-		_usedAlpha = new ReactiveCollection<AlphaLevel>();
-		usedAlpha = new List<AlphaLevel>();
-		base._002Ector();
 	}
 }

@@ -33,14 +33,14 @@ public class LanguageFontChangerLegacy : MonoBehaviour
 
 	private void Start()
 	{
-		_targetText = ((Component)this).GetComponent<Text>();
+		_targetText = GetComponent<Text>();
 		_defaultFont = _targetText.font;
 		_defaultFontSize = _targetText.fontSize;
 		ChangeFont(SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate(LanguageType t)
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate(LanguageType t)
 		{
 			ChangeFont(t);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void ChangeFont(LanguageType languageType)

@@ -51,15 +51,15 @@ public class LanguageFontChanger : MonoBehaviour
 
 	private void Start()
 	{
-		_targetText = ((Component)this).GetComponent<TMP_Text>();
+		_targetText = GetComponent<TMP_Text>();
 		_defaultFont = _targetText.font;
 		_defaultFontSize = _targetText.fontSize;
 		_defaultFontSpace = _targetText.characterSpacing;
 		ChangeFont(SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate(LanguageType t)
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate(LanguageType t)
 		{
 			ChangeFont(t);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void ChangeFont(LanguageType languageType)
@@ -70,10 +70,10 @@ public class LanguageFontChanger : MonoBehaviour
 			{
 				continue;
 			}
-			if ((Object)(object)fontData._languageFont != (Object)null)
+			if (fontData._languageFont != null)
 			{
 				_targetText.font = fontData._languageFont;
-				if ((Object)(object)tMPStencil != (Object)null)
+				if (tMPStencil != null)
 				{
 					tMPStencil.SetStencil();
 				}
@@ -85,7 +85,7 @@ public class LanguageFontChanger : MonoBehaviour
 		_targetText.font = _defaultFont;
 		_targetText.fontSize = _defaultFontSize;
 		_targetText.characterSpacing = _defaultFontSpace;
-		if ((Object)(object)tMPStencil != (Object)null)
+		if (tMPStencil != null)
 		{
 			tMPStencil.SetStencil();
 		}

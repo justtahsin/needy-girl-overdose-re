@@ -17,7 +17,7 @@ public class ChachedWindowParent : MonoBehaviour, IChachedWindowParent
 	{
 		if (chachedWindowObjects.Where((ChachedWindowObject w) => !w.IsOpend).Count() == 0)
 		{
-			Debug.Log((object)"PopできるWindowがありません");
+			Debug.Log("PopできるWindowがありません");
 			return null;
 		}
 		return chachedWindowObjects.FirstOrDefault((ChachedWindowObject w) => !w.IsOpend);

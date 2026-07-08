@@ -11,7 +11,7 @@ public class ThemeSettings : ScriptableObject
 	private abstract class SelectableSettings_Base
 	{
 		[SerializeField]
-		protected Transition _transition;
+		protected Selectable.Transition _transition;
 
 		[SerializeField]
 		protected CustomColorBlock _colors;
@@ -22,7 +22,7 @@ public class ThemeSettings : ScriptableObject
 		[SerializeField]
 		protected CustomAnimationTriggers _animationTriggers;
 
-		public Transition transition => _transition;
+		public Selectable.Transition transition => _transition;
 
 		public CustomColorBlock selectableColors => _colors;
 
@@ -32,27 +32,13 @@ public class ThemeSettings : ScriptableObject
 
 		public virtual void Apply(Selectable item)
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0023: Invalid comparison between Unknown and I4
-			//IL_007a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_007c: Invalid comparison between Unknown and I4
-			//IL_003a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00aa: Invalid comparison between Unknown and I4
-			//IL_0085: Unknown result type (might be due to invalid IL or missing references)
-			//IL_006b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0126: Unknown result type (might be due to invalid IL or missing references)
-			Transition val = _transition;
-			bool num = item.transition != val;
-			item.transition = val;
+			Selectable.Transition transition = _transition;
+			bool num = item.transition != transition;
+			item.transition = transition;
 			ICustomSelectable customSelectable = item as ICustomSelectable;
-			if ((int)val == 1)
+			switch (transition)
+			{
+			case Selectable.Transition.ColorTint:
 			{
 				CustomColorBlock colors = _colors;
 				colors.fadeDuration = 0f;
@@ -63,17 +49,16 @@ public class ThemeSettings : ScriptableObject
 				{
 					customSelectable.disabledHighlightedColor = colors.disabledHighlightedColor;
 				}
+				break;
 			}
-			else if ((int)val == 2)
-			{
+			case Selectable.Transition.SpriteSwap:
 				item.spriteState = _spriteState;
 				if (customSelectable != null)
 				{
 					customSelectable.disabledHighlightedSprite = _spriteState.disabledHighlightedSprite;
 				}
-			}
-			else if ((int)val == 3)
-			{
+				break;
+			case Selectable.Transition.Animation:
 				item.animationTriggers.disabledTrigger = _animationTriggers.disabledTrigger;
 				item.animationTriggers.highlightedTrigger = _animationTriggers.highlightedTrigger;
 				item.animationTriggers.normalTrigger = _animationTriggers.normalTrigger;
@@ -82,10 +67,11 @@ public class ThemeSettings : ScriptableObject
 				{
 					customSelectable.disabledHighlightedTrigger = _animationTriggers.disabledHighlightedTrigger;
 				}
+				break;
 			}
 			if (num)
 			{
-				item.targetGraphic.CrossFadeColor(item.targetGraphic.color, 0f, true, true);
+				item.targetGraphic.CrossFadeColor(item.targetGraphic.color, 0f, ignoreTimeScale: true, useAlpha: true);
 			}
 		}
 	}
@@ -100,14 +86,12 @@ public class ThemeSettings : ScriptableObject
 
 		public override void Apply(Selectable item)
 		{
-			if (!((Object)(object)item == (Object)null))
+			if (!(item == null))
 			{
 				base.Apply(item);
 				if (_imageSettings != null)
 				{
-					ImageSettings obj = _imageSettings;
-					Graphic targetGraphic = item.targetGraphic;
-					obj.CopyTo((Image)(object)((targetGraphic is Image) ? targetGraphic : null));
+					_imageSettings.CopyTo(item.targetGraphic as Image);
 				}
 			}
 		}
@@ -133,30 +117,28 @@ public class ThemeSettings : ScriptableObject
 
 		private void Apply(Slider item)
 		{
-			if ((Object)(object)item == (Object)null)
+			if (item == null)
 			{
 				return;
 			}
 			if (_handleImageSettings != null)
 			{
-				ImageSettings imageSettings = _handleImageSettings;
-				Graphic targetGraphic = ((Selectable)item).targetGraphic;
-				imageSettings.CopyTo((Image)(object)((targetGraphic is Image) ? targetGraphic : null));
+				_handleImageSettings.CopyTo(item.targetGraphic as Image);
 			}
 			if (_fillImageSettings != null)
 			{
 				RectTransform fillRect = item.fillRect;
-				if ((Object)(object)fillRect != (Object)null)
+				if (fillRect != null)
 				{
-					_fillImageSettings.CopyTo(((Component)fillRect).GetComponent<Image>());
+					_fillImageSettings.CopyTo(fillRect.GetComponent<Image>());
 				}
 			}
 			if (_backgroundImageSettings != null)
 			{
-				Transform val = ((Component)item).transform.Find("Background");
-				if ((Object)(object)val != (Object)null)
+				Transform transform = item.transform.Find("Background");
+				if (transform != null)
 				{
-					_backgroundImageSettings.CopyTo(((Component)val).GetComponent<Image>());
+					_backgroundImageSettings.CopyTo(transform.GetComponent<Image>());
 				}
 			}
 		}
@@ -164,7 +146,7 @@ public class ThemeSettings : ScriptableObject
 		public override void Apply(Selectable item)
 		{
 			base.Apply(item);
-			Apply((Slider)(object)((item is Slider) ? item : null));
+			Apply(item as Slider);
 		}
 	}
 
@@ -183,17 +165,15 @@ public class ThemeSettings : ScriptableObject
 
 		private void Apply(Scrollbar item)
 		{
-			if (!((Object)(object)item == (Object)null))
+			if (!(item == null))
 			{
 				if (_handleImageSettings != null)
 				{
-					ImageSettings handleImageSettings = _handleImageSettings;
-					Graphic targetGraphic = ((Selectable)item).targetGraphic;
-					handleImageSettings.CopyTo((Image)(object)((targetGraphic is Image) ? targetGraphic : null));
+					_handleImageSettings.CopyTo(item.targetGraphic as Image);
 				}
 				if (_backgroundImageSettings != null)
 				{
-					_backgroundImageSettings.CopyTo(((Component)item).GetComponent<Image>());
+					_backgroundImageSettings.CopyTo(item.GetComponent<Image>());
 				}
 			}
 		}
@@ -201,7 +181,7 @@ public class ThemeSettings : ScriptableObject
 		public override void Apply(Selectable item)
 		{
 			base.Apply(item);
-			Apply((Scrollbar)(object)((item is Scrollbar) ? item : null));
+			Apply(item as Scrollbar);
 		}
 	}
 
@@ -218,7 +198,7 @@ public class ThemeSettings : ScriptableObject
 		private Material _materal;
 
 		[SerializeField]
-		private Type _type;
+		private Image.Type _type;
 
 		[SerializeField]
 		private bool _preserveAspect;
@@ -227,7 +207,7 @@ public class ThemeSettings : ScriptableObject
 		private bool _fillCenter;
 
 		[SerializeField]
-		private FillMethod _fillMethod;
+		private Image.FillMethod _fillMethod;
 
 		[SerializeField]
 		private float _fillAmout;
@@ -244,13 +224,13 @@ public class ThemeSettings : ScriptableObject
 
 		public Material materal => _materal;
 
-		public Type type => _type;
+		public Image.Type type => _type;
 
 		public bool preserveAspect => _preserveAspect;
 
 		public bool fillCenter => _fillCenter;
 
-		public FillMethod fillMethod => _fillMethod;
+		public Image.FillMethod fillMethod => _fillMethod;
 
 		public float fillAmout => _fillAmout;
 
@@ -260,14 +240,11 @@ public class ThemeSettings : ScriptableObject
 
 		public virtual void CopyTo(Image image)
 		{
-			//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0030: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0054: Unknown result type (might be due to invalid IL or missing references)
-			if (!((Object)(object)image == (Object)null))
+			if (!(image == null))
 			{
-				((Graphic)image).color = _color;
+				image.color = _color;
 				image.sprite = _sprite;
-				((Graphic)image).material = _materal;
+				image.material = _materal;
 				image.type = _type;
 				image.preserveAspect = _preserveAspect;
 				image.fillCenter = _fillCenter;
@@ -322,13 +299,10 @@ public class ThemeSettings : ScriptableObject
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 				return m_DisabledColor;
 			}
 			set
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 				m_DisabledColor = value;
 			}
 		}
@@ -349,13 +323,10 @@ public class ThemeSettings : ScriptableObject
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 				return m_HighlightedColor;
 			}
 			set
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 				m_HighlightedColor = value;
 			}
 		}
@@ -364,13 +335,10 @@ public class ThemeSettings : ScriptableObject
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 				return m_NormalColor;
 			}
 			set
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 				m_NormalColor = value;
 			}
 		}
@@ -379,13 +347,10 @@ public class ThemeSettings : ScriptableObject
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 				return m_PressedColor;
 			}
 			set
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 				m_PressedColor = value;
 			}
 		}
@@ -394,13 +359,10 @@ public class ThemeSettings : ScriptableObject
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 				return m_SelectedColor;
 			}
 			set
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 				m_SelectedColor = value;
 			}
 		}
@@ -409,35 +371,26 @@ public class ThemeSettings : ScriptableObject
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 				return m_DisabledHighlightedColor;
 			}
 			set
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 				m_DisabledHighlightedColor = value;
 			}
 		}
 
 		public static implicit operator ColorBlock(CustomColorBlock item)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0063: Unknown result type (might be due to invalid IL or missing references)
-			ColorBlock result = default(ColorBlock);
-			((ColorBlock)(ref result)).selectedColor = item.m_SelectedColor;
-			((ColorBlock)(ref result)).colorMultiplier = item.m_ColorMultiplier;
-			((ColorBlock)(ref result)).disabledColor = item.m_DisabledColor;
-			((ColorBlock)(ref result)).fadeDuration = item.m_FadeDuration;
-			((ColorBlock)(ref result)).highlightedColor = item.m_HighlightedColor;
-			((ColorBlock)(ref result)).normalColor = item.m_NormalColor;
-			((ColorBlock)(ref result)).pressedColor = item.m_PressedColor;
-			return result;
+			return new ColorBlock
+			{
+				selectedColor = item.m_SelectedColor,
+				colorMultiplier = item.m_ColorMultiplier,
+				disabledColor = item.m_DisabledColor,
+				fadeDuration = item.m_FadeDuration,
+				highlightedColor = item.m_HighlightedColor,
+				normalColor = item.m_NormalColor,
+				pressedColor = item.m_PressedColor
+			};
 		}
 	}
 
@@ -521,14 +474,13 @@ public class ThemeSettings : ScriptableObject
 
 		public static implicit operator SpriteState(CustomSpriteState item)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003c: Unknown result type (might be due to invalid IL or missing references)
-			SpriteState result = default(SpriteState);
-			((SpriteState)(ref result)).selectedSprite = item.m_SelectedSprite;
-			((SpriteState)(ref result)).disabledSprite = item.m_DisabledSprite;
-			((SpriteState)(ref result)).highlightedSprite = item.m_HighlightedSprite;
-			((SpriteState)(ref result)).pressedSprite = item.m_PressedSprite;
-			return result;
+			return new SpriteState
+			{
+				selectedSprite = item.m_SelectedSprite,
+				disabledSprite = item.m_DisabledSprite,
+				highlightedSprite = item.m_HighlightedSprite,
+				pressedSprite = item.m_PressedSprite
+			};
 		}
 	}
 
@@ -637,13 +589,6 @@ public class ThemeSettings : ScriptableObject
 
 		public static implicit operator AnimationTriggers(CustomAnimationTriggers item)
 		{
-			//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0005: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0035: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0042: Expected O, but got Unknown
 			return new AnimationTriggers
 			{
 				selectedTrigger = item.m_SelectedTrigger,
@@ -767,42 +712,36 @@ public class ThemeSettings : ScriptableObject
 
 	private void Apply(string themeClass, Component component)
 	{
-		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001b: Expected O, but got Unknown
-		//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Expected O, but got Unknown
-		//IL_0049: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0053: Expected O, but got Unknown
-		if ((Object)(object)((component is Selectable) ? component : null) != (Object)null)
+		if (component as Selectable != null)
 		{
 			Apply(themeClass, (Selectable)component);
 		}
-		else if ((Object)(object)((component is Image) ? component : null) != (Object)null)
+		else if (component as Image != null)
 		{
 			Apply(themeClass, (Image)component);
 		}
-		else if ((Object)(object)((component is Text) ? component : null) != (Object)null)
+		else if (component as Text != null)
 		{
 			Apply(themeClass, (Text)component);
 		}
-		else if ((Object)(object)(component as UIImageHelper) != (Object)null)
+		else if (component as UIImageHelper != null)
 		{
-			Apply(themeClass, (UIImageHelper)(object)component);
+			Apply(themeClass, (UIImageHelper)component);
 		}
 	}
 
 	private void Apply(string themeClass, Selectable item)
 	{
-		if (!((Object)(object)item == (Object)null))
+		if (!(item == null))
 		{
-			SelectableSettings_Base selectableSettings_Base = (((Object)(object)((item is Button) ? item : null) != (Object)null) ? ((!(themeClass == "inputGridField")) ? _buttonSettings : _inputGridFieldSettings) : (((Object)(object)((item is Scrollbar) ? item : null) != (Object)null) ? _scrollbarSettings : (((Object)(object)((item is Slider) ? item : null) != (Object)null) ? ((SelectableSettings_Base)_sliderSettings) : ((SelectableSettings_Base)((!((Object)(object)((item is Toggle) ? item : null) != (Object)null)) ? _selectableSettings : ((!(themeClass == "button")) ? _selectableSettings : _buttonSettings))))));
+			SelectableSettings_Base selectableSettings_Base = ((item as Button != null) ? ((!(themeClass == "inputGridField")) ? _buttonSettings : _inputGridFieldSettings) : ((item as Scrollbar != null) ? _scrollbarSettings : ((item as Slider != null) ? ((SelectableSettings_Base)_sliderSettings) : ((SelectableSettings_Base)((!(item as Toggle != null)) ? _selectableSettings : ((!(themeClass == "button")) ? _selectableSettings : _buttonSettings))))));
 			selectableSettings_Base.Apply(item);
 		}
 	}
 
 	private void Apply(string themeClass, Image item)
 	{
-		if ((Object)(object)item == (Object)null)
+		if (item == null)
 		{
 			return;
 		}
@@ -885,16 +824,14 @@ public class ThemeSettings : ScriptableObject
 
 	private void Apply(string themeClass, Text item)
 	{
-		//IL_005b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00cc: Unknown result type (might be due to invalid IL or missing references)
-		if (!((Object)(object)item == (Object)null))
+		if (!(item == null))
 		{
 			TextSettings textSettings = ((themeClass == "button") ? _buttonTextSettings : ((!(themeClass == "inputGridField")) ? _textSettings : _inputGridFieldTextSettings));
-			if ((Object)(object)textSettings.font != (Object)null)
+			if (textSettings.font != null)
 			{
 				item.font = textSettings.font;
 			}
-			((Graphic)item).color = textSettings.color;
+			item.color = textSettings.color;
 			item.lineSpacing = textSettings.lineSpacing;
 			if (textSettings.sizeMultiplier != 1f)
 			{
@@ -911,9 +848,7 @@ public class ThemeSettings : ScriptableObject
 
 	private void Apply(string themeClass, UIImageHelper item)
 	{
-		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		if (!((Object)(object)item == (Object)null))
+		if (!(item == null))
 		{
 			item.SetEnabledStateColor(_invertToggle.color);
 			item.SetDisabledStateColor(_invertToggleDisabledColor);

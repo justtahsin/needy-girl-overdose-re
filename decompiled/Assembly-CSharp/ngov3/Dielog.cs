@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NGO;
 using TMPro;
@@ -19,27 +18,23 @@ public class Dielog : MonoBehaviour
 	[SerializeField]
 	private Button _dismissButton;
 
-	public List<GameObject> SelectableObejcts => new List<GameObject>
-	{
-		((Component)_submitButton).gameObject,
-		((Component)_dismissButton).gameObject
-	};
+	public List<GameObject> SelectableObejcts => new List<GameObject> { _submitButton.gameObject, _dismissButton.gameObject };
 
 	public void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageChanged();
-		}), (Component)(object)this);
+		}).AddTo(this);
 		OnLanguageChanged();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_submitButton), (Action<Unit>)delegate
+		_submitButton.OnClickAsObservable().Subscribe(delegate
 		{
 			OnSubmit();
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_dismissButton), (Action<Unit>)delegate
+		}).AddTo(this);
+		_dismissButton.OnClickAsObservable().Subscribe(delegate
 		{
 			OnSubmit();
-		}), (Component)(object)this);
+		}).AddTo(this);
 	}
 
 	private void OnSubmit()
@@ -50,7 +45,7 @@ public class Dielog : MonoBehaviour
 	private void OnLanguageChanged()
 	{
 		_notionText.text = NgoEx.TenTalk("Ending_KowaiInternet_Day3_Title", SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		((Component)_submitButton).GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		((Component)_dismissButton).GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		_submitButton.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		_dismissButton.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 	}
 }

@@ -14,26 +14,26 @@ public class Window2DStorage : MonoBehaviour
 	{
 		foreach (Window2D preparedWindowInstance in _preparedWindowInstances)
 		{
-			_preparedWindowDic.Add(((Object)preparedWindowInstance.nakamiApp).name, preparedWindowInstance);
+			_preparedWindowDic.Add(preparedWindowInstance.nakamiApp.name, preparedWindowInstance);
 		}
 	}
 
 	public bool IsTargetWindow(IWindow window)
 	{
-		if ((Object)(object)window.nakamiApp == (Object)null)
+		if (window.nakamiApp == null)
 		{
 			return false;
 		}
-		return _preparedWindowDic.ContainsKey(((Object)window.nakamiApp).name);
+		return _preparedWindowDic.ContainsKey(window.nakamiApp.name);
 	}
 
 	public bool IsTargetWindow(AppTypeToData data)
 	{
-		if ((Object)(object)data.InnerContent == (Object)null)
+		if (data.InnerContent == null)
 		{
 			return false;
 		}
-		return _preparedWindowDic.ContainsKey(((Object)data.InnerContent).name);
+		return _preparedWindowDic.ContainsKey(data.InnerContent.name);
 	}
 
 	public IWindow PickWindowFromStorage(string nakamiAppName)
@@ -50,9 +50,6 @@ public class Window2DStorage : MonoBehaviour
 
 	public void StoreWindowInStorage(IWindow window)
 	{
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
 		Transform gameObjectTransform = window.GameObjectTransform;
 		gameObjectTransform.localPosition = new Vector3(-3000f, 0f, 0f);
 		if (gameObjectTransform.localScale.x < 1f)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using NGO;
@@ -65,11 +64,11 @@ public class GraphManager : MonoBehaviour
 	private void Awake()
 	{
 		Initialize();
-		tweener = TweenSettingsExtensions.SetRecyclable<Tweener>(TweenSettingsExtensions.SetLoops<Tweener>(ShortcutExtensions.DOShakePosition(((Component)value).gameObject.transform, 0.2f, 5f, 10, 90f, true, true), -1), true);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		tweener = value.gameObject.transform.DOShakePosition(0.2f, 5f, 10, 90f, snapping: true).SetLoops(-1).SetRecyclable(recyclable: true);
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			label.text = NgoEx.StatusLabelFromType(type, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	public void SetType(StatusType type)
@@ -95,7 +94,6 @@ public class GraphManager : MonoBehaviour
 
 	private void UpdateGraph()
 	{
-		//IL_0079: Unknown result type (might be due to invalid IL or missing references)
 		if (type != StatusType.Follower)
 		{
 			history.Add((float)status.currentValue.Value / (float)status.maxValue.Value);
@@ -105,7 +103,7 @@ public class GraphManager : MonoBehaviour
 			}
 			for (int i = 0; i < 30; i++)
 			{
-				((Transform)graphBars[i]).localScale = new Vector3(1f, history[i], 1f);
+				graphBars[i].localScale = new Vector3(1f, history[i], 1f);
 			}
 		}
 	}
@@ -117,18 +115,18 @@ public class GraphManager : MonoBehaviour
 		icon.sprite = LoadStatusData.ReadstatusContent(type).StatusIcon;
 		balloonTr = balloon.transform;
 		NewValue(status.currentValue.Value, 0);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe(Observable.Zip((IObservable<int>)status.currentValue, Observable.Skip<int>((IObservable<int>)status.currentValue, 1), (int x, int y) => new
+		status.currentValue.Zip(status.currentValue.Skip(1), (int x, int y) => new
 		{
 			OldValue = x,
 			NewValue = y
-		}), t =>
+		}).Subscribe(t =>
 		{
 			NewValue(t.NewValue, t.OldValue);
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)status.maxValue, (Action<int>)delegate(int x)
+		}).AddTo(base.gameObject);
+		status.maxValue.Subscribe(delegate(int x)
 		{
 			NewMaxValue(x);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 		for (int num = 0; num <= 30; num++)
 		{
 			history.Add(0f);
@@ -137,48 +135,48 @@ public class GraphManager : MonoBehaviour
 
 	private void NewValue(int newValue, int oldValue)
 	{
-		//IL_005e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0068: Expected O, but got Unknown
-		//IL_00d5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00df: Expected O, but got Unknown
-		//IL_0110: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011a: Expected O, but got Unknown
-		//IL_018f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01c0: Unknown result type (might be due to invalid IL or missing references)
 		if (!updateWithTween)
 		{
 			NewValueDirectly(newValue, oldValue);
 			return;
 		}
 		int num = newValue - oldValue;
-		string text = ((num > 0) ? $"+{num}" : num.ToString());
-		balloonTweenSequence = TweenExtensions.Play<Sequence>(TweenSettingsExtensions.OnComplete<Sequence>(TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendInterval(TweenSettingsExtensions.AppendCallback(TweenSettingsExtensions.Join(TweenSettingsExtensions.AppendInterval(TweenSettingsExtensions.Append(TweenSettingsExtensions.Append(TweenSettingsExtensions.OnStart<Sequence>(DOTween.Sequence(), (TweenCallback)delegate
+		string endValue = ((num > 0) ? $"+{num}" : num.ToString());
+		balloonTweenSequence = DOTween.Sequence().OnStart(delegate
 		{
-			balloon.SetActive(true);
-			((Component)statusTopic).gameObject.SetActive(false);
-			((Component)diffText).gameObject.SetActive(true);
+			balloon.SetActive(value: true);
+			statusTopic.gameObject.SetActive(value: false);
+			diffText.gameObject.SetActive(value: true);
 			diffText.text = "";
-		}), (Tween)(object)DOTweenModuleUI.DOText(diffText, text, 0.2f, true, (ScrambleMode)4, (string)null)), (Tween)(object)DOTweenModuleUI.DOText(value, newValue.ToString(), 0.6f, true, (ScrambleMode)4, (string)null)), 1f), (Tween)(object)ShortcutExtensions.DOLocalMoveX(balloon.transform, -38f, 0.2f, true)), (TweenCallback)delegate
-		{
-			if (type != StatusType.Follower)
+		}).Append(diffText.DOText(endValue, 0.2f, richTextEnabled: true, ScrambleMode.Numerals))
+			.Append(value.DOText(newValue.ToString(), 0.6f, richTextEnabled: true, ScrambleMode.Numerals))
+			.AppendInterval(1f)
+			.Join(balloon.transform.DOLocalMoveX(-38f, 0.2f, snapping: true))
+			.AppendCallback(delegate
 			{
-				((Component)diffText).gameObject.SetActive(false);
-				statusTopic.text = getTopic(status.statusType, newValue);
-				((Component)statusTopic).gameObject.SetActive(true);
-			}
-		}), 4f), (Tween)(object)ShortcutExtensions.DOLocalMoveX(balloon.transform, -140f, 0.001f, true)), (TweenCallback)delegate
-		{
-			balloon.gameObject.SetActive(false);
-		}));
+				if (type != StatusType.Follower)
+				{
+					diffText.gameObject.SetActive(value: false);
+					statusTopic.text = getTopic(status.statusType, newValue);
+					statusTopic.gameObject.SetActive(value: true);
+				}
+			})
+			.AppendInterval(4f)
+			.Append(balloon.transform.DOLocalMoveX(-140f, 0.001f, snapping: true))
+			.OnComplete(delegate
+			{
+				balloon.gameObject.SetActive(value: false);
+			})
+			.Play();
 		if ((type == StatusType.Stress && newValue >= 80) || (type == StatusType.Yami && newValue == 0) || (type == StatusType.Love && newValue == 0) || (type == StatusType.Love && newValue == SingletonMonoBehaviour<StatusManager>.Instance.GetMaxStatus(StatusType.Love)))
 		{
-			((Graphic)value).color = new Color(77f / 85f, 0.32156864f, 0.32156864f, 1f);
-			TweenExtensions.Play<Tweener>(tweener);
+			value.color = new Color(77f / 85f, 0.32156864f, 0.32156864f, 1f);
+			tweener.Play();
 		}
 		else
 		{
-			((Graphic)value).color = new Color(0.3019608f, 7f / 51f, 69f / 85f, 1f);
-			TweenExtensions.Pause<Tweener>(tweener);
+			value.color = new Color(0.3019608f, 7f / 51f, 69f / 85f, 1f);
+			tweener.Pause();
 		}
 	}
 
@@ -199,10 +197,10 @@ public class GraphManager : MonoBehaviour
 	{
 		if (newValue == 0)
 		{
-			((Component)icon).gameObject.SetActive(true);
+			icon.gameObject.SetActive(value: true);
 			return;
 		}
-		((Component)icon).gameObject.SetActive(false);
+		icon.gameObject.SetActive(value: false);
 		_ = 0;
 	}
 
@@ -282,8 +280,8 @@ public class GraphManager : MonoBehaviour
 
 	public void SetTooltip(bool onoff)
 	{
-		TooltipCaller component = ((Component)this).GetComponent<TooltipCaller>();
-		if ((Object)(object)component != (Object)null)
+		TooltipCaller component = GetComponent<TooltipCaller>();
+		if (component != null)
 		{
 			component.isShowTooltip = onoff;
 		}
@@ -292,21 +290,18 @@ public class GraphManager : MonoBehaviour
 	public void OnReadyToOutOfOrder()
 	{
 		updateWithTween = false;
-		balloon.SetActive(false);
-		TweenExtensions.Kill((Tween)(object)balloonTweenSequence, true);
-		((Behaviour)graphBg.GetComponent<HorizontalLayoutGroup>()).enabled = false;
+		balloon.SetActive(value: false);
+		balloonTweenSequence.Kill(complete: true);
+		graphBg.GetComponent<HorizontalLayoutGroup>().enabled = false;
 	}
 
 	public void OnGoOutOfOrder()
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
 		Vector3 localPosition = balloonTr.localPosition;
 		localPosition.x = -38f;
 		balloonTr.localPosition = localPosition;
-		((Component)statusTopic).gameObject.SetActive(false);
-		balloon.SetActive(true);
-		((Component)diffText).gameObject.SetActive(true);
+		statusTopic.gameObject.SetActive(value: false);
+		balloon.SetActive(value: true);
+		diffText.gameObject.SetActive(value: true);
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using NGO;
 using TMPro;
 using UniRx;
@@ -17,7 +16,7 @@ public class EndingDialog : MonoBehaviour
 	[SerializeField]
 	private Button _submitButton;
 
-	public GameObject SubmitButtonObject => ((Component)_submitButton).gameObject;
+	public GameObject SubmitButtonObject => _submitButton.gameObject;
 
 	public void Awake()
 	{
@@ -26,21 +25,20 @@ public class EndingDialog : MonoBehaviour
 
 	public void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageChanged();
-		}), (Component)(object)this);
+		}).AddTo(this);
 		OnLanguageChanged();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_submitButton), (Action<Unit>)delegate
+		_submitButton.OnClickAsObservable().Subscribe(delegate
 		{
 			OnSubmit();
-		}), (Component)(object)this);
+		}).AddTo(this);
 		SingletonMonoBehaviour<ShortcutInputManager>.Instance.ChangeControllerMode(ShortcutInputManager.ControllerMode.Desktop);
 	}
 
 	private void OnSubmit()
 	{
-		//IL_0005: Unknown result type (might be due to invalid IL or missing references)
 		SingletonMonoBehaviour<EventManager>.Instance.CallEnding();
 	}
 
@@ -49,6 +47,6 @@ public class EndingDialog : MonoBehaviour
 		_notionText.text = NgoEx.ReasonTextFromEDType(end, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		string text = ((SingletonMonoBehaviour<EventManager>.Instance.nowEnding != EndingType.Ending_Ideon) ? NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value) : NgoEx.SystemTextFromType(SystemTextType.System_Thankyou, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value));
 		text = text.Replace("\r", "").Replace("\n", "");
-		((Component)_submitButton).GetComponentInChildren<TMP_Text>().text = text;
+		_submitButton.GetComponentInChildren<TMP_Text>().text = text;
 	}
 }

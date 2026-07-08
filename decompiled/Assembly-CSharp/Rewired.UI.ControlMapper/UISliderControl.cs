@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Rewired.UI.ControlMapper;
@@ -26,9 +25,9 @@ public class UISliderControl : UIControl
 		}
 		set
 		{
-			if (!((Object)(object)iconImage == (Object)null))
+			if (!(iconImage == null))
 			{
-				((Component)iconImage).gameObject.SetActive(value);
+				iconImage.gameObject.SetActive(value);
 				_showIcon = value;
 			}
 		}
@@ -42,9 +41,9 @@ public class UISliderControl : UIControl
 		}
 		set
 		{
-			if (!((Object)(object)slider == (Object)null))
+			if (!(slider == null))
 			{
-				((Component)slider).gameObject.SetActive(value);
+				slider.gameObject.SetActive(value);
 				_showSlider = value;
 			}
 		}
@@ -52,42 +51,35 @@ public class UISliderControl : UIControl
 
 	public override void SetCancelCallback(Action cancelCallback)
 	{
-		//IL_004f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0059: Expected O, but got Unknown
-		//IL_0080: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0086: Expected O, but got Unknown
-		//IL_0087: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0091: Expected O, but got Unknown
-		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
 		base.SetCancelCallback(cancelCallback);
-		if (cancelCallback == null || (Object)(object)slider == (Object)null)
+		if (cancelCallback == null || slider == null)
 		{
 			return;
 		}
 		if (slider is ICustomSelectable)
 		{
-			(slider as ICustomSelectable).CancelEvent += (UnityAction)delegate
+			(slider as ICustomSelectable).CancelEvent += delegate
 			{
 				cancelCallback();
 			};
 			return;
 		}
-		EventTrigger val = ((Component)slider).GetComponent<EventTrigger>();
-		if ((Object)(object)val == (Object)null)
+		EventTrigger eventTrigger = slider.GetComponent<EventTrigger>();
+		if (eventTrigger == null)
 		{
-			val = ((Component)slider).gameObject.AddComponent<EventTrigger>();
+			eventTrigger = slider.gameObject.AddComponent<EventTrigger>();
 		}
-		Entry val2 = new Entry();
-		val2.callback = new TriggerEvent();
-		val2.eventID = (EventTriggerType)16;
-		((UnityEvent<BaseEventData>)(object)val2.callback).AddListener((UnityAction<BaseEventData>)delegate
+		EventTrigger.Entry entry = new EventTrigger.Entry();
+		entry.callback = new EventTrigger.TriggerEvent();
+		entry.eventID = EventTriggerType.Cancel;
+		entry.callback.AddListener(delegate
 		{
 			cancelCallback();
 		});
-		if (val.triggers == null)
+		if (eventTrigger.triggers == null)
 		{
-			val.triggers = new List<Entry>();
+			eventTrigger.triggers = new List<EventTrigger.Entry>();
 		}
-		val.triggers.Add(val2);
+		eventTrigger.triggers.Add(entry);
 	}
 }

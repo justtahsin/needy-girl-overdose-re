@@ -37,7 +37,7 @@ public class LanguageData : LanguageDataBase
 				{
 					if (dictionary.ContainsKey(array[i].key))
 					{
-						Debug.LogError((object)("Key \"" + array[i].key + "\" is already in dictionary!"));
+						Debug.LogError("Key \"" + array[i].key + "\" is already in dictionary!");
 					}
 					else
 					{
@@ -457,15 +457,11 @@ public class LanguageData : LanguageDataBase
 
 	public override string GetElementIdentifierName(ActionElementMap actionElementMap)
 	{
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0041: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
 		if (actionElementMap == null)
 		{
 			throw new ArgumentNullException("actionElementMap");
 		}
-		if ((int)actionElementMap.controllerMap.controllerType == 0)
+		if (actionElementMap.controllerMap.controllerType == ControllerType.Keyboard)
 		{
 			return GetElementIdentifierName(actionElementMap.keyCode, actionElementMap.modifierKeyFlags);
 		}
@@ -474,13 +470,6 @@ public class LanguageData : LanguageDataBase
 
 	public override string GetElementIdentifierName(Controller controller, int elementIdentifierId, AxisRange axisRange)
 	{
-		//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0047: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0053: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004d: Invalid comparison between Unknown and I4
 		if (controller == null)
 		{
 			throw new ArgumentNullException("controller");
@@ -490,30 +479,22 @@ public class LanguageData : LanguageDataBase
 		{
 			throw new ArgumentException("Invalid element identifier id: " + elementIdentifierId);
 		}
-		Element elementById = controller.GetElementById(elementIdentifierId);
+		Controller.Element elementById = controller.GetElementById(elementIdentifierId);
 		if (elementById == null)
 		{
 			return string.Empty;
 		}
-		ControllerElementType type = elementById.type;
-		if ((int)type != 0)
+		return elementById.type switch
 		{
-			if ((int)type == 1)
-			{
-				return elementIdentifierById.name;
-			}
-			return elementIdentifierById.name;
-		}
-		return elementIdentifierById.GetDisplayName(elementById.type, axisRange);
+			ControllerElementType.Axis => elementIdentifierById.GetDisplayName(elementById.type, axisRange), 
+			ControllerElementType.Button => elementIdentifierById.name, 
+			_ => elementIdentifierById.name, 
+		};
 	}
 
 	public override string GetElementIdentifierName(KeyCode keyCode, ModifierKeyFlags modifierKeyFlags)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		if ((int)modifierKeyFlags != 0)
+		if (modifierKeyFlags != ModifierKeyFlags.None)
 		{
 			return $"{ModifierKeyFlagsToString(modifierKeyFlags)}{_modifierKeys.separator}{Keyboard.GetKeyName(keyCode)}";
 		}
@@ -527,24 +508,22 @@ public class LanguageData : LanguageDataBase
 
 	public override string GetActionName(int actionId, AxisRange axisRange)
 	{
-		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0038: Expected I4, but got Unknown
 		InputAction action = ReInput.mapping.GetAction(actionId);
 		if (action == null)
 		{
 			throw new ArgumentException("Invalid action id: " + actionId);
 		}
-		switch ((int)axisRange)
+		switch (axisRange)
 		{
-		case 0:
+		case AxisRange.Full:
 			return action.descriptiveName;
-		case 1:
+		case AxisRange.Positive:
 			if (string.IsNullOrEmpty(action.positiveDescriptiveName))
 			{
 				return action.descriptiveName + " +";
 			}
 			return action.positiveDescriptiveName;
-		case 2:
+		case AxisRange.Negative:
 			if (string.IsNullOrEmpty(action.negativeDescriptiveName))
 			{
 				return action.descriptiveName + " -";
@@ -557,7 +536,7 @@ public class LanguageData : LanguageDataBase
 
 	public override string GetMapCategoryName(int id)
 	{
-		return ((InputCategory)(ReInput.mapping.GetMapCategory(id) ?? throw new ArgumentException("Invalid map category id: " + id))).descriptiveName;
+		return (ReInput.mapping.GetMapCategory(id) ?? throw new ArgumentException("Invalid map category id: " + id)).descriptiveName;
 	}
 
 	public override string GetActionCategoryName(int id)
@@ -565,26 +544,21 @@ public class LanguageData : LanguageDataBase
 		return (ReInput.mapping.GetActionCategory(id) ?? throw new ArgumentException("Invalid action category id: " + id)).descriptiveName;
 	}
 
-	public unsafe override string GetLayoutName(ControllerType controllerType, int id)
+	public override string GetLayoutName(ControllerType controllerType, int id)
 	{
-		//IL_0005: Unknown result type (might be due to invalid IL or missing references)
-		return (ReInput.mapping.GetLayout(controllerType, id) ?? throw new ArgumentException("Invalid " + ((object)(*(ControllerType*)(&controllerType))/*cast due to constrained. prefix*/).ToString() + " layout id: " + id)).descriptiveName;
+		return (ReInput.mapping.GetLayout(controllerType, id) ?? throw new ArgumentException("Invalid " + controllerType.ToString() + " layout id: " + id)).descriptiveName;
 	}
 
 	public override string ModifierKeyFlagsToString(ModifierKeyFlags flags)
 	{
-		//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0027: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
 		int num = 0;
 		string text = string.Empty;
-		if (Keyboard.ModifierKeyFlagsContain(flags, (ModifierKey)1))
+		if (Keyboard.ModifierKeyFlagsContain(flags, ModifierKey.Control))
 		{
 			text += _modifierKeys.control;
 			num++;
 		}
-		if (Keyboard.ModifierKeyFlagsContain(flags, (ModifierKey)4))
+		if (Keyboard.ModifierKeyFlagsContain(flags, ModifierKey.Command))
 		{
 			if (num > 0 && !string.IsNullOrEmpty(_modifierKeys.separator))
 			{
@@ -593,7 +567,7 @@ public class LanguageData : LanguageDataBase
 			text += _modifierKeys.command;
 			num++;
 		}
-		if (Keyboard.ModifierKeyFlagsContain(flags, (ModifierKey)2))
+		if (Keyboard.ModifierKeyFlagsContain(flags, ModifierKey.Alt))
 		{
 			if (num > 0 && !string.IsNullOrEmpty(_modifierKeys.separator))
 			{
@@ -606,7 +580,7 @@ public class LanguageData : LanguageDataBase
 		{
 			return text;
 		}
-		if (Keyboard.ModifierKeyFlagsContain(flags, (ModifierKey)3))
+		if (Keyboard.ModifierKeyFlagsContain(flags, ModifierKey.Shift))
 		{
 			if (num > 0 && !string.IsNullOrEmpty(_modifierKeys.separator))
 			{

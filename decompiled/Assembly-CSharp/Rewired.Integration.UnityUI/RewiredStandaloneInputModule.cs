@@ -17,7 +17,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 	{
 		public int playerId;
 
-		public List<PlayerMouse> playerMice = new List<PlayerMouse>();
+		public List<Rewired.Components.PlayerMouse> playerMice = new List<Rewired.Components.PlayerMouse>();
 
 		public PlayerSetting()
 		{
@@ -30,12 +30,12 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 				throw new ArgumentNullException("other");
 			}
 			playerId = other.playerId;
-			playerMice = new List<PlayerMouse>();
+			playerMice = new List<Rewired.Components.PlayerMouse>();
 			if (other.playerMice == null)
 			{
 				return;
 			}
-			foreach (PlayerMouse item in other.playerMice)
+			foreach (Rewired.Components.PlayerMouse item in other.playerMice)
 			{
 				playerMice.Add(item);
 			}
@@ -77,7 +77,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	[SerializeField]
 	[Tooltip("Player Mice allowed to interact with the UI. Each Player that owns a Player Mouse must also be allowed to control the UI or the Player Mouse will not function.")]
-	private List<PlayerMouse> playerMice = new List<PlayerMouse>();
+	private List<Rewired.Components.PlayerMouse> playerMice = new List<Rewired.Components.PlayerMouse>();
 
 	[Tooltip("Makes an axis press always move only one UI selection. Enable if you do not want to allow scrolling through UI elements by holding an axis direction.")]
 	[SerializeField]
@@ -243,22 +243,22 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 		}
 	}
 
-	public List<PlayerMouse> PlayerMice
+	public List<Rewired.Components.PlayerMouse> PlayerMice
 	{
 		get
 		{
-			return new List<PlayerMouse>(playerMice);
+			return new List<Rewired.Components.PlayerMouse>(playerMice);
 		}
 		set
 		{
 			if (value == null)
 			{
-				playerMice = new List<PlayerMouse>();
+				playerMice = new List<Rewired.Components.PlayerMouse>();
 				SetupRewiredVars();
 			}
 			else
 			{
-				playerMice = new List<PlayerMouse>(value);
+				playerMice = new List<Rewired.Components.PlayerMouse>(value);
 				SetupRewiredVars();
 			}
 		}
@@ -581,7 +581,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	protected override void Awake()
 	{
-		((UIBehaviour)this).Awake();
+		base.Awake();
 		isTouchSupported = base.defaultTouchInputSource.touchSupported;
 		ReInput.InitializedEvent += OnRewiredInitialized;
 		InitializeRewired();
@@ -603,14 +603,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	public override bool ShouldActivateModule()
 	{
-		//IL_013f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0144: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0149: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0152: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0158: Invalid comparison between Unknown and I4
-		//IL_015c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0162: Invalid comparison between Unknown and I4
-		if (!((BaseInputModule)this).ShouldActivateModule())
+		if (!base.ShouldActivateModule())
 		{
 			return false;
 		}
@@ -652,7 +645,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 			for (int j = 0; j < base.defaultTouchInputSource.touchCount; j++)
 			{
 				Touch touch = base.defaultTouchInputSource.GetTouch(j);
-				flag |= (int)((Touch)(ref touch)).phase == 0 || (int)((Touch)(ref touch)).phase == 1 || (int)((Touch)(ref touch)).phase == 2;
+				flag |= touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary;
 			}
 		}
 		return flag;
@@ -662,30 +655,30 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 	{
 		if (m_HasFocus || !ShouldIgnoreEventsOnNoFocus())
 		{
-			((BaseInputModule)this).ActivateModule();
-			GameObject val = ((BaseInputModule)this).eventSystem.currentSelectedGameObject;
-			if ((Object)(object)val == (Object)null)
+			base.ActivateModule();
+			GameObject gameObject = base.eventSystem.currentSelectedGameObject;
+			if (gameObject == null)
 			{
-				val = ((BaseInputModule)this).eventSystem.firstSelectedGameObject;
+				gameObject = base.eventSystem.firstSelectedGameObject;
 			}
-			((BaseInputModule)this).eventSystem.SetSelectedGameObject(val, ((BaseInputModule)this).GetBaseEventData());
+			base.eventSystem.SetSelectedGameObject(gameObject, GetBaseEventData());
 		}
 	}
 
 	public override void DeactivateModule()
 	{
-		((BaseInputModule)this).DeactivateModule();
+		base.DeactivateModule();
 		ClearSelection();
 	}
 
 	public override void Process()
 	{
-		if (!ReInput.isReady || (!m_HasFocus && ShouldIgnoreEventsOnNoFocus()) || !((Behaviour)this).enabled || !((Component)this).gameObject.activeInHierarchy)
+		if (!ReInput.isReady || (!m_HasFocus && ShouldIgnoreEventsOnNoFocus()) || !base.enabled || !base.gameObject.activeInHierarchy)
 		{
 			return;
 		}
 		bool flag = SendUpdateEventToSelectedObject();
-		if (((BaseInputModule)this).eventSystem.sendNavigationEvents)
+		if (base.eventSystem.sendNavigationEvents)
 		{
 			if (!flag)
 			{
@@ -704,11 +697,6 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	private bool ProcessTouchEvents()
 	{
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0023: Invalid comparison between Unknown and I4
-		//IL_0028: Unknown result type (might be due to invalid IL or missing references)
 		if (!isTouchAllowed)
 		{
 			return false;
@@ -716,12 +704,12 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 		for (int i = 0; i < base.defaultTouchInputSource.touchCount; i++)
 		{
 			Touch touch = base.defaultTouchInputSource.GetTouch(i);
-			if ((int)((Touch)(ref touch)).type != 1)
+			if (touch.type != TouchType.Indirect)
 			{
 				bool pressed;
 				bool released;
 				PlayerPointerEventData touchPointerEventData = GetTouchPointerEventData(0, 0, touch, out pressed, out released);
-				ProcessTouchPress((PointerEventData)(object)touchPointerEventData, pressed, released);
+				ProcessTouchPress(touchPointerEventData, pressed, released);
 				if (!released)
 				{
 					ProcessMove(touchPointerEventData);
@@ -738,13 +726,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	private void ProcessTouchPress(PointerEventData pointerEvent, bool pressed, bool released)
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-		RaycastResult pointerCurrentRaycast = pointerEvent.pointerCurrentRaycast;
-		GameObject gameObject = ((RaycastResult)(ref pointerCurrentRaycast)).gameObject;
+		GameObject gameObject = pointerEvent.pointerCurrentRaycast.gameObject;
 		if (pressed)
 		{
 			pointerEvent.eligibleForClick = true;
@@ -753,19 +735,19 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 			pointerEvent.useDragThreshold = true;
 			pointerEvent.pressPosition = pointerEvent.position;
 			pointerEvent.pointerPressRaycast = pointerEvent.pointerCurrentRaycast;
-			HandleMouseTouchDeselectionOnSelectionChanged(gameObject, (BaseEventData)(object)pointerEvent);
-			if ((Object)(object)pointerEvent.pointerEnter != (Object)(object)gameObject)
+			HandleMouseTouchDeselectionOnSelectionChanged(gameObject, pointerEvent);
+			if (pointerEvent.pointerEnter != gameObject)
 			{
-				((BaseInputModule)this).HandlePointerExitAndEnter(pointerEvent, gameObject);
+				HandlePointerExitAndEnter(pointerEvent, gameObject);
 				pointerEvent.pointerEnter = gameObject;
 			}
-			GameObject val = ExecuteEvents.ExecuteHierarchy<IPointerDownHandler>(gameObject, (BaseEventData)(object)pointerEvent, ExecuteEvents.pointerDownHandler);
-			if ((Object)(object)val == (Object)null)
+			GameObject gameObject2 = ExecuteEvents.ExecuteHierarchy(gameObject, pointerEvent, ExecuteEvents.pointerDownHandler);
+			if (gameObject2 == null)
 			{
-				val = ExecuteEvents.GetEventHandler<IPointerClickHandler>(gameObject);
+				gameObject2 = ExecuteEvents.GetEventHandler<IPointerClickHandler>(gameObject);
 			}
 			double unscaledTime = ReInput.time.unscaledTime;
-			if ((Object)(object)val == (Object)(object)pointerEvent.lastPress)
+			if (gameObject2 == pointerEvent.lastPress)
 			{
 				if (unscaledTime - (double)pointerEvent.clickTime < 0.30000001192092896)
 				{
@@ -782,49 +764,49 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 			{
 				pointerEvent.clickCount = 1;
 			}
-			pointerEvent.pointerPress = val;
+			pointerEvent.pointerPress = gameObject2;
 			pointerEvent.rawPointerPress = gameObject;
 			pointerEvent.clickTime = (float)unscaledTime;
 			pointerEvent.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(gameObject);
-			if ((Object)(object)pointerEvent.pointerDrag != (Object)null)
+			if (pointerEvent.pointerDrag != null)
 			{
-				ExecuteEvents.Execute<IInitializePotentialDragHandler>(pointerEvent.pointerDrag, (BaseEventData)(object)pointerEvent, ExecuteEvents.initializePotentialDrag);
+				ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.initializePotentialDrag);
 			}
 		}
 		if (released)
 		{
-			ExecuteEvents.Execute<IPointerUpHandler>(pointerEvent.pointerPress, (BaseEventData)(object)pointerEvent, ExecuteEvents.pointerUpHandler);
+			ExecuteEvents.Execute(pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerUpHandler);
 			GameObject eventHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(gameObject);
-			if ((Object)(object)pointerEvent.pointerPress == (Object)(object)eventHandler && pointerEvent.eligibleForClick)
+			if (pointerEvent.pointerPress == eventHandler && pointerEvent.eligibleForClick)
 			{
-				ExecuteEvents.Execute<IPointerClickHandler>(pointerEvent.pointerPress, (BaseEventData)(object)pointerEvent, ExecuteEvents.pointerClickHandler);
+				ExecuteEvents.Execute(pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerClickHandler);
 			}
-			else if ((Object)(object)pointerEvent.pointerDrag != (Object)null && pointerEvent.dragging)
+			else if (pointerEvent.pointerDrag != null && pointerEvent.dragging)
 			{
-				ExecuteEvents.ExecuteHierarchy<IDropHandler>(gameObject, (BaseEventData)(object)pointerEvent, ExecuteEvents.dropHandler);
+				ExecuteEvents.ExecuteHierarchy(gameObject, pointerEvent, ExecuteEvents.dropHandler);
 			}
 			pointerEvent.eligibleForClick = false;
 			pointerEvent.pointerPress = null;
 			pointerEvent.rawPointerPress = null;
-			if ((Object)(object)pointerEvent.pointerDrag != (Object)null && pointerEvent.dragging)
+			if (pointerEvent.pointerDrag != null && pointerEvent.dragging)
 			{
-				ExecuteEvents.Execute<IEndDragHandler>(pointerEvent.pointerDrag, (BaseEventData)(object)pointerEvent, ExecuteEvents.endDragHandler);
+				ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.endDragHandler);
 			}
 			pointerEvent.dragging = false;
 			pointerEvent.pointerDrag = null;
-			if ((Object)(object)pointerEvent.pointerDrag != (Object)null)
+			if (pointerEvent.pointerDrag != null)
 			{
-				ExecuteEvents.Execute<IEndDragHandler>(pointerEvent.pointerDrag, (BaseEventData)(object)pointerEvent, ExecuteEvents.endDragHandler);
+				ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.endDragHandler);
 			}
 			pointerEvent.pointerDrag = null;
-			ExecuteEvents.ExecuteHierarchy<IPointerExitHandler>(pointerEvent.pointerEnter, (BaseEventData)(object)pointerEvent, ExecuteEvents.pointerExitHandler);
+			ExecuteEvents.ExecuteHierarchy(pointerEvent.pointerEnter, pointerEvent, ExecuteEvents.pointerExitHandler);
 			pointerEvent.pointerEnter = null;
 		}
 	}
 
 	private bool SendSubmitEventToSelectedObject()
 	{
-		if ((Object)(object)((BaseInputModule)this).eventSystem.currentSelectedGameObject == (Object)null)
+		if (base.eventSystem.currentSelectedGameObject == null)
 		{
 			return false;
 		}
@@ -832,7 +814,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 		{
 			return false;
 		}
-		BaseEventData baseEventData = ((BaseInputModule)this).GetBaseEventData();
+		BaseEventData baseEventData = GetBaseEventData();
 		for (int i = 0; i < playerIds.Length; i++)
 		{
 			Player player = ReInput.players.GetPlayer(playerIds[i]);
@@ -840,25 +822,21 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 			{
 				if (GetButtonDown(player, submitActionId))
 				{
-					ExecuteEvents.Execute<ISubmitHandler>(((BaseInputModule)this).eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.submitHandler);
+					ExecuteEvents.Execute(base.eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.submitHandler);
 					break;
 				}
 				if (GetButtonDown(player, cancelActionId))
 				{
-					ExecuteEvents.Execute<ICancelHandler>(((BaseInputModule)this).eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.cancelHandler);
+					ExecuteEvents.Execute(base.eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.cancelHandler);
 					break;
 				}
 			}
 		}
-		return ((AbstractEventData)baseEventData).used;
+		return baseEventData.used;
 	}
 
 	private Vector2 GetRawMoveVector()
 	{
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f0: Unknown result type (might be due to invalid IL or missing references)
 		if (recompiling)
 		{
 			return Vector2.zero;
@@ -925,29 +903,6 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	private bool SendMoveEventToSelectedObject()
 	{
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0049: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0075: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0096: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0099: Invalid comparison between Unknown and I4
-		//IL_009b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009e: Invalid comparison between Unknown and I4
-		//IL_0146: Unknown result type (might be due to invalid IL or missing references)
-		//IL_014c: Invalid comparison between Unknown and I4
-		//IL_012c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0132: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ac: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00af: Invalid comparison between Unknown and I4
-		//IL_0194: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0195: Unknown result type (might be due to invalid IL or missing references)
 		if (recompiling)
 		{
 			return false;
@@ -961,13 +916,13 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 		}
 		bool flag = Vector2.Dot(rawMoveVector, m_LastMoveVector) > 0f;
 		CheckButtonOrKeyMovement(out var downHorizontal, out var downVertical);
-		AxisEventData val = null;
+		AxisEventData axisEventData = null;
 		bool flag2 = downHorizontal || downVertical;
 		if (flag2)
 		{
-			val = ((BaseInputModule)this).GetAxisEventData(rawMoveVector.x, rawMoveVector.y, 0f);
-			MoveDirection moveDir = val.moveDir;
-			flag2 = (((int)moveDir == 1 || (int)moveDir == 3) && downVertical) || (((int)moveDir == 0 || (int)moveDir == 2) && downHorizontal);
+			axisEventData = GetAxisEventData(rawMoveVector.x, rawMoveVector.y, 0f);
+			MoveDirection moveDir = axisEventData.moveDir;
+			flag2 = ((moveDir == MoveDirection.Up || moveDir == MoveDirection.Down) && downVertical) || ((moveDir == MoveDirection.Left || moveDir == MoveDirection.Right) && downHorizontal);
 		}
 		if (!flag2)
 		{
@@ -977,13 +932,13 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 		{
 			return false;
 		}
-		if (val == null)
+		if (axisEventData == null)
 		{
-			val = ((BaseInputModule)this).GetAxisEventData(rawMoveVector.x, rawMoveVector.y, 0f);
+			axisEventData = GetAxisEventData(rawMoveVector.x, rawMoveVector.y, 0f);
 		}
-		if ((int)val.moveDir != 4)
+		if (axisEventData.moveDir != MoveDirection.None)
 		{
-			ExecuteEvents.Execute<IMoveHandler>(((BaseInputModule)this).eventSystem.currentSelectedGameObject, (BaseEventData)(object)val, ExecuteEvents.moveHandler);
+			ExecuteEvents.Execute(base.eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
 			if (!flag)
 			{
 				m_ConsecutiveMoveCount = 0;
@@ -999,7 +954,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 		{
 			m_ConsecutiveMoveCount = 0;
 		}
-		return ((AbstractEventData)val).used;
+		return axisEventData.used;
 	}
 
 	private void CheckButtonOrKeyMovement(out bool downHorizontal, out bool downVertical)
@@ -1035,10 +990,6 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	private void ProcessMouseEvent(int playerId, int pointerIndex)
 	{
-		//IL_00d8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00dd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fd: Unknown result type (might be due to invalid IL or missing references)
 		MouseState mousePointerEventData = GetMousePointerEventData(playerId, pointerIndex);
 		if (mousePointerEventData == null)
 		{
@@ -1060,106 +1011,98 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 				ProcessMousePress(mousePointerEventData.GetButtonState(i).eventData);
 				ProcessDrag(mousePointerEventData.GetButtonState(i).eventData.buttonData);
 			}
-			Vector2 scrollDelta = ((PointerEventData)eventData.buttonData).scrollDelta;
-			if (!Mathf.Approximately(((Vector2)(ref scrollDelta)).sqrMagnitude, 0f))
+			if (!Mathf.Approximately(eventData.buttonData.scrollDelta.sqrMagnitude, 0f))
 			{
-				RaycastResult pointerCurrentRaycast = ((PointerEventData)eventData.buttonData).pointerCurrentRaycast;
-				ExecuteEvents.ExecuteHierarchy<IScrollHandler>(ExecuteEvents.GetEventHandler<IScrollHandler>(((RaycastResult)(ref pointerCurrentRaycast)).gameObject), (BaseEventData)(object)eventData.buttonData, ExecuteEvents.scrollHandler);
+				ExecuteEvents.ExecuteHierarchy(ExecuteEvents.GetEventHandler<IScrollHandler>(eventData.buttonData.pointerCurrentRaycast.gameObject), eventData.buttonData, ExecuteEvents.scrollHandler);
 			}
 		}
 	}
 
 	private bool SendUpdateEventToSelectedObject()
 	{
-		if ((Object)(object)((BaseInputModule)this).eventSystem.currentSelectedGameObject == (Object)null)
+		if (base.eventSystem.currentSelectedGameObject == null)
 		{
 			return false;
 		}
-		BaseEventData baseEventData = ((BaseInputModule)this).GetBaseEventData();
-		ExecuteEvents.Execute<IUpdateSelectedHandler>(((BaseInputModule)this).eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.updateSelectedHandler);
-		return ((AbstractEventData)baseEventData).used;
+		BaseEventData baseEventData = GetBaseEventData();
+		ExecuteEvents.Execute(base.eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.updateSelectedHandler);
+		return baseEventData.used;
 	}
 
 	private void ProcessMousePress(MouseButtonEventData data)
 	{
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0064: Unknown result type (might be due to invalid IL or missing references)
 		PlayerPointerEventData buttonData = data.buttonData;
 		if (GetMouseInputSource(buttonData.playerId, buttonData.inputSourceIndex) == null)
 		{
 			return;
 		}
-		RaycastResult pointerCurrentRaycast = ((PointerEventData)buttonData).pointerCurrentRaycast;
-		GameObject gameObject = ((RaycastResult)(ref pointerCurrentRaycast)).gameObject;
+		GameObject gameObject = buttonData.pointerCurrentRaycast.gameObject;
 		if (data.PressedThisFrame())
 		{
-			((PointerEventData)buttonData).eligibleForClick = true;
-			((PointerEventData)buttonData).delta = Vector2.zero;
-			((PointerEventData)buttonData).dragging = false;
-			((PointerEventData)buttonData).useDragThreshold = true;
-			((PointerEventData)buttonData).pressPosition = ((PointerEventData)buttonData).position;
-			((PointerEventData)buttonData).pointerPressRaycast = ((PointerEventData)buttonData).pointerCurrentRaycast;
-			HandleMouseTouchDeselectionOnSelectionChanged(gameObject, (BaseEventData)(object)buttonData);
-			GameObject val = ExecuteEvents.ExecuteHierarchy<IPointerDownHandler>(gameObject, (BaseEventData)(object)buttonData, ExecuteEvents.pointerDownHandler);
-			if ((Object)(object)val == (Object)null)
+			buttonData.eligibleForClick = true;
+			buttonData.delta = Vector2.zero;
+			buttonData.dragging = false;
+			buttonData.useDragThreshold = true;
+			buttonData.pressPosition = buttonData.position;
+			buttonData.pointerPressRaycast = buttonData.pointerCurrentRaycast;
+			HandleMouseTouchDeselectionOnSelectionChanged(gameObject, buttonData);
+			GameObject gameObject2 = ExecuteEvents.ExecuteHierarchy(gameObject, buttonData, ExecuteEvents.pointerDownHandler);
+			if (gameObject2 == null)
 			{
-				val = ExecuteEvents.GetEventHandler<IPointerClickHandler>(gameObject);
+				gameObject2 = ExecuteEvents.GetEventHandler<IPointerClickHandler>(gameObject);
 			}
 			double unscaledTime = ReInput.time.unscaledTime;
-			if ((Object)(object)val == (Object)(object)((PointerEventData)buttonData).lastPress)
+			if (gameObject2 == buttonData.lastPress)
 			{
-				if (unscaledTime - (double)((PointerEventData)buttonData).clickTime < 0.30000001192092896)
+				if (unscaledTime - (double)buttonData.clickTime < 0.30000001192092896)
 				{
-					int clickCount = ((PointerEventData)buttonData).clickCount + 1;
-					((PointerEventData)buttonData).clickCount = clickCount;
+					int clickCount = buttonData.clickCount + 1;
+					buttonData.clickCount = clickCount;
 				}
 				else
 				{
-					((PointerEventData)buttonData).clickCount = 1;
+					buttonData.clickCount = 1;
 				}
-				((PointerEventData)buttonData).clickTime = (float)unscaledTime;
+				buttonData.clickTime = (float)unscaledTime;
 			}
 			else
 			{
-				((PointerEventData)buttonData).clickCount = 1;
+				buttonData.clickCount = 1;
 			}
-			((PointerEventData)buttonData).pointerPress = val;
-			((PointerEventData)buttonData).rawPointerPress = gameObject;
-			((PointerEventData)buttonData).clickTime = (float)unscaledTime;
-			((PointerEventData)buttonData).pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(gameObject);
-			if ((Object)(object)((PointerEventData)buttonData).pointerDrag != (Object)null)
+			buttonData.pointerPress = gameObject2;
+			buttonData.rawPointerPress = gameObject;
+			buttonData.clickTime = (float)unscaledTime;
+			buttonData.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(gameObject);
+			if (buttonData.pointerDrag != null)
 			{
-				ExecuteEvents.Execute<IInitializePotentialDragHandler>(((PointerEventData)buttonData).pointerDrag, (BaseEventData)(object)buttonData, ExecuteEvents.initializePotentialDrag);
+				ExecuteEvents.Execute(buttonData.pointerDrag, buttonData, ExecuteEvents.initializePotentialDrag);
 			}
 		}
 		if (data.ReleasedThisFrame())
 		{
-			ExecuteEvents.Execute<IPointerUpHandler>(((PointerEventData)buttonData).pointerPress, (BaseEventData)(object)buttonData, ExecuteEvents.pointerUpHandler);
+			ExecuteEvents.Execute(buttonData.pointerPress, buttonData, ExecuteEvents.pointerUpHandler);
 			GameObject eventHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(gameObject);
-			if ((Object)(object)((PointerEventData)buttonData).pointerPress == (Object)(object)eventHandler && ((PointerEventData)buttonData).eligibleForClick)
+			if (buttonData.pointerPress == eventHandler && buttonData.eligibleForClick)
 			{
-				ExecuteEvents.Execute<IPointerClickHandler>(((PointerEventData)buttonData).pointerPress, (BaseEventData)(object)buttonData, ExecuteEvents.pointerClickHandler);
+				ExecuteEvents.Execute(buttonData.pointerPress, buttonData, ExecuteEvents.pointerClickHandler);
 			}
-			else if ((Object)(object)((PointerEventData)buttonData).pointerDrag != (Object)null && ((PointerEventData)buttonData).dragging)
+			else if (buttonData.pointerDrag != null && buttonData.dragging)
 			{
-				ExecuteEvents.ExecuteHierarchy<IDropHandler>(gameObject, (BaseEventData)(object)buttonData, ExecuteEvents.dropHandler);
+				ExecuteEvents.ExecuteHierarchy(gameObject, buttonData, ExecuteEvents.dropHandler);
 			}
-			((PointerEventData)buttonData).eligibleForClick = false;
-			((PointerEventData)buttonData).pointerPress = null;
-			((PointerEventData)buttonData).rawPointerPress = null;
-			if ((Object)(object)((PointerEventData)buttonData).pointerDrag != (Object)null && ((PointerEventData)buttonData).dragging)
+			buttonData.eligibleForClick = false;
+			buttonData.pointerPress = null;
+			buttonData.rawPointerPress = null;
+			if (buttonData.pointerDrag != null && buttonData.dragging)
 			{
-				ExecuteEvents.Execute<IEndDragHandler>(((PointerEventData)buttonData).pointerDrag, (BaseEventData)(object)buttonData, ExecuteEvents.endDragHandler);
+				ExecuteEvents.Execute(buttonData.pointerDrag, buttonData, ExecuteEvents.endDragHandler);
 			}
-			((PointerEventData)buttonData).dragging = false;
-			((PointerEventData)buttonData).pointerDrag = null;
-			if ((Object)(object)gameObject != (Object)(object)((PointerEventData)buttonData).pointerEnter)
+			buttonData.dragging = false;
+			buttonData.pointerDrag = null;
+			if (gameObject != buttonData.pointerEnter)
 			{
-				((BaseInputModule)this).HandlePointerExitAndEnter((PointerEventData)(object)buttonData, (GameObject)null);
-				((BaseInputModule)this).HandlePointerExitAndEnter((PointerEventData)(object)buttonData, gameObject);
+				HandlePointerExitAndEnter(buttonData, null);
+				HandlePointerExitAndEnter(buttonData, gameObject);
 			}
 		}
 	}
@@ -1174,14 +1117,14 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 		GameObject eventHandler = ExecuteEvents.GetEventHandler<ISelectHandler>(currentOverGo);
 		if (m_deselectIfBackgroundClicked)
 		{
-			if ((Object)(object)eventHandler != (Object)(object)((BaseInputModule)this).eventSystem.currentSelectedGameObject && (Object)(object)eventHandler != (Object)null)
+			if (eventHandler != base.eventSystem.currentSelectedGameObject && eventHandler != null)
 			{
-				((BaseInputModule)this).eventSystem.SetSelectedGameObject((GameObject)null, pointerEvent);
+				base.eventSystem.SetSelectedGameObject(null, pointerEvent);
 			}
 		}
-		else if (m_deselectBeforeSelecting && (Object)(object)eventHandler != (Object)null && (Object)(object)eventHandler != (Object)(object)((BaseInputModule)this).eventSystem.currentSelectedGameObject)
+		else if (m_deselectBeforeSelecting && eventHandler != null && eventHandler != base.eventSystem.currentSelectedGameObject)
 		{
-			((BaseInputModule)this).eventSystem.SetSelectedGameObject((GameObject)null, pointerEvent);
+			base.eventSystem.SetSelectedGameObject(null, pointerEvent);
 		}
 	}
 
@@ -1201,7 +1144,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	protected override void OnDestroy()
 	{
-		((UIBehaviour)this).OnDestroy();
+		base.OnDestroy();
 		ReInput.InitializedEvent -= OnRewiredInitialized;
 		ReInput.ShutDownEvent -= OnRewiredShutDown;
 		ReInput.EditorRecompileEvent -= OnEditorRecompile;
@@ -1235,7 +1178,7 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 	{
 		if (!ReInput.isReady)
 		{
-			Debug.LogError((object)"Rewired is not initialized! Are you missing a Rewired Input Manager in your scene?");
+			Debug.LogError("Rewired is not initialized! Are you missing a Rewired Input Manager in your scene?");
 			return;
 		}
 		ReInput.ShutDownEvent -= OnRewiredShutDown;
@@ -1295,10 +1238,10 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 		ClearMouseInputSources();
 		for (int i = 0; i < playerMice.Count; i++)
 		{
-			PlayerMouse val = playerMice[i];
-			if (!UnityTools.IsNullOrDestroyed<PlayerMouse>(val))
+			Rewired.Components.PlayerMouse playerMouse = playerMice[i];
+			if (!UnityTools.IsNullOrDestroyed(playerMouse))
 			{
-				AddMouseInputSource((IMouseInputSource)(object)val);
+				AddMouseInputSource(playerMouse);
 			}
 		}
 	}
@@ -1411,27 +1354,21 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 
 	private bool DidAnyMouseMove()
 	{
-		//IL_004a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004f: Unknown result type (might be due to invalid IL or missing references)
 		for (int i = 0; i < playerIds.Length; i++)
 		{
-			int num = playerIds[i];
-			Player player = ReInput.players.GetPlayer(num);
+			int playerId = playerIds[i];
+			Player player = ReInput.players.GetPlayer(playerId);
 			if (player == null || (usePlayingPlayersOnly && !player.isPlaying))
 			{
 				continue;
 			}
-			int mouseInputSourceCount = GetMouseInputSourceCount(num);
+			int mouseInputSourceCount = GetMouseInputSourceCount(playerId);
 			for (int j = 0; j < mouseInputSourceCount; j++)
 			{
-				IMouseInputSource mouseInputSource = GetMouseInputSource(num, j);
-				if (mouseInputSource != null)
+				IMouseInputSource mouseInputSource = GetMouseInputSource(playerId, j);
+				if (mouseInputSource != null && mouseInputSource.screenPositionDelta.sqrMagnitude > 0f)
 				{
-					Vector2 screenPositionDelta = mouseInputSource.screenPositionDelta;
-					if (((Vector2)(ref screenPositionDelta)).sqrMagnitude > 0f)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 		}
@@ -1442,16 +1379,16 @@ public sealed class RewiredStandaloneInputModule : RewiredPointerInputModule
 	{
 		for (int i = 0; i < playerIds.Length; i++)
 		{
-			int num = playerIds[i];
-			Player player = ReInput.players.GetPlayer(num);
+			int playerId = playerIds[i];
+			Player player = ReInput.players.GetPlayer(playerId);
 			if (player == null || (usePlayingPlayersOnly && !player.isPlaying))
 			{
 				continue;
 			}
-			int mouseInputSourceCount = GetMouseInputSourceCount(num);
+			int mouseInputSourceCount = GetMouseInputSourceCount(playerId);
 			for (int j = 0; j < mouseInputSourceCount; j++)
 			{
-				IMouseInputSource mouseInputSource = GetMouseInputSource(num, j);
+				IMouseInputSource mouseInputSource = GetMouseInputSource(playerId, j);
 				if (mouseInputSource != null && mouseInputSource.GetButtonDown(buttonIndex))
 				{
 					return true;

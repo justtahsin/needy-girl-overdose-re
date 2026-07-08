@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -13,23 +11,23 @@ public class Event_WebCamAngry : MonoBehaviour
 	{
 		if (!SingletonMonoBehaviour<WebCamManager>.Instance.hidegirl.Value)
 		{
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(((Component)this).GetComponent<Button>()), (Action<Unit>)delegate
+			GetComponent<Button>().OnClickAsObservable().Subscribe(delegate
 			{
 				Angry();
-			}), ((Component)this).gameObject);
+			}).AddTo(base.gameObject);
 		}
 	}
 
 	public async void Angry()
 	{
-		await UniTask.Delay(300, false, (PlayerLoopTiming)8, default(CancellationToken), false);
+		await UniTask.Delay(300);
 		if (!SingletonMonoBehaviour<WindowManager>.Instance.isAppOpen(AppType.Webcam))
 		{
 			SingletonMonoBehaviour<WindowManager>.Instance.NewWindow(AppType.Webcam);
 		}
 		SingletonMonoBehaviour<WindowManager>.Instance.Touched(SingletonMonoBehaviour<WindowManager>.Instance.GetWindowFromApp(AppType.Webcam));
 		SingletonMonoBehaviour<WebCamManager>.Instance.PlayAnim("stream_ame_henoji");
-		await UniTask.Delay(1800, false, (PlayerLoopTiming)8, default(CancellationToken), false);
+		await UniTask.Delay(1800);
 		SingletonMonoBehaviour<WebCamManager>.Instance.ResetAnim();
 	}
 }

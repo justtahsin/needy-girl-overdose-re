@@ -11,7 +11,7 @@ public static class CommandHelper
 
 	public static CommandMaster getCommandMaster()
 	{
-		if ((Object)(object)_commandMaster == (Object)null)
+		if (_commandMaster == null)
 		{
 			_commandMaster = Resources.Load<CommandMaster>("Master/Command");
 		}
@@ -26,7 +26,7 @@ public static class CommandHelper
 	public static string GetCommandTitle(CommandType type, LanguageType lang)
 	{
 		CommandMaster commandMaster = getCommandMaster();
-		if (Object.op_Implicit((Object)(object)commandMaster))
+		if ((bool)commandMaster)
 		{
 			switch (lang)
 			{
@@ -52,7 +52,7 @@ public static class CommandHelper
 
 	public static ActMaster getActMaster()
 	{
-		if ((Object)(object)_ActMaster == (Object)null)
+		if (_ActMaster == null)
 		{
 			_ActMaster = Resources.Load<ActMaster>("Master/Act");
 		}
@@ -62,7 +62,7 @@ public static class CommandHelper
 	public static string GetCommandTitle(ActionType type, LanguageType lang)
 	{
 		ActMaster actMaster = getActMaster();
-		if (Object.op_Implicit((Object)(object)actMaster))
+		if ((bool)actMaster)
 		{
 			return lang switch
 			{

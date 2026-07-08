@@ -25,7 +25,7 @@ public sealed class WristcutModel : IDisposable
 		OnCut = new Subject<Cut>();
 		_cutCount = FetchCutCount();
 		IDisposable dispose = null;
-		dispose = ObservableExtensions.Subscribe<Cut>((IObservable<Cut>)OnCut, (Action<Cut>)delegate
+		dispose = ((IObservable<Cut>)OnCut).Subscribe((Action<Cut>)delegate
 		{
 			AudioManager.Instance?.PlaySeByType(SoundType.SE_zubasi);
 		}, (Action)delegate

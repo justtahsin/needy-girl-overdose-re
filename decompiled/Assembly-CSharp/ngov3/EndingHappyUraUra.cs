@@ -1,9 +1,5 @@
-using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using NGO;
 using UniRx;
 using UnityEngine;
@@ -51,59 +47,56 @@ public class EndingHappyUraUra : MonoBehaviour
 
 	private void Awake()
 	{
-		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0057: Expected O, but got Unknown
-		//IL_005e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0068: Expected O, but got Unknown
-		//IL_0089: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0093: Expected O, but got Unknown
-		//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00be: Expected O, but got Unknown
-		//IL_00df: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e9: Expected O, but got Unknown
-		//IL_010a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0114: Expected O, but got Unknown
-		TweenExtensions.Play<TweenerCore<float, float, FloatOptions>>(TweenSettingsExtensions.SetEase<TweenerCore<float, float, FloatOptions>>(TweenSettingsExtensions.SetLoops<TweenerCore<float, float, FloatOptions>>(DOTweenModuleUI.DOFade(_uraUraHint, 1f, 1f), -1, (LoopType)1), (Ease)7));
+		_uraUraHint.DOFade(1f, 1f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad)
+			.Play();
 		Sequence sequence = DOTween.Sequence();
-		TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendCallback(TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendCallback(TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendCallback(TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendCallback(TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendCallback(TweenSettingsExtensions.OnStart<Sequence>(sequence, (TweenCallback)delegate
+		sequence.OnStart(delegate
 		{
-			_followers.SetActive(false);
-			_tweets.SetActive(true);
-			((Component)_tweet1).gameObject.SetActive(false);
-			((Component)_tweet2).gameObject.SetActive(false);
-			((Component)_tweet3).gameObject.SetActive(false);
-			((Component)_tweet4).gameObject.SetActive(false);
-			((Component)_tweet5).gameObject.SetActive(false);
-		}), (TweenCallback)delegate
+			_followers.SetActive(value: false);
+			_tweets.SetActive(value: true);
+			_tweet1.gameObject.SetActive(value: false);
+			_tweet2.gameObject.SetActive(value: false);
+			_tweet3.gameObject.SetActive(value: false);
+			_tweet4.gameObject.SetActive(value: false);
+			_tweet5.gameObject.SetActive(value: false);
+		}).AppendCallback(delegate
 		{
-			((Component)_tweet1).gameObject.SetActive(true);
-		}), (Tween)(object)DOTweenModuleUI.DOFade(_tweet1, 1f, 2.2f)), (TweenCallback)delegate
+			_tweet1.gameObject.SetActive(value: true);
+		}).Append(_tweet1.DOFade(1f, 2.2f))
+			.AppendCallback(delegate
+			{
+				_tweet2.gameObject.SetActive(value: true);
+			})
+			.Append(_tweet2.DOFade(1f, 2.2f))
+			.AppendCallback(delegate
+			{
+				_tweet3.gameObject.SetActive(value: true);
+			})
+			.Append(_tweet3.DOFade(1f, 2.2f))
+			.AppendCallback(delegate
+			{
+				_tweet4.gameObject.SetActive(value: true);
+			})
+			.Append(_tweet4.DOFade(1f, 2.2f))
+			.AppendCallback(delegate
+			{
+				_tweet5.gameObject.SetActive(value: true);
+			})
+			.Append(_tweet5.DOFade(1f, 2.2f));
+		_uraUraAccount.OnClickAsObservable().Subscribe(delegate
 		{
-			((Component)_tweet2).gameObject.SetActive(true);
-		}), (Tween)(object)DOTweenModuleUI.DOFade(_tweet2, 1f, 2.2f)), (TweenCallback)delegate
-		{
-			((Component)_tweet3).gameObject.SetActive(true);
-		}), (Tween)(object)DOTweenModuleUI.DOFade(_tweet3, 1f, 2.2f)), (TweenCallback)delegate
-		{
-			((Component)_tweet4).gameObject.SetActive(true);
-		}), (Tween)(object)DOTweenModuleUI.DOFade(_tweet4, 1f, 2.2f)), (TweenCallback)delegate
-		{
-			((Component)_tweet5).gameObject.SetActive(true);
-		}), (Tween)(object)DOTweenModuleUI.DOFade(_tweet5, 1f, 2.2f));
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_uraUraAccount), (Action<Unit>)delegate
-		{
-			TweenExtensions.Play<Sequence>(sequence);
-		}), (Component)(object)_uraUraAccount);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_followRequest), (Action<Unit>)async delegate
+			sequence.Play();
+		}).AddTo(_uraUraAccount);
+		_followRequest.OnClickAsObservable().Subscribe(async delegate
 		{
 			AudioManager.Instance.PlaySeByType(SoundType.SE_piporo);
-			await UniTask.Delay(Constants.MIDDLE, false, (PlayerLoopTiming)8, default(CancellationToken), false);
+			await UniTask.Delay(Constants.MIDDLE);
 			AudioManager.Instance.PlaySeByType(SoundType.SE_Error);
 			_blocked.alpha = 1f;
 			_blocked.blocksRaycasts = true;
-			await UniTask.Delay(Constants.MIDDLE, false, (PlayerLoopTiming)8, default(CancellationToken), false);
+			await UniTask.Delay(Constants.MIDDLE);
 			SingletonMonoBehaviour<NotificationManager>.Instance.osimai();
 			AchievementStatsUpdater.UpdateStats("Ending_Happy");
-		}), (Component)(object)_followRequest);
+		}).AddTo(_followRequest);
 	}
 }

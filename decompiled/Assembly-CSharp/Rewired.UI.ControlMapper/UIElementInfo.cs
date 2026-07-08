@@ -20,7 +20,7 @@ public abstract class UIElementInfo : MonoBehaviour, ISelectHandler, IEventSyste
 	{
 		if (this.OnSelectedEvent != null)
 		{
-			this.OnSelectedEvent(((Component)this).gameObject);
+			this.OnSelectedEvent(base.gameObject);
 		}
 	}
 }

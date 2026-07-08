@@ -84,63 +84,63 @@ public sealed class GamepadTemplate : ControllerTemplate, IGamepadTemplate, ICon
 
 	public const int elementId_dPad = 25;
 
-	IControllerTemplateButton IGamepadTemplate.actionBottomRow1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(4);
+	IControllerTemplateButton IGamepadTemplate.actionBottomRow1 => GetElement<IControllerTemplateButton>(4);
 
-	IControllerTemplateButton IGamepadTemplate.a => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(4);
+	IControllerTemplateButton IGamepadTemplate.a => GetElement<IControllerTemplateButton>(4);
 
-	IControllerTemplateButton IGamepadTemplate.actionBottomRow2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(5);
+	IControllerTemplateButton IGamepadTemplate.actionBottomRow2 => GetElement<IControllerTemplateButton>(5);
 
-	IControllerTemplateButton IGamepadTemplate.b => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(5);
+	IControllerTemplateButton IGamepadTemplate.b => GetElement<IControllerTemplateButton>(5);
 
-	IControllerTemplateButton IGamepadTemplate.actionBottomRow3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(6);
+	IControllerTemplateButton IGamepadTemplate.actionBottomRow3 => GetElement<IControllerTemplateButton>(6);
 
-	IControllerTemplateButton IGamepadTemplate.c => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(6);
+	IControllerTemplateButton IGamepadTemplate.c => GetElement<IControllerTemplateButton>(6);
 
-	IControllerTemplateButton IGamepadTemplate.actionTopRow1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(7);
+	IControllerTemplateButton IGamepadTemplate.actionTopRow1 => GetElement<IControllerTemplateButton>(7);
 
-	IControllerTemplateButton IGamepadTemplate.x => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(7);
+	IControllerTemplateButton IGamepadTemplate.x => GetElement<IControllerTemplateButton>(7);
 
-	IControllerTemplateButton IGamepadTemplate.actionTopRow2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(8);
+	IControllerTemplateButton IGamepadTemplate.actionTopRow2 => GetElement<IControllerTemplateButton>(8);
 
-	IControllerTemplateButton IGamepadTemplate.y => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(8);
+	IControllerTemplateButton IGamepadTemplate.y => GetElement<IControllerTemplateButton>(8);
 
-	IControllerTemplateButton IGamepadTemplate.actionTopRow3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(9);
+	IControllerTemplateButton IGamepadTemplate.actionTopRow3 => GetElement<IControllerTemplateButton>(9);
 
-	IControllerTemplateButton IGamepadTemplate.z => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(9);
+	IControllerTemplateButton IGamepadTemplate.z => GetElement<IControllerTemplateButton>(9);
 
-	IControllerTemplateButton IGamepadTemplate.leftShoulder1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(10);
+	IControllerTemplateButton IGamepadTemplate.leftShoulder1 => GetElement<IControllerTemplateButton>(10);
 
-	IControllerTemplateButton IGamepadTemplate.leftBumper => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(10);
+	IControllerTemplateButton IGamepadTemplate.leftBumper => GetElement<IControllerTemplateButton>(10);
 
-	IControllerTemplateAxis IGamepadTemplate.leftShoulder2 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(11);
+	IControllerTemplateAxis IGamepadTemplate.leftShoulder2 => GetElement<IControllerTemplateAxis>(11);
 
-	IControllerTemplateAxis IGamepadTemplate.leftTrigger => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(11);
+	IControllerTemplateAxis IGamepadTemplate.leftTrigger => GetElement<IControllerTemplateAxis>(11);
 
-	IControllerTemplateButton IGamepadTemplate.rightShoulder1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(12);
+	IControllerTemplateButton IGamepadTemplate.rightShoulder1 => GetElement<IControllerTemplateButton>(12);
 
-	IControllerTemplateButton IGamepadTemplate.rightBumper => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(12);
+	IControllerTemplateButton IGamepadTemplate.rightBumper => GetElement<IControllerTemplateButton>(12);
 
-	IControllerTemplateAxis IGamepadTemplate.rightShoulder2 => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(13);
+	IControllerTemplateAxis IGamepadTemplate.rightShoulder2 => GetElement<IControllerTemplateAxis>(13);
 
-	IControllerTemplateAxis IGamepadTemplate.rightTrigger => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(13);
+	IControllerTemplateAxis IGamepadTemplate.rightTrigger => GetElement<IControllerTemplateAxis>(13);
 
-	IControllerTemplateButton IGamepadTemplate.center1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(14);
+	IControllerTemplateButton IGamepadTemplate.center1 => GetElement<IControllerTemplateButton>(14);
 
-	IControllerTemplateButton IGamepadTemplate.back => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(14);
+	IControllerTemplateButton IGamepadTemplate.back => GetElement<IControllerTemplateButton>(14);
 
-	IControllerTemplateButton IGamepadTemplate.center2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(15);
+	IControllerTemplateButton IGamepadTemplate.center2 => GetElement<IControllerTemplateButton>(15);
 
-	IControllerTemplateButton IGamepadTemplate.start => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(15);
+	IControllerTemplateButton IGamepadTemplate.start => GetElement<IControllerTemplateButton>(15);
 
-	IControllerTemplateButton IGamepadTemplate.center3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(16);
+	IControllerTemplateButton IGamepadTemplate.center3 => GetElement<IControllerTemplateButton>(16);
 
-	IControllerTemplateButton IGamepadTemplate.guide => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(16);
+	IControllerTemplateButton IGamepadTemplate.guide => GetElement<IControllerTemplateButton>(16);
 
-	IControllerTemplateThumbStick IGamepadTemplate.leftStick => ((ControllerTemplate)this).GetElement<IControllerTemplateThumbStick>(23);
+	IControllerTemplateThumbStick IGamepadTemplate.leftStick => GetElement<IControllerTemplateThumbStick>(23);
 
-	IControllerTemplateThumbStick IGamepadTemplate.rightStick => ((ControllerTemplate)this).GetElement<IControllerTemplateThumbStick>(24);
+	IControllerTemplateThumbStick IGamepadTemplate.rightStick => GetElement<IControllerTemplateThumbStick>(24);
 
-	IControllerTemplateDPad IGamepadTemplate.dPad => ((ControllerTemplate)this).GetElement<IControllerTemplateDPad>(25);
+	IControllerTemplateDPad IGamepadTemplate.dPad => GetElement<IControllerTemplateDPad>(25);
 
 	public GamepadTemplate(object payload)
 		: base(payload)

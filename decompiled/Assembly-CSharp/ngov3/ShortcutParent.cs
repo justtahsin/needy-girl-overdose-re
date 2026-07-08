@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -20,9 +19,9 @@ public class ShortcutParent : MonoBehaviour
 
 	private async void RestShortCutCollider()
 	{
-		await UniTask.DelayFrame(1, (PlayerLoopTiming)8, default(CancellationToken), false);
-		((Component)this).gameObject.SetActive(false);
-		await UniTask.DelayFrame(1, (PlayerLoopTiming)8, default(CancellationToken), false);
-		((Component)this).gameObject.SetActive(true);
+		await UniTask.DelayFrame(1);
+		base.gameObject.SetActive(value: false);
+		await UniTask.DelayFrame(1);
+		base.gameObject.SetActive(value: true);
 	}
 }

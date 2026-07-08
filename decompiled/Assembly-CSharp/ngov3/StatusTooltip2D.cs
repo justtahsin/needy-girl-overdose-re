@@ -59,26 +59,18 @@ public class StatusTooltip2D : Tooltip2D
 
 	public void SlidePosition()
 	{
-		//IL_0035: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0098: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0071: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-		if ((Object)(object)_rectTr == (Object)null)
+		if (_rectTr == null)
 		{
-			_rectTr = ((Component)this).gameObject.GetComponent<RectTransform>();
-			_posX = ((Transform)_rectTr).position.x;
+			_rectTr = base.gameObject.GetComponent<RectTransform>();
+			_posX = _rectTr.position.x;
 		}
 		if (Input.mousePosition.x > (float)(Screen.width / 2))
 		{
-			((Transform)_rectTr).position = new Vector3(_posX * -1f, ((Transform)_rectTr).position.y, ((Transform)_rectTr).position.z);
+			_rectTr.position = new Vector3(_posX * -1f, _rectTr.position.y, _rectTr.position.z);
 		}
 		else
 		{
-			((Transform)_rectTr).position = new Vector3(_posX, ((Transform)_rectTr).position.y, ((Transform)_rectTr).position.z);
+			_rectTr.position = new Vector3(_posX, _rectTr.position.y, _rectTr.position.z);
 		}
 	}
 
@@ -99,11 +91,11 @@ public class StatusTooltip2D : Tooltip2D
 
 	public void SetBonusLine(bool visible, LanguageType lang)
 	{
-		((Component)_BonusLine).gameObject.SetActive(visible);
+		_BonusLine.gameObject.SetActive(visible);
 		if (visible)
 		{
 			_BonusLine.text = NgoEx.SystemTextFromType(SystemTextType.System_HaishinBonus, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-			((Component)_BonusLine).gameObject.transform.SetAsLastSibling();
+			_BonusLine.gameObject.transform.SetAsLastSibling();
 		}
 	}
 
@@ -119,12 +111,12 @@ public class StatusTooltip2D : Tooltip2D
 				if (num < count)
 				{
 					statusDiffComponent2D = _diffInstances[num];
-					((Component)statusDiffComponent2D).gameObject.SetActive(true);
-					((Component)statusDiffComponent2D).gameObject.transform.SetAsLastSibling();
+					statusDiffComponent2D.gameObject.SetActive(value: true);
+					statusDiffComponent2D.gameObject.transform.SetAsLastSibling();
 				}
 				else
 				{
-					statusDiffComponent2D = Object.Instantiate<StatusDiffComponent2D>(_diffPrefab, _diffParent);
+					statusDiffComponent2D = Object.Instantiate(_diffPrefab, _diffParent);
 					_diffInstances.Add(statusDiffComponent2D);
 				}
 				statusDiffComponent2D.SetData(diff);
@@ -145,12 +137,12 @@ public class StatusTooltip2D : Tooltip2D
 				if (num < count)
 				{
 					mainStatusDiffComponent2D = _diffMainInstances[num];
-					((Component)mainStatusDiffComponent2D).gameObject.SetActive(true);
-					((Component)mainStatusDiffComponent2D).gameObject.transform.SetAsLastSibling();
+					mainStatusDiffComponent2D.gameObject.SetActive(value: true);
+					mainStatusDiffComponent2D.gameObject.transform.SetAsLastSibling();
 				}
 				else
 				{
-					mainStatusDiffComponent2D = Object.Instantiate<MainStatusDiffComponent2D>(_diffMainPrefab, _diffParent);
+					mainStatusDiffComponent2D = Object.Instantiate(_diffMainPrefab, _diffParent);
 					_diffMainInstances.Add(mainStatusDiffComponent2D);
 				}
 				mainStatusDiffComponent2D.SetData(diff);
@@ -162,13 +154,13 @@ public class StatusTooltip2D : Tooltip2D
 	public void SetFollowerDiff(CmdMaster.Param c)
 	{
 		FollowerDiffComponent2D followerDiffComponent2D = null;
-		if ((Object)(object)_followerDiffInstance == (Object)null)
+		if (_followerDiffInstance == null)
 		{
-			_followerDiffInstance = Object.Instantiate<FollowerDiffComponent2D>(_followerDiffPrefab, _diffParent);
+			_followerDiffInstance = Object.Instantiate(_followerDiffPrefab, _diffParent);
 		}
 		else
 		{
-			((Component)_followerDiffInstance).gameObject.SetActive(true);
+			_followerDiffInstance.gameObject.SetActive(value: true);
 		}
 		followerDiffComponent2D = _followerDiffInstance;
 		followerDiffComponent2D.SetData(c.FollowerDelta);
@@ -180,7 +172,7 @@ public class StatusTooltip2D : Tooltip2D
 
 	public void SetLayout()
 	{
-		((LayoutGroup)_layout).SetLayoutVertical();
+		_layout.SetLayoutVertical();
 	}
 
 	public void SetPassingTime(int goTime, int komasuu, int beforeTime)
@@ -248,15 +240,15 @@ public class StatusTooltip2D : Tooltip2D
 	{
 		foreach (StatusDiffComponent2D diffInstance in _diffInstances)
 		{
-			((Component)diffInstance).gameObject.SetActive(false);
+			diffInstance.gameObject.SetActive(value: false);
 		}
 		foreach (MainStatusDiffComponent2D diffMainInstance in _diffMainInstances)
 		{
-			((Component)diffMainInstance).gameObject.SetActive(false);
+			diffMainInstance.gameObject.SetActive(value: false);
 		}
-		if ((Object)(object)_followerDiffInstance != (Object)null)
+		if (_followerDiffInstance != null)
 		{
-			((Component)_followerDiffInstance).gameObject.SetActive(false);
+			_followerDiffInstance.gameObject.SetActive(value: false);
 		}
 	}
 }

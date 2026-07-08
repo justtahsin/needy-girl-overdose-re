@@ -1,6 +1,4 @@
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using TMPro;
 using UnityEngine;
 
@@ -29,7 +27,7 @@ public class TaskManagerManager : MonoBehaviour
 
 	public void setMeate(string newAim = "#####")
 	{
-		TweenExtensions.Play<TweenerCore<string, string, StringOptions>>(ShortcutExtensionsTMPText.DOText(meate, newAim, 0.4f, true, (ScrambleMode)1, (string)null));
+		meate.DOText(newAim, 0.4f, richTextEnabled: true, ScrambleMode.All).Play();
 	}
 
 	public void SetToolTip(bool onoff)

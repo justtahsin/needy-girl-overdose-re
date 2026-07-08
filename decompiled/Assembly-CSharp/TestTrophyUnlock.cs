@@ -4,55 +4,55 @@ public class TestTrophyUnlock : MonoBehaviour
 {
 	private void Update()
 	{
-		if (Input.GetKeyDown((KeyCode)48))
+		if (Input.GetKeyDown(KeyCode.Alpha0))
 		{
 			TryUnlockTrophy(0);
 		}
-		if (Input.GetKeyDown((KeyCode)49))
+		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
 			TryUnlockTrophy(1);
 		}
-		if (Input.GetKeyDown((KeyCode)50))
+		if (Input.GetKeyDown(KeyCode.Alpha2))
 		{
 			TryUnlockTrophy(2);
 		}
-		if (Input.GetKeyDown((KeyCode)51))
+		if (Input.GetKeyDown(KeyCode.Alpha3))
 		{
 			TryUnlockTrophy(3);
 		}
-		if (Input.GetKeyDown((KeyCode)52))
+		if (Input.GetKeyDown(KeyCode.Alpha4))
 		{
 			TryUnlockTrophy(4);
 		}
-		if (Input.GetKeyDown((KeyCode)53))
+		if (Input.GetKeyDown(KeyCode.Alpha5))
 		{
 			TryUnlockTrophy(5);
 		}
-		if (Input.GetKeyDown((KeyCode)54))
+		if (Input.GetKeyDown(KeyCode.Alpha6))
 		{
 			TryUnlockTrophy(6);
 		}
-		if (Input.GetKeyDown((KeyCode)55))
+		if (Input.GetKeyDown(KeyCode.Alpha7))
 		{
 			TryUnlockTrophy(7);
 		}
-		if (Input.GetKeyDown((KeyCode)56))
+		if (Input.GetKeyDown(KeyCode.Alpha8))
 		{
 			TryUnlockTrophy(8);
 		}
-		if (Input.GetKeyDown((KeyCode)57))
+		if (Input.GetKeyDown(KeyCode.Alpha9))
 		{
 			TryUnlockTrophy(9);
 		}
-		if (Input.GetKeyDown((KeyCode)97))
+		if (Input.GetKeyDown(KeyCode.A))
 		{
 			TryUnlockTrophy(10);
 		}
-		if (Input.GetKeyDown((KeyCode)98))
+		if (Input.GetKeyDown(KeyCode.B))
 		{
 			TryUnlockTrophy(11);
 		}
-		if (Input.GetKeyDown((KeyCode)99))
+		if (Input.GetKeyDown(KeyCode.C))
 		{
 			TryUnlockTrophy(12);
 		}
@@ -60,6 +60,6 @@ public class TestTrophyUnlock : MonoBehaviour
 
 	private void TryUnlockTrophy(int trophyId)
 	{
-		Debug.LogError((object)("TryUnlock " + trophyId));
+		Debug.LogError("TryUnlock " + trophyId);
 	}
 }

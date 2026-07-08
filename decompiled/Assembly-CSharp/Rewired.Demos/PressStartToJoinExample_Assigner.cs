@@ -33,9 +33,9 @@ public class PressStartToJoinExample_Assigner : MonoBehaviour
 		{
 			return null;
 		}
-		if ((Object)(object)instance == (Object)null)
+		if (instance == null)
 		{
-			Debug.LogError((object)"Not initialized. Do you have a PressStartToJoinPlayerSelector in your scehe?");
+			Debug.LogError("Not initialized. Do you have a PressStartToJoinPlayerSelector in your scehe?");
 			return null;
 		}
 		for (int i = 0; i < instance.playerMap.Count; i++)
@@ -69,15 +69,15 @@ public class PressStartToJoinExample_Assigner : MonoBehaviour
 	{
 		if (playerMap.Count >= maxPlayers)
 		{
-			Debug.LogError((object)"Max player limit already reached!");
+			Debug.LogError("Max player limit already reached!");
 			return;
 		}
 		int nextGamePlayerId = GetNextGamePlayerId();
 		playerMap.Add(new PlayerMap(rewiredPlayerId, nextGamePlayerId));
 		Player player = ReInput.players.GetPlayer(rewiredPlayerId);
-		player.controllers.maps.SetMapsEnabled(false, "Assignment");
-		player.controllers.maps.SetMapsEnabled(true, "Default");
-		Debug.Log((object)("Added Rewired Player id " + rewiredPlayerId + " to game player " + nextGamePlayerId));
+		player.controllers.maps.SetMapsEnabled(state: false, "Assignment");
+		player.controllers.maps.SetMapsEnabled(state: true, "Default");
+		Debug.Log("Added Rewired Player id " + rewiredPlayerId + " to game player " + nextGamePlayerId);
 	}
 
 	private int GetNextGamePlayerId()

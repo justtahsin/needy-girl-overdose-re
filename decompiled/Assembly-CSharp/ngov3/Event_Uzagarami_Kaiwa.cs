@@ -1,71 +1,13 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using UnityEngine;
 
 namespace ngov3;
 
 public class Event_Uzagarami_Kaiwa : NgoEvent
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CstartEvent_003Ed__30 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public Event_Uzagarami_Kaiwa _003C_003E4__this;
-
-		public CancellationToken cancellationToken;
-
-		private void MoveNext()
-		{
-			//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-			Event_Uzagarami_Kaiwa event_Uzagarami_Kaiwa = _003C_003E4__this;
-			try
-			{
-				((NgoEvent)event_Uzagarami_Kaiwa).startEvent(cancellationToken);
-				SingletonMonoBehaviour<WebCamManager>.Instance.WatchSp();
-				event_Uzagarami_Kaiwa.eventName = event_Uzagarami_Kaiwa.getUniqueUzagaramiId();
-				SingletonMonoBehaviour<EventManager>.Instance.AddEventQueue(event_Uzagarami_Kaiwa.eventName);
-				event_Uzagarami_Kaiwa.endEvent();
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	private static List<string> heijouEvents = new List<string>
 	{
 		"Event_AmePiercerd", "Event_Fetish", "Event_Haikuwoyome", "Event_Hairstyle", "Event_Instead", "Event_Kurorekishi", "Event_Money", "Event_MuchaGag", "Event_NextDate", "Event_Pudding",
@@ -265,18 +207,12 @@ public class Event_Uzagarami_Kaiwa : NgoEvent
 		return source.ElementAt(Random.Range(0, source.Count()));
 	}
 
-	[AsyncStateMachine(typeof(_003CstartEvent_003Ed__30))]
-	public override UniTask startEvent(CancellationToken cancellationToken = default(CancellationToken))
+	public override async UniTask startEvent(CancellationToken cancellationToken = default(CancellationToken))
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0039: Unknown result type (might be due to invalid IL or missing references)
-		_003CstartEvent_003Ed__30 _003CstartEvent_003Ed__31 = default(_003CstartEvent_003Ed__30);
-		_003CstartEvent_003Ed__31._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CstartEvent_003Ed__31._003C_003E4__this = this;
-		_003CstartEvent_003Ed__31.cancellationToken = cancellationToken;
-		_003CstartEvent_003Ed__31._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CstartEvent_003Ed__31._003C_003Et__builder)).Start<_003CstartEvent_003Ed__30>(ref _003CstartEvent_003Ed__31);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CstartEvent_003Ed__31._003C_003Et__builder)).Task;
+		base.startEvent(cancellationToken);
+		SingletonMonoBehaviour<WebCamManager>.Instance.WatchSp();
+		eventName = getUniqueUzagaramiId();
+		SingletonMonoBehaviour<EventManager>.Instance.AddEventQueue(eventName);
+		endEvent();
 	}
 }

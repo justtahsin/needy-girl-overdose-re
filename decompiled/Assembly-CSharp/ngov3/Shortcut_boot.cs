@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,13 +15,13 @@ public class Shortcut_boot : MonoBehaviour
 
 	public void Awake()
 	{
-		_shortcut = ((Component)this).GetComponent<Button>();
+		_shortcut = GetComponent<Button>();
 		if (appType != AppType.None)
 		{
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_shortcut), (Action<Unit>)delegate
+			_shortcut.OnClickAsObservable().Subscribe(delegate
 			{
 				windowManager.NewWindow(appType);
-			}), (Component)(object)_shortcut);
+			}).AddTo(_shortcut);
 		}
 	}
 }

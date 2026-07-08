@@ -34,15 +34,10 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		{
 			get
 			{
-				//IL_0001: Unknown result type (might be due to invalid IL or missing references)
 				return _type;
 			}
 			set
 			{
-				//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000e: Unknown result type (might be due to invalid IL or missing references)
 				_typePrev = _type;
 				_type = value;
 			}
@@ -61,19 +56,16 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 		public void Set(int id, ControllerType type)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
 			this.id = id;
 			this.type = type;
 		}
 
 		public void Clear()
 		{
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0017: Unknown result type (might be due to invalid IL or missing references)
 			_id = -1;
 			_idPrev = -1;
-			_type = (ControllerType)2;
-			_typePrev = (ControllerType)2;
+			_type = ControllerType.Joystick;
+			_typePrev = ControllerType.Joystick;
 		}
 	}
 
@@ -103,7 +95,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 		private Action<int> drawWindowDelegate;
 
-		private WindowFunction drawWindowFunction;
+		private GUI.WindowFunction drawWindowFunction;
 
 		private WindowProperties windowProperties;
 
@@ -177,10 +169,8 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 		public DialogHelper()
 		{
-			//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002f: Expected O, but got Unknown
 			drawWindowDelegate = DrawWindow;
-			drawWindowFunction = new WindowFunction(drawWindowDelegate.Invoke);
+			drawWindowFunction = drawWindowDelegate.Invoke;
 		}
 
 		public void StartModal(int queueActionId, DialogType type, WindowProperties windowProperties, Action<int, UserResponse> resultCallback)
@@ -208,13 +198,11 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 		public void Draw()
 		{
-			//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0041: Unknown result type (might be due to invalid IL or missing references)
 			if (_enabled)
 			{
 				bool flag = GUI.enabled;
 				GUI.enabled = true;
-				GUILayout.Window(windowProperties.windowId, windowProperties.rect, drawWindowFunction, windowProperties.title, Array.Empty<GUILayoutOption>());
+				GUILayout.Window(windowProperties.windowId, windowProperties.rect, drawWindowFunction, windowProperties.title);
 				GUI.FocusWindow(windowProperties.windowId);
 				if (GUI.enabled != flag)
 				{
@@ -235,7 +223,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 			{
 				GUI.enabled = false;
 			}
-			if (GUILayout.Button(title, Array.Empty<GUILayoutOption>()))
+			if (GUILayout.Button(title))
 			{
 				Confirm(UserResponse.Confirm);
 			}
@@ -257,7 +245,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 			{
 				GUI.enabled = false;
 			}
-			if (GUILayout.Button(title, Array.Empty<GUILayoutOption>()))
+			if (GUILayout.Button(title))
 			{
 				Confirm(response);
 			}
@@ -279,7 +267,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 			{
 				GUI.enabled = false;
 			}
-			if (GUILayout.Button(title, Array.Empty<GUILayoutOption>()))
+			if (GUILayout.Button(title))
 			{
 				Cancel();
 			}
@@ -424,9 +412,9 @@ public class ControlRemappingDemo1 : MonoBehaviour
 	{
 		public ElementAssignmentChangeType changeType { get; set; }
 
-		public Context context { get; private set; }
+		public InputMapper.Context context { get; private set; }
 
-		public ElementAssignmentChange(ElementAssignmentChangeType changeType, Context context)
+		public ElementAssignmentChange(ElementAssignmentChangeType changeType, InputMapper.Context context)
 			: base(QueueActionType.ElementAssignment)
 		{
 			this.changeType = changeType;
@@ -526,7 +514,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private InputMapper inputMapper = new InputMapper();
 
-	private ConflictFoundEventData conflictFoundEventData;
+	private InputMapper.ConflictFoundEventData conflictFoundEventData;
 
 	private bool guiState;
 
@@ -600,16 +588,12 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void Setup()
 	{
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Expected O, but got Unknown
-		//IL_0035: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003f: Expected O, but got Unknown
 		if (!setupFinished)
 		{
 			style_wordWrap = new GUIStyle(GUI.skin.label);
 			style_wordWrap.wordWrap = true;
 			style_centeredBox = new GUIStyle(GUI.skin.box);
-			style_centeredBox.alignment = (TextAnchor)4;
+			style_centeredBox.alignment = TextAnchor.MiddleCenter;
 			setupFinished = true;
 		}
 	}
@@ -648,9 +632,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void HandleMenuControl()
 	{
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0019: Invalid comparison between Unknown and I4
-		if (!dialog.enabled && (int)Event.current.type == 8 && ReInput.players.GetSystemPlayer().GetButtonDown("Menu"))
+		if (!dialog.enabled && Event.current.type == EventType.Layout && ReInput.players.GetSystemPlayer().GetButtonDown("Menu"))
 		{
 			if (showMenu)
 			{
@@ -677,28 +659,15 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void DrawInitialScreen()
 	{
-		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004b: Expected O, but got Unknown
-		//IL_0038: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003e: Expected O, but got Unknown
-		//IL_0056: Unknown result type (might be due to invalid IL or missing references)
-		ActionElementMap firstElementMapWithAction = ReInput.players.GetSystemPlayer().controllers.maps.GetFirstElementMapWithAction("Menu", true);
-		GUIContent val = ((firstElementMapWithAction == null) ? new GUIContent("There is no element assigned to open the menu!") : new GUIContent("Press " + firstElementMapWithAction.elementIdentifierName + " to open the menu."));
+		ActionElementMap firstElementMapWithAction = ReInput.players.GetSystemPlayer().controllers.maps.GetFirstElementMapWithAction("Menu", skipDisabledMaps: true);
+		GUIContent content = ((firstElementMapWithAction == null) ? new GUIContent("There is no element assigned to open the menu!") : new GUIContent("Press " + firstElementMapWithAction.elementIdentifierName + " to open the menu."));
 		GUILayout.BeginArea(GetScreenCenteredRect(300f, 50f));
-		GUILayout.Box(val, style_centeredBox, (GUILayoutOption[])(object)new GUILayoutOption[2]
-		{
-			GUILayout.ExpandHeight(true),
-			GUILayout.ExpandWidth(true)
-		});
+		GUILayout.Box(content, style_centeredBox, GUILayout.ExpandHeight(expand: true), GUILayout.ExpandWidth(expand: true));
 		GUILayout.EndArea();
 	}
 
 	private void DrawPage()
 	{
-		//IL_0062: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0092: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a1: Unknown result type (might be due to invalid IL or missing references)
 		if (GUI.enabled != pageGUIState)
 		{
 			GUI.enabled = pageGUIState;
@@ -710,7 +679,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		DrawControllerSelector();
 		DrawCalibrateButton();
 		DrawMapCategories();
-		actionScrollPos = GUILayout.BeginScrollView(actionScrollPos, Array.Empty<GUILayoutOption>());
+		actionScrollPos = GUILayout.BeginScrollView(actionScrollPos);
 		DrawCategoryActions();
 		GUILayout.EndScrollView();
 		GUILayout.EndArea();
@@ -720,20 +689,20 @@ public class ControlRemappingDemo1 : MonoBehaviour
 	{
 		if (ReInput.players.allPlayerCount == 0)
 		{
-			GUILayout.Label("There are no players.", Array.Empty<GUILayoutOption>());
+			GUILayout.Label("There are no players.");
 			return;
 		}
 		GUILayout.Space(15f);
-		GUILayout.Label("Players:", Array.Empty<GUILayoutOption>());
-		GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
-		foreach (Player player in ReInput.players.GetPlayers(true))
+		GUILayout.Label("Players:");
+		GUILayout.BeginHorizontal();
+		foreach (Player player in ReInput.players.GetPlayers(includeSystemPlayer: true))
 		{
 			if (selectedPlayer == null)
 			{
 				selectedPlayer = player;
 			}
 			bool flag = ((player == selectedPlayer) ? true : false);
-			bool flag2 = GUILayout.Toggle(flag, (player.descriptiveName != string.Empty) ? player.descriptiveName : player.name, GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
+			bool flag2 = GUILayout.Toggle(flag, (player.descriptiveName != string.Empty) ? player.descriptiveName : player.name, "Button", GUILayout.ExpandWidth(expand: false));
 			if (flag2 != flag && flag2)
 			{
 				selectedPlayer = player;
@@ -746,19 +715,19 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void DrawMouseAssignment()
 	{
-		bool enabled = GUI.enabled;
+		bool flag = GUI.enabled;
 		if (selectedPlayer == null)
 		{
 			GUI.enabled = false;
 		}
 		GUILayout.Space(15f);
-		GUILayout.Label("Assign Mouse:", Array.Empty<GUILayoutOption>());
-		GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
-		bool flag = ((selectedPlayer != null && selectedPlayer.controllers.hasMouse) ? true : false);
-		bool flag2 = GUILayout.Toggle(flag, "Assign Mouse", GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
-		if (flag2 != flag)
+		GUILayout.Label("Assign Mouse:");
+		GUILayout.BeginHorizontal();
+		bool flag2 = ((selectedPlayer != null && selectedPlayer.controllers.hasMouse) ? true : false);
+		bool flag3 = GUILayout.Toggle(flag2, "Assign Mouse", "Button", GUILayout.ExpandWidth(expand: false));
+		if (flag3 != flag2)
 		{
-			if (flag2)
+			if (flag3)
 			{
 				selectedPlayer.controllers.hasMouse = true;
 				foreach (Player player in ReInput.players.Players)
@@ -775,311 +744,265 @@ public class ControlRemappingDemo1 : MonoBehaviour
 			}
 		}
 		GUILayout.EndHorizontal();
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 	}
 
 	private void DrawJoystickSelector()
 	{
-		bool enabled = GUI.enabled;
+		bool flag = GUI.enabled;
 		if (selectedPlayer == null)
 		{
 			GUI.enabled = false;
 		}
 		GUILayout.Space(15f);
-		GUILayout.Label("Assign Joysticks:", Array.Empty<GUILayoutOption>());
-		GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
-		bool flag = ((selectedPlayer == null || selectedPlayer.controllers.joystickCount == 0) ? true : false);
-		bool flag2 = GUILayout.Toggle(flag, "None", GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
-		if (flag2 != flag)
+		GUILayout.Label("Assign Joysticks:");
+		GUILayout.BeginHorizontal();
+		bool flag2 = ((selectedPlayer == null || selectedPlayer.controllers.joystickCount == 0) ? true : false);
+		bool flag3 = GUILayout.Toggle(flag2, "None", "Button", GUILayout.ExpandWidth(expand: false));
+		if (flag3 != flag2)
 		{
-			selectedPlayer.controllers.ClearControllersOfType((ControllerType)2);
+			selectedPlayer.controllers.ClearControllersOfType(ControllerType.Joystick);
 			ControllerSelectionChanged();
 		}
 		if (selectedPlayer != null)
 		{
 			foreach (Joystick joystick in ReInput.controllers.Joysticks)
 			{
-				flag = selectedPlayer.controllers.ContainsController((Controller)(object)joystick);
-				flag2 = GUILayout.Toggle(flag, ((Controller)joystick).name, GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
-				if (flag2 != flag)
+				flag2 = selectedPlayer.controllers.ContainsController(joystick);
+				flag3 = GUILayout.Toggle(flag2, joystick.name, "Button", GUILayout.ExpandWidth(expand: false));
+				if (flag3 != flag2)
 				{
-					EnqueueAction(new JoystickAssignmentChange(selectedPlayer.id, ((Controller)joystick).id, flag2));
+					EnqueueAction(new JoystickAssignmentChange(selectedPlayer.id, joystick.id, flag3));
 				}
 			}
 		}
 		GUILayout.EndHorizontal();
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 	}
 
 	private void DrawControllerSelector()
 	{
-		//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005e: Invalid comparison between Unknown and I4
-		//IL_00b9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bf: Invalid comparison between Unknown and I4
-		//IL_012f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0135: Invalid comparison between Unknown and I4
 		if (selectedPlayer == null)
 		{
 			return;
 		}
-		bool enabled = GUI.enabled;
+		bool flag = GUI.enabled;
 		GUILayout.Space(15f);
-		GUILayout.Label("Controller to Map:", Array.Empty<GUILayoutOption>());
-		GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
+		GUILayout.Label("Controller to Map:");
+		GUILayout.BeginHorizontal();
 		if (!selectedController.hasSelection)
 		{
-			selectedController.Set(0, (ControllerType)0);
+			selectedController.Set(0, ControllerType.Keyboard);
 			ControllerSelectionChanged();
 		}
-		bool flag = (int)selectedController.type == 0;
-		if (GUILayout.Toggle(flag, "Keyboard", GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }) != flag)
+		bool flag2 = selectedController.type == ControllerType.Keyboard;
+		if (GUILayout.Toggle(flag2, "Keyboard", "Button", GUILayout.ExpandWidth(expand: false)) != flag2)
 		{
-			selectedController.Set(0, (ControllerType)0);
+			selectedController.Set(0, ControllerType.Keyboard);
 			ControllerSelectionChanged();
 		}
 		if (!selectedPlayer.controllers.hasMouse)
 		{
 			GUI.enabled = false;
 		}
-		flag = (int)selectedController.type == 1;
-		if (GUILayout.Toggle(flag, "Mouse", GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }) != flag)
+		flag2 = selectedController.type == ControllerType.Mouse;
+		if (GUILayout.Toggle(flag2, "Mouse", "Button", GUILayout.ExpandWidth(expand: false)) != flag2)
 		{
-			selectedController.Set(0, (ControllerType)1);
+			selectedController.Set(0, ControllerType.Mouse);
 			ControllerSelectionChanged();
 		}
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 		foreach (Joystick joystick in selectedPlayer.controllers.Joysticks)
 		{
-			flag = (int)selectedController.type == 2 && selectedController.id == ((Controller)joystick).id;
-			if (GUILayout.Toggle(flag, ((Controller)joystick).name, GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }) != flag)
+			flag2 = selectedController.type == ControllerType.Joystick && selectedController.id == joystick.id;
+			if (GUILayout.Toggle(flag2, joystick.name, "Button", GUILayout.ExpandWidth(expand: false)) != flag2)
 			{
-				selectedController.Set(((Controller)joystick).id, (ControllerType)2);
+				selectedController.Set(joystick.id, ControllerType.Joystick);
 				ControllerSelectionChanged();
 			}
 		}
 		GUILayout.EndHorizontal();
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 	}
 
 	private void DrawCalibrateButton()
 	{
-		//IL_003a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005f: Invalid comparison between Unknown and I4
 		if (selectedPlayer == null)
 		{
 			return;
 		}
-		bool enabled = GUI.enabled;
+		bool flag = GUI.enabled;
 		GUILayout.Space(10f);
-		Controller val = (selectedController.hasSelection ? selectedPlayer.controllers.GetController(selectedController.type, selectedController.id) : null);
-		if (val == null || (int)selectedController.type != 2)
+		Controller controller = (selectedController.hasSelection ? selectedPlayer.controllers.GetController(selectedController.type, selectedController.id) : null);
+		if (controller == null || selectedController.type != ControllerType.Joystick)
 		{
 			GUI.enabled = false;
-			GUILayout.Button("Select a controller to calibrate", (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
-			if (GUI.enabled != enabled)
+			GUILayout.Button("Select a controller to calibrate", GUILayout.ExpandWidth(expand: false));
+			if (GUI.enabled != flag)
 			{
-				GUI.enabled = enabled;
+				GUI.enabled = flag;
 			}
 		}
-		else if (GUILayout.Button("Calibrate " + val.name, (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }))
+		else if (GUILayout.Button("Calibrate " + controller.name, GUILayout.ExpandWidth(expand: false)) && controller is Joystick { calibrationMap: { } calibrationMap } joystick)
 		{
-			Joystick val2 = (Joystick)(object)((val is Joystick) ? val : null);
-			if (val2 != null)
-			{
-				CalibrationMap calibrationMap = ((ControllerWithAxes)val2).calibrationMap;
-				if (calibrationMap != null)
-				{
-					EnqueueAction(new Calibration(selectedPlayer, val2, calibrationMap));
-				}
-			}
+			EnqueueAction(new Calibration(selectedPlayer, joystick, calibrationMap));
 		}
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 	}
 
 	private void DrawMapCategories()
 	{
-		//IL_0072: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0150: Unknown result type (might be due to invalid IL or missing references)
 		if (selectedPlayer == null || !selectedController.hasSelection)
 		{
 			return;
 		}
-		bool enabled = GUI.enabled;
+		bool flag = GUI.enabled;
 		GUILayout.Space(15f);
-		GUILayout.Label("Categories:", Array.Empty<GUILayoutOption>());
-		GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
+		GUILayout.Label("Categories:");
+		GUILayout.BeginHorizontal();
 		foreach (InputMapCategory userAssignableMapCategory in ReInput.mapping.UserAssignableMapCategories)
 		{
-			if (!selectedPlayer.controllers.maps.ContainsMapInCategory(selectedController.type, ((InputCategory)userAssignableMapCategory).id))
+			if (!selectedPlayer.controllers.maps.ContainsMapInCategory(selectedController.type, userAssignableMapCategory.id))
 			{
 				GUI.enabled = false;
 			}
 			else if (selectedMapCategoryId < 0)
 			{
-				selectedMapCategoryId = ((InputCategory)userAssignableMapCategory).id;
-				selectedMap = selectedPlayer.controllers.maps.GetFirstMapInCategory(selectedController.type, selectedController.id, ((InputCategory)userAssignableMapCategory).id);
+				selectedMapCategoryId = userAssignableMapCategory.id;
+				selectedMap = selectedPlayer.controllers.maps.GetFirstMapInCategory(selectedController.type, selectedController.id, userAssignableMapCategory.id);
 			}
-			bool flag = ((((InputCategory)userAssignableMapCategory).id == selectedMapCategoryId) ? true : false);
-			if (GUILayout.Toggle(flag, (((InputCategory)userAssignableMapCategory).descriptiveName != string.Empty) ? ((InputCategory)userAssignableMapCategory).descriptiveName : ((InputCategory)userAssignableMapCategory).name, GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }) != flag)
+			bool flag2 = ((userAssignableMapCategory.id == selectedMapCategoryId) ? true : false);
+			if (GUILayout.Toggle(flag2, (userAssignableMapCategory.descriptiveName != string.Empty) ? userAssignableMapCategory.descriptiveName : userAssignableMapCategory.name, "Button", GUILayout.ExpandWidth(expand: false)) != flag2)
 			{
-				selectedMapCategoryId = ((InputCategory)userAssignableMapCategory).id;
-				selectedMap = selectedPlayer.controllers.maps.GetFirstMapInCategory(selectedController.type, selectedController.id, ((InputCategory)userAssignableMapCategory).id);
+				selectedMapCategoryId = userAssignableMapCategory.id;
+				selectedMap = selectedPlayer.controllers.maps.GetFirstMapInCategory(selectedController.type, selectedController.id, userAssignableMapCategory.id);
 			}
-			if (GUI.enabled != enabled)
+			if (GUI.enabled != flag)
 			{
-				GUI.enabled = enabled;
+				GUI.enabled = flag;
 			}
 		}
 		GUILayout.EndHorizontal();
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 	}
 
 	private void DrawCategoryActions()
 	{
-		//IL_00b7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bd: Invalid comparison between Unknown and I4
-		//IL_0174: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0184: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01fd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0203: Invalid comparison between Unknown and I4
-		//IL_0207: Unknown result type (might be due to invalid IL or missing references)
-		//IL_020d: Invalid comparison between Unknown and I4
-		//IL_0309: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0312: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0318: Invalid comparison between Unknown and I4
-		//IL_03f2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03f8: Invalid comparison between Unknown and I4
-		//IL_03fc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0402: Invalid comparison between Unknown and I4
 		if (selectedPlayer == null || selectedMapCategoryId < 0)
 		{
 			return;
 		}
-		bool enabled = GUI.enabled;
+		bool flag = GUI.enabled;
 		if (selectedMap == null)
 		{
 			return;
 		}
 		GUILayout.Space(15f);
-		GUILayout.Label("Actions:", Array.Empty<GUILayoutOption>());
+		GUILayout.Label("Actions:");
 		InputMapCategory mapCategory = ReInput.mapping.GetMapCategory(selectedMapCategoryId);
 		if (mapCategory == null)
 		{
 			return;
 		}
-		InputCategory actionCategory = ReInput.mapping.GetActionCategory(((InputCategory)mapCategory).name);
+		InputCategory actionCategory = ReInput.mapping.GetActionCategory(mapCategory.name);
 		if (actionCategory == null)
 		{
 			return;
 		}
-		float num = 150f;
+		float width = 150f;
 		foreach (InputAction item in ReInput.mapping.ActionsInCategory(actionCategory.id))
 		{
 			string text = ((item.descriptiveName != string.Empty) ? item.descriptiveName : item.name);
-			if ((int)item.type == 1)
+			if (item.type == InputActionType.Button)
 			{
-				GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
-				GUILayout.Label(text, (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.Width(num) });
-				DrawAddActionMapButton(selectedPlayer.id, item, (AxisRange)1, selectedController, selectedMap);
+				GUILayout.BeginHorizontal();
+				GUILayout.Label(text, GUILayout.Width(width));
+				DrawAddActionMapButton(selectedPlayer.id, item, AxisRange.Positive, selectedController, selectedMap);
 				foreach (ActionElementMap allMap in selectedMap.AllMaps)
 				{
 					if (allMap.actionId == item.id)
 					{
-						DrawActionAssignmentButton(selectedPlayer.id, item, (AxisRange)1, selectedController, selectedMap, allMap);
+						DrawActionAssignmentButton(selectedPlayer.id, item, AxisRange.Positive, selectedController, selectedMap, allMap);
 					}
 				}
 				GUILayout.EndHorizontal();
 			}
 			else
 			{
-				if ((int)item.type != 0)
+				if (item.type != InputActionType.Axis)
 				{
 					continue;
 				}
-				if ((int)selectedController.type != 0)
+				if (selectedController.type != ControllerType.Keyboard)
 				{
-					GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
-					GUILayout.Label(text, (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.Width(num) });
-					DrawAddActionMapButton(selectedPlayer.id, item, (AxisRange)0, selectedController, selectedMap);
+					GUILayout.BeginHorizontal();
+					GUILayout.Label(text, GUILayout.Width(width));
+					DrawAddActionMapButton(selectedPlayer.id, item, AxisRange.Full, selectedController, selectedMap);
 					foreach (ActionElementMap allMap2 in selectedMap.AllMaps)
 					{
-						if (allMap2.actionId == item.id && (int)allMap2.elementType != 1 && (int)allMap2.axisType != 2)
+						if (allMap2.actionId == item.id && allMap2.elementType != ControllerElementType.Button && allMap2.axisType != AxisType.Split)
 						{
-							DrawActionAssignmentButton(selectedPlayer.id, item, (AxisRange)0, selectedController, selectedMap, allMap2);
-							DrawInvertButton(selectedPlayer.id, item, (Pole)0, selectedController, selectedMap, allMap2);
+							DrawActionAssignmentButton(selectedPlayer.id, item, AxisRange.Full, selectedController, selectedMap, allMap2);
+							DrawInvertButton(selectedPlayer.id, item, Pole.Positive, selectedController, selectedMap, allMap2);
 						}
 					}
 					GUILayout.EndHorizontal();
 				}
-				string obj = ((item.positiveDescriptiveName != string.Empty) ? item.positiveDescriptiveName : (item.descriptiveName + " +"));
-				GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
-				GUILayout.Label(obj, (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.Width(num) });
-				DrawAddActionMapButton(selectedPlayer.id, item, (AxisRange)1, selectedController, selectedMap);
+				string text2 = ((item.positiveDescriptiveName != string.Empty) ? item.positiveDescriptiveName : (item.descriptiveName + " +"));
+				GUILayout.BeginHorizontal();
+				GUILayout.Label(text2, GUILayout.Width(width));
+				DrawAddActionMapButton(selectedPlayer.id, item, AxisRange.Positive, selectedController, selectedMap);
 				foreach (ActionElementMap allMap3 in selectedMap.AllMaps)
 				{
-					if (allMap3.actionId == item.id && (int)allMap3.axisContribution == 0 && (int)allMap3.axisType != 1)
+					if (allMap3.actionId == item.id && allMap3.axisContribution == Pole.Positive && allMap3.axisType != AxisType.Normal)
 					{
-						DrawActionAssignmentButton(selectedPlayer.id, item, (AxisRange)1, selectedController, selectedMap, allMap3);
+						DrawActionAssignmentButton(selectedPlayer.id, item, AxisRange.Positive, selectedController, selectedMap, allMap3);
 					}
 				}
 				GUILayout.EndHorizontal();
-				string obj2 = ((item.negativeDescriptiveName != string.Empty) ? item.negativeDescriptiveName : (item.descriptiveName + " -"));
-				GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
-				GUILayout.Label(obj2, (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.Width(num) });
-				DrawAddActionMapButton(selectedPlayer.id, item, (AxisRange)2, selectedController, selectedMap);
+				string text3 = ((item.negativeDescriptiveName != string.Empty) ? item.negativeDescriptiveName : (item.descriptiveName + " -"));
+				GUILayout.BeginHorizontal();
+				GUILayout.Label(text3, GUILayout.Width(width));
+				DrawAddActionMapButton(selectedPlayer.id, item, AxisRange.Negative, selectedController, selectedMap);
 				foreach (ActionElementMap allMap4 in selectedMap.AllMaps)
 				{
-					if (allMap4.actionId == item.id && (int)allMap4.axisContribution == 1 && (int)allMap4.axisType != 1)
+					if (allMap4.actionId == item.id && allMap4.axisContribution == Pole.Negative && allMap4.axisType != AxisType.Normal)
 					{
-						DrawActionAssignmentButton(selectedPlayer.id, item, (AxisRange)2, selectedController, selectedMap, allMap4);
+						DrawActionAssignmentButton(selectedPlayer.id, item, AxisRange.Negative, selectedController, selectedMap, allMap4);
 					}
 				}
 				GUILayout.EndHorizontal();
 			}
 		}
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 	}
 
 	private void DrawActionAssignmentButton(int playerId, InputAction action, AxisRange actionRange, ControllerSelection controller, ControllerMap controllerMap, ActionElementMap elementMap)
 	{
-		//IL_002a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0053: Expected O, but got Unknown
-		if (GUILayout.Button(elementMap.elementIdentifierName, (GUILayoutOption[])(object)new GUILayoutOption[2]
+		if (GUILayout.Button(elementMap.elementIdentifierName, GUILayout.ExpandWidth(expand: false), GUILayout.MinWidth(30f)))
 		{
-			GUILayout.ExpandWidth(false),
-			GUILayout.MinWidth(30f)
-		}))
-		{
-			Context context = new Context
+			InputMapper.Context context = new InputMapper.Context
 			{
 				actionId = action.id,
 				actionRange = actionRange,
@@ -1095,7 +1018,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 	private void DrawInvertButton(int playerId, InputAction action, Pole actionAxisContribution, ControllerSelection controller, ControllerMap controllerMap, ActionElementMap elementMap)
 	{
 		bool invert = elementMap.invert;
-		bool flag = GUILayout.Toggle(invert, "Invert", (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
+		bool flag = GUILayout.Toggle(invert, "Invert", GUILayout.ExpandWidth(expand: false));
 		if (flag != invert)
 		{
 			elementMap.invert = flag;
@@ -1105,15 +1028,9 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void DrawAddActionMapButton(int playerId, InputAction action, AxisRange actionRange, ControllerSelection controller, ControllerMap controllerMap)
 	{
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0033: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003c: Expected O, but got Unknown
-		if (GUILayout.Button("Add...", (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }))
+		if (GUILayout.Button("Add...", GUILayout.ExpandWidth(expand: false)))
 		{
-			Context context = new Context
+			InputMapper.Context context = new InputMapper.Context
 			{
 				actionId = action.id,
 				actionRange = actionRange,
@@ -1135,9 +1052,9 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		if (dialog.enabled)
 		{
 			GUILayout.Space(5f);
-			GUILayout.Label(message, style_wordWrap, Array.Empty<GUILayoutOption>());
+			GUILayout.Label(message, style_wordWrap);
 			GUILayout.FlexibleSpace();
-			GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
+			GUILayout.BeginHorizontal();
 			dialog.DrawConfirmButton("Okay");
 			GUILayout.FlexibleSpace();
 			dialog.DrawCancelButton();
@@ -1150,9 +1067,9 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		if (dialog.enabled)
 		{
 			GUILayout.Space(5f);
-			GUILayout.Label(message, style_wordWrap, Array.Empty<GUILayoutOption>());
+			GUILayout.Label(message, style_wordWrap);
 			GUILayout.FlexibleSpace();
-			GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
+			GUILayout.BeginHorizontal();
 			dialog.DrawConfirmButton("Okay");
 			GUILayout.EndHorizontal();
 		}
@@ -1160,13 +1077,12 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void DrawElementAssignmentWindow(string title, string message)
 	{
-		//IL_0069: Unknown result type (might be due to invalid IL or missing references)
 		if (!dialog.enabled)
 		{
 			return;
 		}
 		GUILayout.Space(5f);
-		GUILayout.Label(message, style_wordWrap, Array.Empty<GUILayoutOption>());
+		GUILayout.Label(message, style_wordWrap);
 		GUILayout.FlexibleSpace();
 		if (!(actionQueue.Peek() is ElementAssignmentChange elementAssignmentChange))
 		{
@@ -1176,7 +1092,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		float num;
 		if (!dialog.busy)
 		{
-			if (startListening && (int)inputMapper.status == 0)
+			if (startListening && inputMapper.status == InputMapper.Status.Idle)
 			{
 				inputMapper.Start(elementAssignmentChange.context);
 				startListening = false;
@@ -1197,7 +1113,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		{
 			num = inputMapper.options.timeout;
 		}
-		GUILayout.Label("Assignment will be canceled in " + (int)Mathf.Ceil(num) + "...", style_wordWrap, Array.Empty<GUILayoutOption>());
+		GUILayout.Label("Assignment will be canceled in " + (int)Mathf.Ceil(num) + "...", style_wordWrap);
 	}
 
 	private void DrawElementAssignmentProtectedConflictWindow(string title, string message)
@@ -1205,14 +1121,14 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		if (dialog.enabled)
 		{
 			GUILayout.Space(5f);
-			GUILayout.Label(message, style_wordWrap, Array.Empty<GUILayoutOption>());
+			GUILayout.Label(message, style_wordWrap);
 			GUILayout.FlexibleSpace();
 			if (!(actionQueue.Peek() is ElementAssignmentChange))
 			{
 				dialog.Cancel();
 				return;
 			}
-			GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
+			GUILayout.BeginHorizontal();
 			dialog.DrawConfirmButton(UserResponse.Custom1, "Add");
 			GUILayout.FlexibleSpace();
 			dialog.DrawCancelButton();
@@ -1225,14 +1141,14 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		if (dialog.enabled)
 		{
 			GUILayout.Space(5f);
-			GUILayout.Label(message, style_wordWrap, Array.Empty<GUILayoutOption>());
+			GUILayout.Label(message, style_wordWrap);
 			GUILayout.FlexibleSpace();
 			if (!(actionQueue.Peek() is ElementAssignmentChange))
 			{
 				dialog.Cancel();
 				return;
 			}
-			GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
+			GUILayout.BeginHorizontal();
 			dialog.DrawConfirmButton(UserResponse.Confirm, "Replace");
 			GUILayout.FlexibleSpace();
 			dialog.DrawConfirmButton(UserResponse.Custom1, "Add");
@@ -1247,9 +1163,9 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		if (dialog.enabled)
 		{
 			GUILayout.Space(5f);
-			GUILayout.Label(message, style_wordWrap, Array.Empty<GUILayoutOption>());
+			GUILayout.Label(message, style_wordWrap);
 			GUILayout.FlexibleSpace();
-			GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
+			GUILayout.BeginHorizontal();
 			dialog.DrawConfirmButton("Reassign");
 			GUILayout.FlexibleSpace();
 			dialog.DrawCancelButton("Remove");
@@ -1269,14 +1185,14 @@ public class ControlRemappingDemo1 : MonoBehaviour
 			return;
 		}
 		GUILayout.Space(5f);
-		GUILayout.Label(message, style_wordWrap, Array.Empty<GUILayoutOption>());
-		GUILayout.Label("Press any button or axis on \"" + fallbackJoystickIdentification.joystickName + "\" now.", style_wordWrap, Array.Empty<GUILayoutOption>());
+		GUILayout.Label(message, style_wordWrap);
+		GUILayout.Label("Press any button or axis on \"" + fallbackJoystickIdentification.joystickName + "\" now.", style_wordWrap);
 		GUILayout.FlexibleSpace();
-		if (GUILayout.Button("Skip", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Skip"))
 		{
 			dialog.Cancel();
 		}
-		else if (!dialog.busy && ReInput.controllers.SetUnityJoystickIdFromAnyButtonOrAxisPress(fallbackJoystickIdentification.joystickId, 0.8f, false))
+		else if (!dialog.busy && ReInput.controllers.SetUnityJoystickIdFromAnyButtonOrAxisPress(fallbackJoystickIdentification.joystickId, 0.8f, positiveAxesOnly: false))
 		{
 			dialog.Confirm();
 		}
@@ -1284,10 +1200,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void DrawCalibrationWindow(string title, string message)
 	{
-		//IL_007d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0087: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0474: Unknown result type (might be due to invalid IL or missing references)
 		if (!dialog.enabled)
 		{
 			return;
@@ -1298,94 +1210,94 @@ public class ControlRemappingDemo1 : MonoBehaviour
 			return;
 		}
 		GUILayout.Space(5f);
-		GUILayout.Label(message, style_wordWrap, Array.Empty<GUILayoutOption>());
+		GUILayout.Label(message, style_wordWrap);
 		GUILayout.Space(20f);
-		GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
-		bool enabled = GUI.enabled;
-		GUILayout.BeginVertical((GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.Width(200f) });
-		calibrateScrollPos = GUILayout.BeginScrollView(calibrateScrollPos, Array.Empty<GUILayoutOption>());
+		GUILayout.BeginHorizontal();
+		bool flag = GUI.enabled;
+		GUILayout.BeginVertical(GUILayout.Width(200f));
+		calibrateScrollPos = GUILayout.BeginScrollView(calibrateScrollPos);
 		if (calibration.recording)
 		{
 			GUI.enabled = false;
 		}
-		IList<ControllerElementIdentifier> axisElementIdentifiers = ((ControllerWithAxes)calibration.joystick).AxisElementIdentifiers;
+		IList<ControllerElementIdentifier> axisElementIdentifiers = calibration.joystick.AxisElementIdentifiers;
 		for (int i = 0; i < axisElementIdentifiers.Count; i++)
 		{
-			ControllerElementIdentifier val = axisElementIdentifiers[i];
-			bool flag = calibration.selectedElementIdentifierId == val.id;
-			bool flag2 = GUILayout.Toggle(flag, val.name, GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
-			if (flag != flag2)
+			ControllerElementIdentifier controllerElementIdentifier = axisElementIdentifiers[i];
+			bool flag2 = calibration.selectedElementIdentifierId == controllerElementIdentifier.id;
+			bool flag3 = GUILayout.Toggle(flag2, controllerElementIdentifier.name, "Button", GUILayout.ExpandWidth(expand: false));
+			if (flag2 != flag3)
 			{
-				calibration.selectedElementIdentifierId = val.id;
+				calibration.selectedElementIdentifierId = controllerElementIdentifier.id;
 			}
 		}
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
-		GUILayout.BeginVertical((GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.Width(200f) });
+		GUILayout.BeginVertical(GUILayout.Width(200f));
 		if (calibration.selectedElementIdentifierId >= 0)
 		{
-			float axisRawById = ((ControllerWithAxes)calibration.joystick).GetAxisRawById(calibration.selectedElementIdentifierId);
-			GUILayout.Label("Raw Value: " + axisRawById, Array.Empty<GUILayoutOption>());
-			int axisIndexById = ((ControllerWithAxes)calibration.joystick).GetAxisIndexById(calibration.selectedElementIdentifierId);
+			float axisRawById = calibration.joystick.GetAxisRawById(calibration.selectedElementIdentifierId);
+			GUILayout.Label("Raw Value: " + axisRawById);
+			int axisIndexById = calibration.joystick.GetAxisIndexById(calibration.selectedElementIdentifierId);
 			AxisCalibration axis = calibration.calibrationMap.GetAxis(axisIndexById);
-			GUILayout.Label("Calibrated Value: " + ((ControllerWithAxes)calibration.joystick).GetAxisById(calibration.selectedElementIdentifierId), Array.Empty<GUILayoutOption>());
-			GUILayout.Label("Zero: " + axis.calibratedZero, Array.Empty<GUILayoutOption>());
-			GUILayout.Label("Min: " + axis.calibratedMin, Array.Empty<GUILayoutOption>());
-			GUILayout.Label("Max: " + axis.calibratedMax, Array.Empty<GUILayoutOption>());
-			GUILayout.Label("Dead Zone: " + axis.deadZone, Array.Empty<GUILayoutOption>());
+			GUILayout.Label("Calibrated Value: " + calibration.joystick.GetAxisById(calibration.selectedElementIdentifierId));
+			GUILayout.Label("Zero: " + axis.calibratedZero);
+			GUILayout.Label("Min: " + axis.calibratedMin);
+			GUILayout.Label("Max: " + axis.calibratedMax);
+			GUILayout.Label("Dead Zone: " + axis.deadZone);
 			GUILayout.Space(15f);
-			bool flag3 = GUILayout.Toggle(axis.enabled, "Enabled", GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
-			if (axis.enabled != flag3)
+			bool flag4 = GUILayout.Toggle(axis.enabled, "Enabled", "Button", GUILayout.ExpandWidth(expand: false));
+			if (axis.enabled != flag4)
 			{
-				axis.enabled = flag3;
+				axis.enabled = flag4;
 			}
 			GUILayout.Space(10f);
-			bool flag4 = GUILayout.Toggle(calibration.recording, "Record Min/Max", GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
-			if (flag4 != calibration.recording)
+			bool flag5 = GUILayout.Toggle(calibration.recording, "Record Min/Max", "Button", GUILayout.ExpandWidth(expand: false));
+			if (flag5 != calibration.recording)
 			{
-				if (flag4)
+				if (flag5)
 				{
 					axis.calibratedMax = 0f;
 					axis.calibratedMin = 0f;
 				}
-				calibration.recording = flag4;
+				calibration.recording = flag5;
 			}
 			if (calibration.recording)
 			{
-				axis.calibratedMin = Mathf.Min(new float[3] { axis.calibratedMin, axisRawById, axis.calibratedMin });
-				axis.calibratedMax = Mathf.Max(new float[3] { axis.calibratedMax, axisRawById, axis.calibratedMax });
+				axis.calibratedMin = Mathf.Min(axis.calibratedMin, axisRawById, axis.calibratedMin);
+				axis.calibratedMax = Mathf.Max(axis.calibratedMax, axisRawById, axis.calibratedMax);
 				GUI.enabled = false;
 			}
-			if (GUILayout.Button("Set Zero", (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }))
+			if (GUILayout.Button("Set Zero", GUILayout.ExpandWidth(expand: false)))
 			{
 				axis.calibratedZero = axisRawById;
 			}
-			if (GUILayout.Button("Set Dead Zone", (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }))
+			if (GUILayout.Button("Set Dead Zone", GUILayout.ExpandWidth(expand: false)))
 			{
 				axis.deadZone = axisRawById;
 			}
-			bool flag5 = GUILayout.Toggle(axis.invert, "Invert", GUIStyle.op_Implicit("Button"), (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) });
-			if (axis.invert != flag5)
+			bool flag6 = GUILayout.Toggle(axis.invert, "Invert", "Button", GUILayout.ExpandWidth(expand: false));
+			if (axis.invert != flag6)
 			{
-				axis.invert = flag5;
+				axis.invert = flag6;
 			}
 			GUILayout.Space(10f);
-			if (GUILayout.Button("Reset", (GUILayoutOption[])(object)new GUILayoutOption[1] { GUILayout.ExpandWidth(false) }))
+			if (GUILayout.Button("Reset", GUILayout.ExpandWidth(expand: false)))
 			{
 				axis.Reset();
 			}
-			if (GUI.enabled != enabled)
+			if (GUI.enabled != flag)
 			{
-				GUI.enabled = enabled;
+				GUI.enabled = flag;
 			}
 		}
 		else
 		{
-			GUILayout.Label("Select an axis to begin.", Array.Empty<GUILayoutOption>());
+			GUILayout.Label("Select an axis to begin.");
 		}
 		GUILayout.EndVertical();
 		GUILayout.EndHorizontal();
@@ -1394,14 +1306,14 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		{
 			GUI.enabled = false;
 		}
-		if (GUILayout.Button("Close", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Close"))
 		{
 			calibrateScrollPos = default(Vector2);
 			dialog.Confirm();
 		}
-		if (GUI.enabled != enabled)
+		if (GUI.enabled != flag)
 		{
-			GUI.enabled = enabled;
+			GUI.enabled = flag;
 		}
 	}
 
@@ -1426,7 +1338,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private Rect GetScreenCenteredRect(float width, float height)
 	{
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
 		return new Rect((float)Screen.width * 0.5f - width * 0.5f, (float)((double)Screen.height * 0.5 - (double)(height * 0.5f)), width, height);
 	}
 
@@ -1476,8 +1387,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private bool ProcessJoystickAssignmentChange(JoystickAssignmentChange entry)
 	{
-		//IL_00d9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00de: Unknown result type (might be due to invalid IL or missing references)
 		if (entry.state == QueueEntry.State.Canceled)
 		{
 			return true;
@@ -1489,17 +1398,17 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		}
 		if (!entry.assign)
 		{
-			player.controllers.RemoveController((ControllerType)2, entry.joystickId);
+			player.controllers.RemoveController(ControllerType.Joystick, entry.joystickId);
 			ControllerSelectionChanged();
 			return true;
 		}
-		if (player.controllers.ContainsController((ControllerType)2, entry.joystickId))
+		if (player.controllers.ContainsController(ControllerType.Joystick, entry.joystickId))
 		{
 			return true;
 		}
 		if (!ReInput.controllers.IsJoystickAssigned(entry.joystickId) || entry.state == QueueEntry.State.Confirmed)
 		{
-			player.controllers.AddController((ControllerType)2, entry.joystickId, true);
+			player.controllers.AddController(ControllerType.Joystick, entry.joystickId, removeFromOtherPlayers: true);
 			ControllerSelectionChanged();
 			return true;
 		}
@@ -1533,8 +1442,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private bool ProcessRemoveOrReassignElementAssignment(ElementAssignmentChange entry)
 	{
-		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0099: Unknown result type (might be due to invalid IL or missing references)
 		if (entry.context.controllerMap == null)
 		{
 			return true;
@@ -1565,8 +1472,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private bool ProcessRemoveElementAssignment(ElementAssignmentChange entry)
 	{
-		//IL_0081: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0086: Unknown result type (might be due to invalid IL or missing references)
 		if (entry.context.controllerMap == null)
 		{
 			return true;
@@ -1592,16 +1497,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private bool ProcessAddOrReplaceElementAssignment(ElementAssignmentChange entry)
 	{
-		//IL_005d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002a: Invalid comparison between Unknown and I4
-		//IL_00a6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ac: Invalid comparison between Unknown and I4
-		//IL_0064: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0071: Invalid comparison between Unknown and I4
-		//IL_00f3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f8: Unknown result type (might be due to invalid IL or missing references)
 		if (entry.state == QueueEntry.State.Canceled)
 		{
 			inputMapper.Stop();
@@ -1609,7 +1504,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		}
 		if (entry.state == QueueEntry.State.Confirmed)
 		{
-			if ((int)Event.current.type != 8)
+			if (Event.current.type != EventType.Layout)
 			{
 				return false;
 			}
@@ -1622,13 +1517,13 @@ public class ControlRemappingDemo1 : MonoBehaviour
 			return true;
 		}
 		string text;
-		if ((int)entry.context.controllerMap.controllerType != 0)
+		if (entry.context.controllerMap.controllerType != ControllerType.Keyboard)
 		{
-			text = (((int)entry.context.controllerMap.controllerType != 1) ? "Press any button or axis to assign it to this action." : "Press any mouse button or axis to assign it to this action.\n\nTo assign mouse movement axes, move the mouse quickly in the direction you want mapped to the action. Slow movements will be ignored.");
+			text = ((entry.context.controllerMap.controllerType != ControllerType.Mouse) ? "Press any button or axis to assign it to this action." : "Press any mouse button or axis to assign it to this action.\n\nTo assign mouse movement axes, move the mouse quickly in the direction you want mapped to the action. Slow movements will be ignored.");
 		}
 		else
 		{
-			text = (((int)Application.platform != 0 && (int)Application.platform != 1) ? "Press any key to assign it to this action. You may also use the modifier keys Control, Alt, and Shift. If you wish to assign a modifier key itself to this action, press and hold the key for 1 second." : "Press any key to assign it to this action. You may also use the modifier keys Command, Control, Alt, and Shift. If you wish to assign a modifier key itself to this action, press and hold the key for 1 second.");
+			text = ((Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.OSXPlayer) ? "Press any key to assign it to this action. You may also use the modifier keys Control, Alt, and Shift. If you wish to assign a modifier key itself to this action, press and hold the key for 1 second." : "Press any key to assign it to this action. You may also use the modifier keys Command, Control, Alt, and Shift. If you wish to assign a modifier key itself to this action, press and hold the key for 1 second.");
 			if (Application.isEditor)
 			{
 				text += "\n\nNOTE: Some modifier key combinations will not work in the Unity Editor, but they will work in a game build.";
@@ -1646,10 +1541,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private bool ProcessElementAssignmentConflictCheck(ElementAssignmentChange entry)
 	{
-		//IL_015f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0164: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00de: Unknown result type (might be due to invalid IL or missing references)
 		if (entry.context.controllerMap == null)
 		{
 			return true;
@@ -1667,7 +1558,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		{
 			if (entry.response == UserResponse.Confirm)
 			{
-				conflictFoundEventData.responseCallback((ConflictResponse)1);
+				conflictFoundEventData.responseCallback(InputMapper.ConflictResponse.Replace);
 			}
 			else
 			{
@@ -1675,7 +1566,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 				{
 					throw new NotImplementedException();
 				}
-				conflictFoundEventData.responseCallback((ConflictResponse)2);
+				conflictFoundEventData.responseCallback(InputMapper.ConflictResponse.Add);
 			}
 			return true;
 		}
@@ -1706,8 +1597,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private bool ProcessFallbackJoystickIdentification(FallbackJoystickIdentification entry)
 	{
-		//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0055: Unknown result type (might be due to invalid IL or missing references)
 		if (entry.state == QueueEntry.State.Canceled)
 		{
 			return true;
@@ -1728,8 +1617,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private bool ProcessCalibration(Calibration entry)
 	{
-		//IL_0065: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006a: Unknown result type (might be due to invalid IL or missing references)
 		if (entry.state == QueueEntry.State.Canceled)
 		{
 			return true;
@@ -1741,7 +1628,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		dialog.StartModal(entry.id, DialogHelper.DialogType.JoystickConflict, new WindowProperties
 		{
 			title = "Calibrate Controller",
-			message = "Select an axis to calibrate on the " + ((Controller)entry.joystick).name + ".",
+			message = "Select an axis to calibrate on the " + entry.joystick.name + ".",
 			rect = GetScreenCenteredRect(450f, 480f),
 			windowDrawDelegate = DrawCalibrationWindow
 		}, DialogResultCallback);
@@ -1779,7 +1666,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void ClearWorkingVars()
 	{
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
 		selectedPlayer = null;
 		ClearMapSelection();
 		selectedController.Clear();
@@ -1817,10 +1703,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void JoystickConnected(ControllerStatusChangedEventArgs args)
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0080: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0038: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0056: Unknown result type (might be due to invalid IL or missing references)
 		if (ReInput.controllers.IsControllerAssigned(args.controllerType, args.controllerId))
 		{
 			foreach (Player allPlayer in ReInput.players.AllPlayers)
@@ -1843,12 +1725,6 @@ public class ControlRemappingDemo1 : MonoBehaviour
 
 	private void JoystickPreDisconnect(ControllerStatusChangedEventArgs args)
 	{
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009a: Unknown result type (might be due to invalid IL or missing references)
 		if (selectedController.hasSelection && args.controllerType == selectedController.type && args.controllerId == selectedController.id)
 		{
 			ClearControllerSelection();
@@ -1883,12 +1759,12 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		}
 	}
 
-	private void OnConflictFound(ConflictFoundEventData data)
+	private void OnConflictFound(InputMapper.ConflictFoundEventData data)
 	{
 		conflictFoundEventData = data;
 	}
 
-	private void OnStopped(StoppedEventData data)
+	private void OnStopped(InputMapper.StoppedEventData data)
 	{
 		conflictFoundEventData = null;
 	}
@@ -1903,7 +1779,7 @@ public class ControlRemappingDemo1 : MonoBehaviour
 		Open();
 		foreach (Joystick joystick in ReInput.controllers.Joysticks)
 		{
-			actionQueue.Enqueue(new FallbackJoystickIdentification(((Controller)joystick).id, ((Controller)joystick).name));
+			actionQueue.Enqueue(new FallbackJoystickIdentification(joystick.id, joystick.name));
 		}
 	}
 

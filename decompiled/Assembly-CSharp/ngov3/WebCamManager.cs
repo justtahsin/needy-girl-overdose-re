@@ -10,7 +10,7 @@ public class WebCamManager : SingletonMonoBehaviour<WebCamManager>
 
 	public Subject<string> _currentAnim = new Subject<string>();
 
-	public ReactiveProperty<bool> hidegirl = new ReactiveProperty<bool>(false);
+	public ReactiveProperty<bool> hidegirl = new ReactiveProperty<bool>(initialValue: false);
 
 	public string baseAnim;
 

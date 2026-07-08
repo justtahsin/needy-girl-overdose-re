@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UniRx;
 using UnityEngine;
 
@@ -18,11 +17,11 @@ public class PoketterManager : SingletonMonoBehaviour<PoketterManager>
 
 	public ReactiveCollection<TweetData> _tweetQueue = new ReactiveCollection<TweetData>();
 
-	public ReactiveProperty<bool> isDeleted = new ReactiveProperty<bool>(false);
+	public ReactiveProperty<bool> isDeleted = new ReactiveProperty<bool>(initialValue: false);
 
-	public ReactiveProperty<bool> isBlocked = new ReactiveProperty<bool>(false);
+	public ReactiveProperty<bool> isBlocked = new ReactiveProperty<bool>(initialValue: false);
 
-	public ReactiveProperty<bool> isShootRunning = new ReactiveProperty<bool>(false);
+	public ReactiveProperty<bool> isShootRunning = new ReactiveProperty<bool>(initialValue: false);
 
 	public int TweetCountOnLoad => TWEETCOUNT_ONLOAD;
 
@@ -35,37 +34,37 @@ public class PoketterManager : SingletonMonoBehaviour<PoketterManager>
 	protected override void Awake()
 	{
 		base.Awake();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<CollectionAddEvent<TweetData>>(OnAddHistory, (Action<CollectionAddEvent<TweetData>>)delegate(CollectionAddEvent<TweetData> value)
+		OnAddHistory.Subscribe(delegate(CollectionAddEvent<TweetData> value)
 		{
 			history.Add(value.Value);
-		}), (Component)(object)this);
+		}).AddTo(this);
 	}
 
 	public void AddHistory(TweetData t)
 	{
-		((Collection<TweetData>)(object)_history).Add(t);
+		_history.Add(t);
 	}
 
 	public TweetData AddHistoryFromQueue()
 	{
-		TweetData tweetData = ((Collection<TweetData>)(object)_tweetQueue)[0];
-		((Collection<TweetData>)(object)_tweetQueue).Remove(tweetData);
+		TweetData tweetData = _tweetQueue[0];
+		_tweetQueue.Remove(tweetData);
 		AddHistory(tweetData);
 		return tweetData;
 	}
 
 	public void AddHistoryFromQueueAll()
 	{
-		foreach (TweetData item in (Collection<TweetData>)(object)_tweetQueue)
+		foreach (TweetData item in _tweetQueue)
 		{
 			AddHistory(item);
 		}
-		((Collection<TweetData>)(object)_tweetQueue).Clear();
+		_tweetQueue.Clear();
 	}
 
 	public void AddTweet(TweetData data)
 	{
-		((Collection<TweetData>)(object)_tweetQueue).Add(data);
+		_tweetQueue.Add(data);
 	}
 
 	public void AddTweet(string nakami, bool isOmote = true)
@@ -145,7 +144,7 @@ public class PoketterManager : SingletonMonoBehaviour<PoketterManager>
 			}
 			else if (status < 10000)
 			{
-				if (Random.Range(0, 100) < KUSOREPPROBABILITY)
+				if (UnityEngine.Random.Range(0, 100) < KUSOREPPROBABILITY)
 				{
 					AddKusorepToTweet(tweetData, NgoEx.smallKusoreps.RandomizedElement());
 				}
@@ -154,11 +153,11 @@ public class PoketterManager : SingletonMonoBehaviour<PoketterManager>
 			{
 				KusoRepType kusoRepType = NgoEx.middleKusoreps.RandomizedElement();
 				KusoRepType kusoRepType2 = NgoEx.middleKusoreps.RandomizedElement();
-				if (Random.Range(0, 100) < KUSOREPPROBABILITY)
+				if (UnityEngine.Random.Range(0, 100) < KUSOREPPROBABILITY)
 				{
 					AddKusorepToTweet(tweetData, kusoRepType);
 				}
-				if (Random.Range(0, 100) < KUSOREPPROBABILITY && kusoRepType2 != kusoRepType)
+				if (UnityEngine.Random.Range(0, 100) < KUSOREPPROBABILITY && kusoRepType2 != kusoRepType)
 				{
 					AddKusorepToTweet(tweetData, kusoRepType2);
 				}
@@ -168,15 +167,15 @@ public class PoketterManager : SingletonMonoBehaviour<PoketterManager>
 				KusoRepType kusoRepType3 = NgoEx.largeKusoreps.RandomizedElement();
 				KusoRepType kusoRepType4 = NgoEx.largeKusoreps.RandomizedElement();
 				KusoRepType kusoRepType5 = NgoEx.largeKusoreps.RandomizedElement();
-				if (Random.Range(0, 100) < KUSOREPPROBABILITY)
+				if (UnityEngine.Random.Range(0, 100) < KUSOREPPROBABILITY)
 				{
 					AddKusorepToTweet(tweetData, kusoRepType3);
 				}
-				if (Random.Range(0, 100) < KUSOREPPROBABILITY && kusoRepType4 != kusoRepType3)
+				if (UnityEngine.Random.Range(0, 100) < KUSOREPPROBABILITY && kusoRepType4 != kusoRepType3)
 				{
 					AddKusorepToTweet(tweetData, kusoRepType4);
 				}
-				if (Random.Range(0, 100) < KUSOREPPROBABILITY && kusoRepType5 != kusoRepType3 && kusoRepType5 != kusoRepType4)
+				if (UnityEngine.Random.Range(0, 100) < KUSOREPPROBABILITY && kusoRepType5 != kusoRepType3 && kusoRepType5 != kusoRepType4)
 				{
 					AddKusorepToTweet(tweetData, kusoRepType5);
 				}
@@ -218,7 +217,7 @@ public class PoketterManager : SingletonMonoBehaviour<PoketterManager>
 					AddKusorepToTweet(tweetData, item2);
 				}
 			}
-			if (Random.Range(0, 100) < KUSOREPPROBABILITY)
+			if (UnityEngine.Random.Range(0, 100) < KUSOREPPROBABILITY)
 			{
 				AddKusorepToTweet(tweetData, NgoEx.RandomEnumValue<KusoRepType>());
 			}

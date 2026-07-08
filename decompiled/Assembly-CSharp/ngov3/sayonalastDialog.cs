@@ -1,4 +1,3 @@
-using System;
 using NGO;
 using TMPro;
 using UniRx;
@@ -25,19 +24,19 @@ public class sayonalastDialog : MonoBehaviour
 
 	public void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageChanged();
-		}), (Component)(object)this);
+		}).AddTo(this);
 		OnLanguageChanged();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_submitButton), (Action<Unit>)delegate
+		_submitButton.OnClickAsObservable().Subscribe(delegate
 		{
 			OnSubmit();
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_dismissButton), (Action<Unit>)delegate
+		}).AddTo(this);
+		_dismissButton.OnClickAsObservable().Subscribe(delegate
 		{
 			Close();
-		}), (Component)(object)this);
+		}).AddTo(this);
 	}
 
 	private void Close()
@@ -56,7 +55,7 @@ public class sayonalastDialog : MonoBehaviour
 	private void OnLanguageChanged()
 	{
 		_notionText.text = "あと戻りできません";
-		((Component)_submitButton).GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		((Component)_dismissButton).GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_Cancell, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		_submitButton.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_OK, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		_dismissButton.GetComponentInChildren<TMP_Text>().text = NgoEx.SystemTextFromType(SystemTextType.Dialog_Cancell, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 	}
 }

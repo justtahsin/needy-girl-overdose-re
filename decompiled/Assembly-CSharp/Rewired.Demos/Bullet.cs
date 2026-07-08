@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
 	{
 		if (die && Time.time >= deathTime)
 		{
-			Object.Destroy((Object)(object)((Component)this).gameObject);
+			Object.Destroy(base.gameObject);
 		}
 	}
 }

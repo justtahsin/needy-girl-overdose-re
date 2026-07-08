@@ -1,10 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using DG.Tweening;
 using NGO;
 using UnityEngine;
@@ -14,92 +9,6 @@ namespace ngov3;
 
 public class KitsuneView : MonoBehaviour
 {
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CAutoScroll_003Ed__19 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public KitsuneView _003C_003E4__this;
-
-		private TweenAwaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_00c6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00cb: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0027: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Expected O, but got Unknown
-			//IL_0087: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0091: Expected O, but got Unknown
-			//IL_0096: Unknown result type (might be due to invalid IL or missing references)
-			//IL_009b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00af: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b0: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			KitsuneView CS_0024_003C_003E8__locals6 = _003C_003E4__this;
-			try
-			{
-				TweenAwaiter val;
-				if (num != 0)
-				{
-					CS_0024_003C_003E8__locals6.UpdateContents();
-					val = DOTweenAsyncExtensions.GetAwaiter((Tween)(object)TweenExtensions.Play<Sequence>(TweenSettingsExtensions.AppendCallback(TweenSettingsExtensions.AppendInterval(TweenSettingsExtensions.Append(TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendInterval(TweenSettingsExtensions.OnStart<Sequence>(DOTween.Sequence(), (TweenCallback)delegate
-					{
-						CS_0024_003C_003E8__locals6._scrollRect.verticalNormalizedPosition = 1f;
-						CS_0024_003C_003E8__locals6.jienResAlpha.alpha = 0f;
-					}), 1f), (Tween)(object)TweenSettingsExtensions.SetEase<Tweener>(DOTweenModuleUI.DOVerticalNormalizedPos(CS_0024_003C_003E8__locals6._scrollRect, 0f, 4f, false), (Ease)5)), (Tween)(object)DOTweenModuleUI.DOFade(CS_0024_003C_003E8__locals6.jienResAlpha, 1f, 2f)), 1f), (TweenCallback)delegate
-					{
-						CS_0024_003C_003E8__locals6.CleanThread();
-					})));
-					if (!((TweenAwaiter)(ref val)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<TweenAwaiter, _003CAutoScroll_003Ed__19>(ref val, ref this);
-						return;
-					}
-				}
-				else
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(TweenAwaiter);
-					num = (_003C_003E1__state = -1);
-				}
-				((TweenAwaiter)(ref val)).GetResult();
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	[SerializeField]
 	private GameObject _buttonRoot;
 
@@ -149,21 +58,18 @@ public class KitsuneView : MonoBehaviour
 
 	public void UpdateContents(int num = -1)
 	{
-		//IL_0033: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0122: Unknown result type (might be due to invalid IL or missing references)
 		string text = string.Empty;
 		if (SingletonMonoBehaviour<EventManager>.Instance.nowEnding == EndingType.Ending_Yami)
 		{
 			text = "Charisma";
-			((Component)_scrollRect).gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0f, 0f);
-			_buttonRoot.SetActive(false);
+			_scrollRect.gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0f, 0f);
+			_buttonRoot.SetActive(value: false);
 		}
 		else if (SingletonMonoBehaviour<EventManager>.Instance.nowEnding == EndingType.Ending_Ideon)
 		{
 			text = "Ideon";
-			((Component)_scrollRect).gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0f, 0f);
-			_buttonRoot.SetActive(false);
+			_scrollRect.gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0f, 0f);
+			_buttonRoot.SetActive(value: false);
 		}
 		else if (SingletonMonoBehaviour<EventManager>.Instance.isHorror)
 		{
@@ -190,14 +96,14 @@ public class KitsuneView : MonoBehaviour
 					break;
 				}
 			}
-			((Component)_scrollRect).gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0f, 0f);
-			_buttonRoot.SetActive(false);
+			_scrollRect.gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0f, 0f);
+			_buttonRoot.SetActive(value: false);
 		}
 		else
 		{
 			text = ThreadRank(SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.Follower));
 		}
-		string text2 = NgoEx.SuretaiFromType("Suretai_" + text.TrimEnd(new char[3] { '1', '2', '3' }), SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
+		string text2 = NgoEx.SuretaiFromType("Suretai_" + text.TrimEnd('1', '2', '3'), SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		_suretai.text = text2;
 		foreach (KituneMaster.Param item in NgoEx.KituneFromRank(text))
 		{
@@ -214,16 +120,16 @@ public class KitsuneView : MonoBehaviour
 		KitsuneResView resInstance = GetResInstance(isJien: true);
 		resInstance.SetData(NgoEx.SystemTextFromType(SystemTextType.Kitsune_Handle, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value), Random.Range(0, 900) + 11, NgoEx.KituneFromType("Kitune_Ending_Charisma_12", SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value));
 		input.text = "";
-		((Component)resInstance).transform.SetAsLastSibling();
+		resInstance.transform.SetAsLastSibling();
 		AudioManager.Instance?.PlaySeByType(SoundType.SE_status_up);
-		TweenExtensions.Play<Tweener>(TweenSettingsExtensions.SetEase<Tweener>(DOTweenModuleUI.DOVerticalNormalizedPos(_scrollRect, 0f, 4f, false), (Ease)5));
+		_scrollRect.DOVerticalNormalizedPos(0f, 4f).SetEase(Ease.InQuad).Play();
 	}
 
 	public void CleanThread()
 	{
-		for (int num = ((Transform)_content).childCount - 1; num > 1; num--)
+		for (int num = _content.childCount - 1; num > 1; num--)
 		{
-			Object.Destroy((Object)(object)((Component)((Transform)_content).GetChild(num)).gameObject);
+			Object.Destroy(_content.GetChild(num).gameObject);
 		}
 	}
 
@@ -276,33 +182,37 @@ public class KitsuneView : MonoBehaviour
 		return "Normal1";
 	}
 
-	[AsyncStateMachine(typeof(_003CAutoScroll_003Ed__19))]
-	public UniTask AutoScroll()
+	public async UniTask AutoScroll()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CAutoScroll_003Ed__19 _003CAutoScroll_003Ed__20 = default(_003CAutoScroll_003Ed__19);
-		_003CAutoScroll_003Ed__20._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CAutoScroll_003Ed__20._003C_003E4__this = this;
-		_003CAutoScroll_003Ed__20._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CAutoScroll_003Ed__20._003C_003Et__builder)).Start<_003CAutoScroll_003Ed__19>(ref _003CAutoScroll_003Ed__20);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CAutoScroll_003Ed__20._003C_003Et__builder)).Task;
+		UpdateContents();
+		await DOTween.Sequence().OnStart(delegate
+		{
+			_scrollRect.verticalNormalizedPosition = 1f;
+			jienResAlpha.alpha = 0f;
+		}).AppendInterval(1f)
+			.Append(_scrollRect.DOVerticalNormalizedPos(0f, 4f).SetEase(Ease.InQuad))
+			.Append(jienResAlpha.DOFade(1f, 2f))
+			.AppendInterval(1f)
+			.AppendCallback(delegate
+			{
+				CleanThread();
+			})
+			.Play();
 	}
 
 	private KitsuneResView GetResInstance(bool isJien = false)
 	{
 		if (isJien)
 		{
-			return Object.Instantiate<KitsuneResView>(_AAResPrefabView, (Transform)(object)_content);
+			return Object.Instantiate(_AAResPrefabView, _content);
 		}
 		if (stockIndex < _resStocks.Count)
 		{
 			KitsuneResView kitsuneResView = _resStocks[stockIndex];
-			((Component)kitsuneResView).gameObject.SetActive(true);
+			kitsuneResView.gameObject.SetActive(value: true);
 			stockIndex++;
 			return kitsuneResView;
 		}
-		return Object.Instantiate<KitsuneResView>(_kituneResPrefabView, (Transform)(object)_content);
+		return Object.Instantiate(_kituneResPrefabView, _content);
 	}
 }

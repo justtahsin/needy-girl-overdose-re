@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Rewired.Integration.UnityUI;
 using Rewired.Utils;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Rewired.UI.ControlMapper;
@@ -121,7 +120,7 @@ public class CalibrationWindow : Window
 			{
 				return false;
 			}
-			if (selectedAxis < 0 || selectedAxis >= ((ControllerWithAxes)joystick).calibrationMap.axisCount)
+			if (selectedAxis < 0 || selectedAxis >= joystick.calibrationMap.axisCount)
 			{
 				return false;
 			}
@@ -137,15 +136,15 @@ public class CalibrationWindow : Window
 			{
 				return null;
 			}
-			return ((ControllerWithAxes)joystick).calibrationMap.GetAxis(selectedAxis);
+			return joystick.calibrationMap.GetAxis(selectedAxis);
 		}
 	}
 
 	public override void Initialize(int id, Func<int, bool> isFocusedCallback)
 	{
-		if ((Object)(object)rightContentContainer == (Object)null || (Object)(object)valueDisplayGroup == (Object)null || (Object)(object)calibratedValueMarker == (Object)null || (Object)(object)rawValueMarker == (Object)null || (Object)(object)calibratedZeroMarker == (Object)null || (Object)(object)deadzoneArea == (Object)null || (Object)(object)deadzoneSlider == (Object)null || (Object)(object)sensitivitySlider == (Object)null || (Object)(object)zeroSlider == (Object)null || (Object)(object)invertToggle == (Object)null || (Object)(object)axisScrollAreaContent == (Object)null || (Object)(object)doneButton == (Object)null || (Object)(object)calibrateButton == (Object)null || (Object)(object)axisButtonPrefab == (Object)null || (Object)(object)doneButtonLabel == (Object)null || (Object)(object)cancelButtonLabel == (Object)null || (Object)(object)defaultButtonLabel == (Object)null || (Object)(object)deadzoneSliderLabel == (Object)null || (Object)(object)zeroSliderLabel == (Object)null || (Object)(object)sensitivitySliderLabel == (Object)null || (Object)(object)invertToggleLabel == (Object)null || (Object)(object)calibrateButtonLabel == (Object)null)
+		if (rightContentContainer == null || valueDisplayGroup == null || calibratedValueMarker == null || rawValueMarker == null || calibratedZeroMarker == null || deadzoneArea == null || deadzoneSlider == null || sensitivitySlider == null || zeroSlider == null || invertToggle == null || axisScrollAreaContent == null || doneButton == null || calibrateButton == null || axisButtonPrefab == null || doneButtonLabel == null || cancelButtonLabel == null || defaultButtonLabel == null || deadzoneSliderLabel == null || zeroSliderLabel == null || sensitivitySliderLabel == null || invertToggleLabel == null || calibrateButtonLabel == null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: All inspector values must be assigned!");
+			Debug.LogError("Rewired Control Mapper: All inspector values must be assigned!");
 			return;
 		}
 		axisButtons = new List<Button>();
@@ -163,12 +162,6 @@ public class CalibrationWindow : Window
 
 	public void SetJoystick(int playerId, Joystick joystick)
 	{
-		//IL_0089: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0093: Expected O, but got Unknown
-		//IL_011d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_013a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0149: Unknown result type (might be due to invalid IL or missing references)
-		//IL_016b: Unknown result type (might be due to invalid IL or missing references)
 		if (!base.initialized)
 		{
 			return;
@@ -177,45 +170,45 @@ public class CalibrationWindow : Window
 		this.joystick = joystick;
 		if (joystick == null)
 		{
-			Debug.LogError((object)"Rewired Control Mapper: Joystick cannot be null!");
+			Debug.LogError("Rewired Control Mapper: Joystick cannot be null!");
 			return;
 		}
 		float num = 0f;
-		for (int i = 0; i < ((ControllerWithAxes)joystick).axisCount; i++)
+		for (int i = 0; i < joystick.axisCount; i++)
 		{
 			int index = i;
-			GameObject val = UITools.InstantiateGUIObject<Button>(axisButtonPrefab, (Transform)(object)axisScrollAreaContent, "Axis" + i);
-			Button button = val.GetComponent<Button>();
-			((UnityEvent)button.onClick).AddListener((UnityAction)delegate
+			GameObject gameObject = UITools.InstantiateGUIObject<Button>(axisButtonPrefab, axisScrollAreaContent, "Axis" + i);
+			Button button = gameObject.GetComponent<Button>();
+			button.onClick.AddListener(delegate
 			{
 				OnAxisSelected(index, button);
 			});
-			Text componentInSelfOrChildren = UnityTools.GetComponentInSelfOrChildren<Text>(val);
-			if ((Object)(object)componentInSelfOrChildren != (Object)null)
+			Text componentInSelfOrChildren = UnityTools.GetComponentInSelfOrChildren<Text>(gameObject);
+			if (componentInSelfOrChildren != null)
 			{
-				componentInSelfOrChildren.text = ControlMapper.GetLanguage().GetElementIdentifierName((Controller)(object)joystick, ((ControllerWithAxes)joystick).AxisElementIdentifiers[i].id, (AxisRange)0);
+				componentInSelfOrChildren.text = ControlMapper.GetLanguage().GetElementIdentifierName(joystick, joystick.AxisElementIdentifiers[i].id, AxisRange.Full);
 			}
 			if (num == 0f)
 			{
-				num = UnityTools.GetComponentInSelfOrChildren<LayoutElement>(val).minHeight;
+				num = UnityTools.GetComponentInSelfOrChildren<LayoutElement>(gameObject).minHeight;
 			}
 			axisButtons.Add(button);
 		}
-		float spacing = ((HorizontalOrVerticalLayoutGroup)((Component)axisScrollAreaContent).GetComponent<VerticalLayoutGroup>()).spacing;
-		axisScrollAreaContent.sizeDelta = new Vector2(axisScrollAreaContent.sizeDelta.x, Mathf.Max((float)((ControllerWithAxes)joystick).axisCount * (num + spacing) - spacing, axisScrollAreaContent.sizeDelta.y));
-		origCalibrationData = ((ControllerWithAxes)joystick).calibrationMap.ToXmlString();
+		float spacing = axisScrollAreaContent.GetComponent<VerticalLayoutGroup>().spacing;
+		axisScrollAreaContent.sizeDelta = new Vector2(axisScrollAreaContent.sizeDelta.x, Mathf.Max((float)joystick.axisCount * (num + spacing) - spacing, axisScrollAreaContent.sizeDelta.y));
+		origCalibrationData = joystick.calibrationMap.ToXmlString();
 		displayAreaWidth = rightContentContainer.sizeDelta.x;
-		rewiredStandaloneInputModule = ((Component)((Component)this).gameObject.transform.root).GetComponentInChildren<RewiredStandaloneInputModule>();
-		if ((Object)(object)rewiredStandaloneInputModule != (Object)null)
+		rewiredStandaloneInputModule = base.gameObject.transform.root.GetComponentInChildren<RewiredStandaloneInputModule>();
+		if (rewiredStandaloneInputModule != null)
 		{
 			menuHorizActionId = ReInput.mapping.GetActionId(rewiredStandaloneInputModule.horizontalAxis);
 			menuVertActionId = ReInput.mapping.GetActionId(rewiredStandaloneInputModule.verticalAxis);
 		}
-		if (((ControllerWithAxes)joystick).axisCount > 0)
+		if (joystick.axisCount > 0)
 		{
 			SelectAxis(0);
 		}
-		base.defaultUIElement = ((Component)doneButton).gameObject;
+		base.defaultUIElement = doneButton.gameObject;
 		RefreshControls();
 		Redraw();
 	}
@@ -243,13 +236,13 @@ public class CalibrationWindow : Window
 		}
 		if (joystick != null)
 		{
-			((ControllerWithAxes)joystick).ImportCalibrationMapFromXmlString(origCalibrationData);
+			joystick.ImportCalibrationMapFromXmlString(origCalibrationData);
 		}
 		if (!buttonCallbacks.TryGetValue(1, out var value))
 		{
 			if (cancelCallback != null)
 			{
-				cancelCallback.Invoke();
+				cancelCallback();
 			}
 		}
 		else
@@ -284,7 +277,7 @@ public class CalibrationWindow : Window
 	{
 		if (base.initialized && joystick != null)
 		{
-			((ControllerWithAxes)joystick).calibrationMap.Reset();
+			joystick.calibrationMap.Reset();
 			RefreshControls();
 			Redraw();
 		}
@@ -411,68 +404,50 @@ public class CalibrationWindow : Window
 
 	private void RedrawDeadzone()
 	{
-		//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0033: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0075: Unknown result type (might be due to invalid IL or missing references)
 		if (axisSelected)
 		{
-			float num = displayAreaWidth * axisCalibration.deadZone;
-			deadzoneArea.sizeDelta = new Vector2(num, deadzoneArea.sizeDelta.y);
-			deadzoneArea.anchoredPosition = new Vector2(axisCalibration.calibratedZero * (0f - ((Transform)deadzoneArea).parent.localPosition.x), deadzoneArea.anchoredPosition.y);
+			float x = displayAreaWidth * axisCalibration.deadZone;
+			deadzoneArea.sizeDelta = new Vector2(x, deadzoneArea.sizeDelta.y);
+			deadzoneArea.anchoredPosition = new Vector2(axisCalibration.calibratedZero * (0f - deadzoneArea.parent.localPosition.x), deadzoneArea.anchoredPosition.y);
 		}
 	}
 
 	private void RedrawCalibratedZero()
 	{
-		//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0041: Unknown result type (might be due to invalid IL or missing references)
 		if (axisSelected)
 		{
-			calibratedZeroMarker.anchoredPosition = new Vector2(axisCalibration.calibratedZero * (0f - ((Transform)deadzoneArea).parent.localPosition.x), calibratedZeroMarker.anchoredPosition.y);
+			calibratedZeroMarker.anchoredPosition = new Vector2(axisCalibration.calibratedZero * (0f - deadzoneArea.parent.localPosition.x), calibratedZeroMarker.anchoredPosition.y);
 			RedrawDeadzone();
 		}
 	}
 
 	private void RedrawValueMarkers()
 	{
-		//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00aa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ce: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
 		if (!axisSelected)
 		{
 			calibratedValueMarker.anchoredPosition = new Vector2(0f, calibratedValueMarker.anchoredPosition.y);
 			rawValueMarker.anchoredPosition = new Vector2(0f, rawValueMarker.anchoredPosition.y);
 			return;
 		}
-		float axis = ((ControllerWithAxes)joystick).GetAxis(selectedAxis);
-		float num = Mathf.Clamp(((ControllerWithAxes)joystick).GetAxisRaw(selectedAxis), -1f, 1f);
+		float axis = joystick.GetAxis(selectedAxis);
+		float num = Mathf.Clamp(joystick.GetAxisRaw(selectedAxis), -1f, 1f);
 		calibratedValueMarker.anchoredPosition = new Vector2(displayAreaWidth * 0.5f * axis, calibratedValueMarker.anchoredPosition.y);
 		rawValueMarker.anchoredPosition = new Vector2(displayAreaWidth * 0.5f * num, rawValueMarker.anchoredPosition.y);
 	}
 
 	private void SelectAxis(int index)
 	{
-		//IL_0085: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008a: Unknown result type (might be due to invalid IL or missing references)
-		if (index < 0 || index >= axisButtons.Count || (Object)(object)axisButtons[index] == (Object)null)
+		if (index < 0 || index >= axisButtons.Count || axisButtons[index] == null)
 		{
 			return;
 		}
-		((Selectable)axisButtons[index]).interactable = false;
-		((Selectable)axisButtons[index]).Select();
+		axisButtons[index].interactable = false;
+		axisButtons[index].Select();
 		for (int i = 0; i < axisButtons.Count; i++)
 		{
 			if (i != index)
 			{
-				((Selectable)axisButtons[i]).interactable = true;
+				axisButtons[i].interactable = true;
 			}
 		}
 		selectedAxis = index;
@@ -498,7 +473,7 @@ public class CalibrationWindow : Window
 			return;
 		}
 		minSensitivity = 0.1f;
-		if ((Object)(object)rewiredStandaloneInputModule != (Object)null)
+		if (rewiredStandaloneInputModule != null)
 		{
 			if (IsMenuAxis(menuHorizActionId, selectedAxis))
 			{
@@ -513,7 +488,7 @@ public class CalibrationWindow : Window
 
 	private bool IsMenuAxis(int actionId, int axisIndex)
 	{
-		if ((Object)(object)rewiredStandaloneInputModule == (Object)null)
+		if (rewiredStandaloneInputModule == null)
 		{
 			return false;
 		}
@@ -521,7 +496,7 @@ public class CalibrationWindow : Window
 		int count = allPlayers.Count;
 		for (int i = 0; i < count; i++)
 		{
-			IList<JoystickMap> maps = allPlayers[i].controllers.maps.GetMaps<JoystickMap>(((Controller)joystick).id);
+			IList<JoystickMap> maps = allPlayers[i].controllers.maps.GetMaps<JoystickMap>(joystick.id);
 			if (maps == null)
 			{
 				continue;
@@ -529,7 +504,7 @@ public class CalibrationWindow : Window
 			int count2 = maps.Count;
 			for (int j = 0; j < count2; j++)
 			{
-				IList<ActionElementMap> axisMaps = ((ControllerMapWithAxes)maps[j]).AxisMaps;
+				IList<ActionElementMap> axisMaps = maps[j].AxisMaps;
 				if (axisMaps == null)
 				{
 					continue;
@@ -537,8 +512,8 @@ public class CalibrationWindow : Window
 				int count3 = axisMaps.Count;
 				for (int k = 0; k < count3; k++)
 				{
-					ActionElementMap val = axisMaps[k];
-					if (val.actionId == actionId && val.elementIndex == axisIndex)
+					ActionElementMap actionElementMap = axisMaps[k];
+					if (actionElementMap.actionId == actionId && actionElementMap.elementIndex == axisIndex)
 					{
 						return true;
 					}
@@ -564,14 +539,11 @@ public class CalibrationWindow : Window
 
 	private float GetSliderSensitivity(AxisCalibration axisCalibration)
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0016: Invalid comparison between Unknown and I4
-		if ((int)axisCalibration.sensitivityType == 0)
+		if (axisCalibration.sensitivityType == AxisSensitivityType.Multiplier)
 		{
 			return axisCalibration.sensitivity;
 		}
-		if ((int)axisCalibration.sensitivityType == 1)
+		if (axisCalibration.sensitivityType == AxisSensitivityType.Power)
 		{
 			return ProcessPowerValue(axisCalibration.sensitivity, 0f, sensitivitySlider.maxValue);
 		}
@@ -580,10 +552,7 @@ public class CalibrationWindow : Window
 
 	public void SetSensitivity(AxisCalibration axisCalibration, float sliderValue)
 	{
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0041: Invalid comparison between Unknown and I4
-		if ((int)axisCalibration.sensitivityType == 0)
+		if (axisCalibration.sensitivityType == AxisSensitivityType.Multiplier)
 		{
 			axisCalibration.sensitivity = Mathf.Clamp(sliderValue, minSensitivity, float.PositiveInfinity);
 			if (sliderValue < minSensitivity)
@@ -591,7 +560,7 @@ public class CalibrationWindow : Window
 				sensitivitySlider.value = minSensitivity;
 			}
 		}
-		else if ((int)axisCalibration.sensitivityType == 1)
+		else if (axisCalibration.sensitivityType == AxisSensitivityType.Power)
 		{
 			axisCalibration.sensitivity = ProcessPowerValue(sliderValue, 0f, sensitivitySlider.maxValue);
 		}

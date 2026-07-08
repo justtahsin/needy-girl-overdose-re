@@ -32,7 +32,7 @@ public class AnimationCategoryVO
 		}
 		catch (Exception ex)
 		{
-			Debug.LogWarning((object)("Exception!:" + ex));
+			Debug.LogWarning("Exception!:" + ex);
 		}
 	}
 

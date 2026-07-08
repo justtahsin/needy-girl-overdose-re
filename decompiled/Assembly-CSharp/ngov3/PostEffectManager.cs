@@ -1,7 +1,5 @@
 using System;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -78,15 +76,15 @@ public sealed class PostEffectManager : MonoBehaviour, IDisposable
 	{
 		get
 		{
-			if (!((Object)(object)_instance == (Object)null))
+			if (!(_instance == null))
 			{
 				return _instance;
 			}
-			return Object.FindObjectOfType<PostEffectManager>();
+			return UnityEngine.Object.FindObjectOfType<PostEffectManager>();
 		}
 	}
 
-	public IReadOnlyReactiveProperty<EffectType> CurrentShaderType => (IReadOnlyReactiveProperty<EffectType>)(object)_currentShaderType;
+	public IReadOnlyReactiveProperty<EffectType> CurrentShaderType => _currentShaderType;
 
 	public Volume BloomLight => _bloomlight;
 
@@ -94,177 +92,177 @@ public sealed class PostEffectManager : MonoBehaviour, IDisposable
 
 	private void Awake()
 	{
-		if (Object.FindObjectsOfType<PostEffectManager>().Length > 1)
+		if (UnityEngine.Object.FindObjectsOfType<PostEffectManager>().Length > 1)
 		{
-			Object.Destroy((Object)(object)((Component)this).gameObject);
+			UnityEngine.Object.Destroy(base.gameObject);
 		}
 		else
 		{
-			Object.DontDestroyOnLoad((Object)(object)((Component)this).gameObject);
+			UnityEngine.Object.DontDestroyOnLoad(base.gameObject);
 		}
 	}
 
 	private void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<EffectType>(ReactivePropertyExtensions.SkipLatestValueOnSubscribe<EffectType>((IReadOnlyReactiveProperty<EffectType>)(object)_currentShaderType), (Action<EffectType>)delegate(EffectType type)
+		_currentShaderType.SkipLatestValueOnSubscribe().Subscribe(delegate(EffectType type)
 		{
 			switch (type)
 			{
 			case EffectType.Kenjo:
-				((Behaviour)_overdose).enabled = false;
-				((Behaviour)_overdosePron).enabled = false;
-				((Behaviour)_overdoseHyporon).enabled = false;
-				((Behaviour)_psyche).enabled = false;
-				((Behaviour)_weed).enabled = false;
-				((Behaviour)_goCrazy).enabled = false;
-				((Behaviour)_kyouizon).enabled = false;
-				((Behaviour)_bleeding).enabled = false;
-				((Behaviour)_satujinNoise).enabled = false;
-				((Behaviour)_satujinGata).enabled = false;
-				((Behaviour)_anmaku).enabled = false;
-				((Behaviour)_otona).enabled = false;
-				((Behaviour)_noisy).enabled = false;
-				((Behaviour)_invert).enabled = false;
-				((Behaviour)_horror).enabled = false;
-				((Behaviour)_yugami).enabled = false;
-				((Behaviour)_bloomlight).enabled = false;
-				((Behaviour)_kakusei).enabled = false;
-				((Behaviour)_powapowa).enabled = false;
+				_overdose.enabled = false;
+				_overdosePron.enabled = false;
+				_overdoseHyporon.enabled = false;
+				_psyche.enabled = false;
+				_weed.enabled = false;
+				_goCrazy.enabled = false;
+				_kyouizon.enabled = false;
+				_bleeding.enabled = false;
+				_satujinNoise.enabled = false;
+				_satujinGata.enabled = false;
+				_anmaku.enabled = false;
+				_otona.enabled = false;
+				_noisy.enabled = false;
+				_invert.enabled = false;
+				_horror.enabled = false;
+				_yugami.enabled = false;
+				_bloomlight.enabled = false;
+				_kakusei.enabled = false;
+				_powapowa.enabled = false;
 				_audioEffect.UpdateAudioEffect(EffectType.Kenjo, 0f);
 				break;
 			case EffectType.OD:
-				((Behaviour)_overdose).enabled = true;
-				((Behaviour)_psyche).enabled = false;
-				((Behaviour)_weed).enabled = false;
+				_overdose.enabled = true;
+				_psyche.enabled = false;
+				_weed.enabled = false;
 				break;
 			case EffectType.OD2:
-				((Behaviour)_overdosePron).enabled = true;
+				_overdosePron.enabled = true;
 				break;
 			case EffectType.OD3:
-				((Behaviour)_overdoseHyporon).enabled = true;
+				_overdoseHyporon.enabled = true;
 				break;
 			case EffectType.Invert:
-				((Behaviour)_invert).enabled = true;
+				_invert.enabled = true;
 				break;
 			case EffectType.Psyche:
-				((Behaviour)_overdose).enabled = false;
-				((Behaviour)_psyche).enabled = true;
-				((Behaviour)_weed).enabled = false;
+				_overdose.enabled = false;
+				_psyche.enabled = true;
+				_weed.enabled = false;
 				break;
 			case EffectType.Weed:
-				((Behaviour)_overdose).enabled = false;
-				((Behaviour)_psyche).enabled = false;
-				((Behaviour)_weed).enabled = true;
+				_overdose.enabled = false;
+				_psyche.enabled = false;
+				_weed.enabled = true;
 				break;
 			case EffectType.GoCrazy:
-				((Behaviour)_overdose).enabled = false;
-				((Behaviour)_psyche).enabled = false;
-				((Behaviour)_weed).enabled = false;
-				((Behaviour)_goCrazy).enabled = true;
+				_overdose.enabled = false;
+				_psyche.enabled = false;
+				_weed.enabled = false;
+				_goCrazy.enabled = true;
 				break;
 			case EffectType.SatujinNoise:
-				((Behaviour)_satujinNoise).enabled = true;
-				((Behaviour)_overdose).enabled = false;
-				((Behaviour)_overdosePron).enabled = false;
-				((Behaviour)_overdoseHyporon).enabled = false;
-				((Behaviour)_psyche).enabled = false;
-				((Behaviour)_weed).enabled = false;
-				((Behaviour)_goCrazy).enabled = false;
-				((Behaviour)_kyouizon).enabled = false;
-				((Behaviour)_bleeding).enabled = false;
-				((Behaviour)_satujinGata).enabled = false;
-				((Behaviour)_anmaku).enabled = false;
-				((Behaviour)_otona).enabled = false;
-				((Behaviour)_noisy).enabled = false;
-				((Behaviour)_invert).enabled = false;
-				((Behaviour)_horror).enabled = false;
-				((Behaviour)_yugami).enabled = false;
-				((Behaviour)_bloomlight).enabled = false;
-				((Behaviour)_kakusei).enabled = false;
-				((Behaviour)_powapowa).enabled = false;
+				_satujinNoise.enabled = true;
+				_overdose.enabled = false;
+				_overdosePron.enabled = false;
+				_overdoseHyporon.enabled = false;
+				_psyche.enabled = false;
+				_weed.enabled = false;
+				_goCrazy.enabled = false;
+				_kyouizon.enabled = false;
+				_bleeding.enabled = false;
+				_satujinGata.enabled = false;
+				_anmaku.enabled = false;
+				_otona.enabled = false;
+				_noisy.enabled = false;
+				_invert.enabled = false;
+				_horror.enabled = false;
+				_yugami.enabled = false;
+				_bloomlight.enabled = false;
+				_kakusei.enabled = false;
+				_powapowa.enabled = false;
 				break;
 			case EffectType.horror:
-				((Behaviour)_horror).enabled = true;
-				((Behaviour)_overdose).enabled = false;
-				((Behaviour)_overdosePron).enabled = false;
-				((Behaviour)_overdoseHyporon).enabled = false;
-				((Behaviour)_psyche).enabled = false;
-				((Behaviour)_weed).enabled = false;
-				((Behaviour)_goCrazy).enabled = false;
-				((Behaviour)_kyouizon).enabled = false;
-				((Behaviour)_bleeding).enabled = false;
-				((Behaviour)_satujinNoise).enabled = false;
-				((Behaviour)_satujinGata).enabled = false;
-				((Behaviour)_anmaku).enabled = false;
-				((Behaviour)_otona).enabled = false;
-				((Behaviour)_noisy).enabled = false;
-				((Behaviour)_invert).enabled = false;
-				((Behaviour)_yugami).enabled = false;
-				((Behaviour)_bloomlight).enabled = false;
-				((Behaviour)_kakusei).enabled = false;
-				((Behaviour)_powapowa).enabled = false;
+				_horror.enabled = true;
+				_overdose.enabled = false;
+				_overdosePron.enabled = false;
+				_overdoseHyporon.enabled = false;
+				_psyche.enabled = false;
+				_weed.enabled = false;
+				_goCrazy.enabled = false;
+				_kyouizon.enabled = false;
+				_bleeding.enabled = false;
+				_satujinNoise.enabled = false;
+				_satujinGata.enabled = false;
+				_anmaku.enabled = false;
+				_otona.enabled = false;
+				_noisy.enabled = false;
+				_invert.enabled = false;
+				_yugami.enabled = false;
+				_bloomlight.enabled = false;
+				_kakusei.enabled = false;
+				_powapowa.enabled = false;
 				break;
 			case EffectType.Yugami:
-				((Behaviour)_yugami).enabled = true;
-				((Behaviour)_overdose).enabled = false;
-				((Behaviour)_overdosePron).enabled = false;
-				((Behaviour)_overdoseHyporon).enabled = false;
-				((Behaviour)_psyche).enabled = false;
-				((Behaviour)_weed).enabled = false;
-				((Behaviour)_goCrazy).enabled = false;
-				((Behaviour)_kyouizon).enabled = false;
-				((Behaviour)_bleeding).enabled = false;
-				((Behaviour)_satujinNoise).enabled = false;
-				((Behaviour)_satujinGata).enabled = false;
-				((Behaviour)_anmaku).enabled = false;
-				((Behaviour)_otona).enabled = false;
-				((Behaviour)_noisy).enabled = false;
-				((Behaviour)_invert).enabled = false;
-				((Behaviour)_horror).enabled = false;
-				((Behaviour)_bloomlight).enabled = false;
-				((Behaviour)_kakusei).enabled = false;
-				((Behaviour)_powapowa).enabled = false;
+				_yugami.enabled = true;
+				_overdose.enabled = false;
+				_overdosePron.enabled = false;
+				_overdoseHyporon.enabled = false;
+				_psyche.enabled = false;
+				_weed.enabled = false;
+				_goCrazy.enabled = false;
+				_kyouizon.enabled = false;
+				_bleeding.enabled = false;
+				_satujinNoise.enabled = false;
+				_satujinGata.enabled = false;
+				_anmaku.enabled = false;
+				_otona.enabled = false;
+				_noisy.enabled = false;
+				_invert.enabled = false;
+				_horror.enabled = false;
+				_bloomlight.enabled = false;
+				_kakusei.enabled = false;
+				_powapowa.enabled = false;
 				break;
 			case EffectType.Anmaku:
-				((Behaviour)_anmaku).enabled = true;
+				_anmaku.enabled = true;
 				break;
 			case EffectType.Otona:
-				((Behaviour)_otona).enabled = true;
+				_otona.enabled = true;
 				_otona.weight = 0f;
-				TweenExtensions.Play<TweenerCore<float, float, FloatOptions>>(DOTween.To((DOGetter<float>)(() => _otona.weight), (DOSetter<float>)delegate(float x)
+				DOTween.To(() => _otona.weight, delegate(float x)
 				{
 					_otona.weight = x;
-				}, 1f, 1f));
+				}, 1f, 1f).Play();
 				break;
 			case EffectType.Noisy:
-				((Behaviour)_noisy).enabled = true;
+				_noisy.enabled = true;
 				_otona.weight = 0f;
-				TweenExtensions.Play<TweenerCore<float, float, FloatOptions>>(TweenSettingsExtensions.SetEase<TweenerCore<float, float, FloatOptions>>(DOTween.To((DOGetter<float>)(() => _noisy.weight), (DOSetter<float>)delegate(float x)
+				DOTween.To(() => _noisy.weight, delegate(float x)
 				{
 					_noisy.weight = x;
-				}, 1f, 1f), (Ease)17));
+				}, 1f, 1f).SetEase(Ease.InExpo).Play();
 				break;
 			case EffectType.Kyouizon:
-				((Behaviour)_kyouizon).enabled = true;
+				_kyouizon.enabled = true;
 				break;
 			case EffectType.Bleeding:
-				((Behaviour)_bleeding).enabled = true;
+				_bleeding.enabled = true;
 				break;
 			case EffectType.BloomLight:
-				((Behaviour)_bloomlight).enabled = true;
+				_bloomlight.enabled = true;
 				break;
 			case EffectType.Kakusei:
-				((Behaviour)_kakusei).enabled = true;
+				_kakusei.enabled = true;
 				break;
 			case EffectType.Powapowa:
-				((Behaviour)_powapowa).enabled = true;
+				_powapowa.enabled = true;
 				break;
 			case EffectType.WristCut:
 			case EffectType.Gatagata:
 			case EffectType.ChoosingComment:
 				break;
 			}
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	public void MogoMogo(bool onoff)
@@ -307,10 +305,10 @@ public sealed class PostEffectManager : MonoBehaviour, IDisposable
 	{
 		_currentShaderType.Value = EffectType.Anmaku;
 		_anmaku.weight = 0f;
-		TweenExtensions.Play<TweenerCore<float, float, FloatOptions>>(DOTween.To((DOGetter<float>)(() => _anmaku.weight), (DOSetter<float>)delegate(float x)
+		DOTween.To(() => _anmaku.weight, delegate(float x)
 		{
 			_anmaku.weight = x;
-		}, targetWeight, 0.8f));
+		}, targetWeight, 0.8f).Play();
 	}
 
 	public void SetShader(EffectType type)
@@ -332,35 +330,30 @@ public sealed class PostEffectManager : MonoBehaviour, IDisposable
 
 	public void ResetShaderCalmly(EffectType effectType, bool killCurrentShaderCalmly = true)
 	{
-		//IL_007c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0086: Expected O, but got Unknown
 		if (effectType != CurrentShaderType.Value)
 		{
 			return;
 		}
 		if (killCurrentShaderCalmly)
 		{
-			Sequence resetShaderCalmlyTweener = ResetShaderCalmlyTweener;
-			if (resetShaderCalmlyTweener != null)
-			{
-				TweenExtensions.Kill((Tween)(object)resetShaderCalmlyTweener, true);
-			}
+			ResetShaderCalmlyTweener?.Kill(complete: true);
 		}
-		ResetShaderCalmlyTweener = TweenExtensions.Play<Sequence>(TweenSettingsExtensions.OnComplete<Sequence>(TweenSettingsExtensions.Append(DOTween.Sequence(), (Tween)(object)TweenSettingsExtensions.SetEase<TweenerCore<float, float, FloatOptions>>(DOTween.To((DOGetter<float>)(() => _overdose.weight), (DOSetter<float>)delegate(float x)
+		ResetShaderCalmlyTweener = DOTween.Sequence().Append(DOTween.To(() => _overdose.weight, delegate(float x)
 		{
 			SetShaderWeight(x, effectType);
-		}, 0f, 16f), (Ease)1)), (TweenCallback)delegate
+		}, 0f, 16f).SetEase(Ease.Linear)).OnComplete(delegate
 		{
 			if (_currentShaderType.Value == effectType)
 			{
 				_currentShaderType.Value = EffectType.Kenjo;
 			}
-		}));
+		})
+			.Play();
 	}
 
 	public void Dispose()
 	{
 		_instance = null;
-		Object.Destroy((Object)(object)((Component)this).gameObject);
+		UnityEngine.Object.Destroy(base.gameObject);
 	}
 }

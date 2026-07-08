@@ -1,7 +1,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ngov3;
@@ -18,11 +17,9 @@ public class AnimationKeyItem : MonoBehaviour
 
 	public void Initialize(AnimationKeyVO vo, Action<AnimationKeyVO> action)
 	{
-		//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0048: Expected O, but got Unknown
 		text.text = vo.Id;
 		this.vo = vo;
-		((UnityEvent)button.onClick).AddListener((UnityAction)delegate
+		button.onClick.AddListener(delegate
 		{
 			action(this.vo);
 		});

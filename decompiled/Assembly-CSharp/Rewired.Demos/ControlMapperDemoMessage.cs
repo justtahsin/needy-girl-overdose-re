@@ -15,7 +15,7 @@ public class ControlMapperDemoMessage : MonoBehaviour
 
 	private void Awake()
 	{
-		if ((Object)(object)controlMapper != (Object)null)
+		if (controlMapper != null)
 		{
 			controlMapper.ScreenClosedEvent += OnControlMapperClosed;
 			controlMapper.ScreenOpenedEvent += OnControlMapperOpened;
@@ -29,20 +29,20 @@ public class ControlMapperDemoMessage : MonoBehaviour
 
 	private void OnControlMapperClosed()
 	{
-		((Component)this).gameObject.SetActive(true);
-		((MonoBehaviour)this).StartCoroutine(SelectDefaultDeferred());
+		base.gameObject.SetActive(value: true);
+		StartCoroutine(SelectDefaultDeferred());
 	}
 
 	private void OnControlMapperOpened()
 	{
-		((Component)this).gameObject.SetActive(false);
+		base.gameObject.SetActive(value: false);
 	}
 
 	private void SelectDefault()
 	{
-		if (!((Object)(object)EventSystem.current == (Object)null) && (Object)(object)defaultSelectable != (Object)null)
+		if (!(EventSystem.current == null) && defaultSelectable != null)
 		{
-			EventSystem.current.SetSelectedGameObject(((Component)defaultSelectable).gameObject);
+			EventSystem.current.SetSelectedGameObject(defaultSelectable.gameObject);
 		}
 	}
 

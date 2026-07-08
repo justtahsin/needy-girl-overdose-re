@@ -30,12 +30,12 @@ public class PlayerPointerEventData : PointerEventData
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.AppendLine("<b>Player Id</b>: " + playerId);
-		stringBuilder.AppendLine("<b>Mouse Source</b>: " + (object)mouseSource);
+		stringBuilder.AppendLine("<b>Mouse Source</b>: " + mouseSource);
 		stringBuilder.AppendLine("<b>Input Source Index</b>: " + inputSourceIndex);
-		stringBuilder.AppendLine("<b>Touch Source/b>: " + (object)touchSource);
+		stringBuilder.AppendLine("<b>Touch Source/b>: " + touchSource);
 		stringBuilder.AppendLine("<b>Source Type</b>: " + sourceType);
 		stringBuilder.AppendLine("<b>Button Index</b>: " + buttonIndex);
-		stringBuilder.Append(((PointerEventData)this).ToString());
+		stringBuilder.Append(base.ToString());
 		return stringBuilder.ToString();
 	}
 }

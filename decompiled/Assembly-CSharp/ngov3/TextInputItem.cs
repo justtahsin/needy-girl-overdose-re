@@ -1,11 +1,9 @@
 using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using NGO;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ngov3;
@@ -58,7 +56,7 @@ public class TextInputItem : MonoBehaviour
 
 	public TMP_InputField Input => _input;
 
-	public int Index => ((Component)this).transform.GetSiblingIndex();
+	public int Index => base.transform.GetSiblingIndex();
 
 	public bool IsSelected => isSelected;
 
@@ -70,23 +68,21 @@ public class TextInputItem : MonoBehaviour
 
 	private async void Start()
 	{
-		defaultSize = ((Component)this).GetComponent<RectTransform>().sizeDelta;
+		defaultSize = GetComponent<RectTransform>().sizeDelta;
 		prevSize = defaultSize;
 		_inputPlaceHolderText.text = NgoEx.SystemTextFromType(SystemTextType.live_gen_text_limt, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<string>((IObservable<string>)AnimationKey, (Action<string>)delegate(string value)
+		AnimationKey.Subscribe(delegate(string value)
 		{
-			//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0014: Unknown result type (might be due to invalid IL or missing references)
 			if (value == "")
 			{
-				((Graphic)animationKeyButtonImage).color = nonSelectedAnimationKeyColor;
+				animationKeyButtonImage.color = nonSelectedAnimationKeyColor;
 			}
 			else
 			{
-				((Graphic)animationKeyButtonImage).color = selectedColor;
+				animationKeyButtonImage.color = selectedColor;
 			}
-		}), ((Component)this).gameObject);
-		((UnityEvent<string>)(object)_input.onValueChanged).AddListener((UnityAction<string>)async delegate(string text)
+		}).AddTo(base.gameObject);
+		_input.onValueChanged.AddListener(async delegate(string text)
 		{
 			if (text.Contains(Environment.NewLine) || text.Contains("\r") || text.Contains("\n"))
 			{
@@ -94,11 +90,11 @@ public class TextInputItem : MonoBehaviour
 			}
 			SetSizeFromTextSize();
 		});
-		((UnityEvent<string>)(object)_input.onSelect).AddListener((UnityAction<string>)delegate
+		_input.onSelect.AddListener(delegate
 		{
 			SetSelected(isSelected: true);
 		});
-		((UnityEvent<string>)(object)_input.onEndEdit).AddListener((UnityAction<string>)delegate(string t)
+		_input.onEndEdit.AddListener(delegate(string t)
 		{
 			SetSelected(isSelected: false);
 			_input.text = t.Replace(Environment.NewLine, "");
@@ -107,22 +103,22 @@ public class TextInputItem : MonoBehaviour
 
 	public async void DeleatItem()
 	{
-		Transform child = ((Component)this).transform.parent.GetChild(Index - 1);
-		if ((Object)(object)child != (Object)null)
+		Transform child = base.transform.parent.GetChild(Index - 1);
+		if (child != null)
 		{
-			TextInputItem upperTextInput = ((Component)child).GetComponent<TextInputItem>();
+			TextInputItem upperTextInput = child.GetComponent<TextInputItem>();
 			parentLiveGen.RemoveTextInput(this);
-			Object.Destroy((Object)(object)((Component)this).gameObject);
-			await UniTask.Delay(1000, false, (PlayerLoopTiming)8, default(CancellationToken), false);
-			((Selectable)upperTextInput.Input).Select();
+			UnityEngine.Object.Destroy(base.gameObject);
+			await UniTask.Delay(1000);
+			upperTextInput.Input.Select();
 			upperTextInput.SetSelected(isSelected: true);
 		}
 	}
 
 	public void CreateChildItem()
 	{
-		TextInputItem textInputItem = CreateNewTextInput("", ((Component)this).transform.GetSiblingIndex() + 1);
-		((Selectable)textInputItem.Input).Select();
+		TextInputItem textInputItem = CreateNewTextInput("", base.transform.GetSiblingIndex() + 1);
+		textInputItem.Input.Select();
 		textInputItem.SetSelected(isSelected: true);
 	}
 
@@ -134,12 +130,11 @@ public class TextInputItem : MonoBehaviour
 
 	private TextInputItem CreateNewTextInput(string text, int index)
 	{
-		//IL_0035: Unknown result type (might be due to invalid IL or missing references)
-		TextInputItem textInputItem = PrefabFolder.InstantiateTo<TextInputItem>((MonoBehaviour)(object)textInputItemPrefab, ((Component)this).transform.parent);
-		((Object)((Component)textInputItem).gameObject).name = "input";
+		TextInputItem textInputItem = PrefabFolder.InstantiateTo<TextInputItem>(textInputItemPrefab, base.transform.parent);
+		textInputItem.gameObject.name = "input";
 		textInputItem.SetText(text);
-		((Component)textInputItem).GetComponent<RectTransform>().sizeDelta = defaultSize;
-		((Component)textInputItem).transform.SetSiblingIndex(index);
+		textInputItem.GetComponent<RectTransform>().sizeDelta = defaultSize;
+		textInputItem.transform.SetSiblingIndex(index);
 		textInputItem.Initialize(parentLiveGen);
 		textInputItem.AnimationKey.Value = "";
 		SetSelected(isSelected: false);
@@ -149,32 +144,21 @@ public class TextInputItem : MonoBehaviour
 
 	private void SetSelectDisplay(bool onSelect)
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-		((Graphic)backImage).color = (onSelect ? selectedColor : nonSelectedColor);
+		backImage.color = (onSelect ? selectedColor : nonSelectedColor);
 	}
 
 	private void SetSizeFromTextSize()
 	{
-		//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0077: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008c: Unknown result type (might be due to invalid IL or missing references)
-		RectTransform component = ((Component)this).GetComponent<RectTransform>();
-		Vector2 preferredValues = ((TMP_Text)box_name).GetPreferredValues();
-		Debug.Log((object)("textHight=" + preferredValues.y));
+		RectTransform component = GetComponent<RectTransform>();
+		Vector2 preferredValues = box_name.GetPreferredValues();
+		Debug.Log("textHight=" + preferredValues.y);
 		component.sizeDelta = new Vector2(component.sizeDelta.x, preferredValues.y + (float)paddingHight);
 		if (prevSize.y != component.sizeDelta.y)
 		{
 			parentLiveGen.FixTextGridLayout();
 		}
 		prevSize = component.sizeDelta;
-		((Component)box_name).GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+		box_name.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 	}
 
 	public void SetText(string text)
@@ -184,10 +168,8 @@ public class TextInputItem : MonoBehaviour
 
 	public void Initialize(Live_gen parentLiveGen)
 	{
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0023: Expected O, but got Unknown
 		this.parentLiveGen = parentLiveGen;
-		((UnityEvent)_openAnimationCategory.onClick).AddListener((UnityAction)delegate
+		_openAnimationCategory.onClick.AddListener(delegate
 		{
 			SetSelectDisplay(onSelect: true);
 			this.parentLiveGen.ShowCategoryParent();

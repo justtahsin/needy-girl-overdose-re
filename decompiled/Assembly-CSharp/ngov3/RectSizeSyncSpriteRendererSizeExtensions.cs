@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -21,52 +20,12 @@ public class RectSizeSyncSpriteRendererSizeExtensions : MonoBehaviour
 
 	private void Start()
 	{
-		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0039: Unknown result type (might be due to invalid IL or missing references)
-		RectTransform rectTransform = ((Component)this).GetComponent<RectTransform>();
-		SpriteRenderer sprite = ((Component)this).GetComponent<SpriteRenderer>();
-		Rect rect = rectTransform.rect;
-		Vector2 prevSize = ((Rect)(ref rect)).size;
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Vector2>(Observable.DistinctUntilChanged<Vector2>(Observable.Select<Unit, Vector2>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, Vector2>)delegate
+		RectTransform rectTransform = GetComponent<RectTransform>();
+		SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+		Vector2 prevSize = rectTransform.rect.size;
+		(from _ in this.UpdateAsObservable()
+			select rectTransform.rect.size).DistinctUntilChanged().Subscribe(delegate(Vector2 size)
 		{
-			//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-			Rect rect2 = rectTransform.rect;
-			return ((Rect)(ref rect2)).size;
-		})), (Action<Vector2>)delegate(Vector2 size)
-		{
-			//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0077: Unknown result type (might be due to invalid IL or missing references)
-			//IL_008f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0099: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00cc: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0101: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0113: Unknown result type (might be due to invalid IL or missing references)
-			//IL_012e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_013e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0150: Unknown result type (might be due to invalid IL or missing references)
-			//IL_016b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0183: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0195: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01b0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01c8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01da: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01f5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_020d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_021f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0237: Unknown result type (might be due to invalid IL or missing references)
-			//IL_024f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0261: Unknown result type (might be due to invalid IL or missing references)
-			//IL_026c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_026d: Unknown result type (might be due to invalid IL or missing references)
 			float num = prevSize.x - size.x;
 			float num2 = prevSize.y - size.y;
 			sprite.size = size;
@@ -98,6 +57,6 @@ public class RectSizeSyncSpriteRendererSizeExtensions : MonoBehaviour
 				break;
 			}
 			prevSize = size;
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 }

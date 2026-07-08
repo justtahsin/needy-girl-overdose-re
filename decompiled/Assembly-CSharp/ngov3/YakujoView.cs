@@ -24,19 +24,19 @@ public class YakujoView : MonoBehaviour
 	{
 		if (yami >= 20)
 		{
-			_puron.SetActive(true);
+			_puron.SetActive(value: true);
 		}
 		if (yami >= 40)
 		{
-			_hypron.SetActive(true);
+			_hypron.SetActive(value: true);
 		}
 		if (yami >= 60)
 		{
-			_happa.SetActive(true);
+			_happa.SetActive(value: true);
 		}
 		if (yami >= 80)
 		{
-			_psyche.SetActive(true);
+			_psyche.SetActive(value: true);
 		}
 	}
 }

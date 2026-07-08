@@ -311,7 +311,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	{
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", this);
 		}
 		else
 		{
@@ -321,10 +321,9 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	public override void SaveControllerData(int playerId, ControllerType controllerType, int controllerId)
 	{
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", this);
 		}
 		else
 		{
@@ -334,10 +333,9 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	public override void SaveControllerData(ControllerType controllerType, int controllerId)
 	{
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", this);
 		}
 		else
 		{
@@ -349,7 +347,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	{
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", this);
 		}
 		else
 		{
@@ -361,7 +359,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	{
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not save any data.", this);
 		}
 		else
 		{
@@ -373,7 +371,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	{
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", this);
 		}
 		else
 		{
@@ -383,10 +381,9 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	public override void LoadControllerData(int playerId, ControllerType controllerType, int controllerId)
 	{
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", this);
 		}
 		else
 		{
@@ -396,10 +393,9 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	public override void LoadControllerData(ControllerType controllerType, int controllerId)
 	{
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", this);
 		}
 		else
 		{
@@ -411,7 +407,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	{
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", this);
 		}
 		else
 		{
@@ -423,7 +419,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	{
 		if (!isEnabled)
 		{
-			Debug.LogWarning((object)"Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", (Object)(object)this);
+			Debug.LogWarning("Rewired: UserDataStore_PlayerPrefs is disabled and will not load any data.", this);
 		}
 		else
 		{
@@ -435,7 +431,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	{
 		if (loadDataOnStart)
 		{
-			((UserDataStore)this).Load();
+			Load();
 			if (loadControllerAssignments && ReInput.controllers.joystickCount > 0)
 			{
 				wasJoystickEverDetected = true;
@@ -446,14 +442,12 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	protected override void OnControllerConnected(ControllerStatusChangedEventArgs args)
 	{
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0010: Invalid comparison between Unknown and I4
-		if (isEnabled && (int)args.controllerType == 2)
+		if (isEnabled && args.controllerType == ControllerType.Joystick)
 		{
 			LoadJoystickData(args.controllerId);
 			if (loadDataOnStart && loadJoystickAssignments && !wasJoystickEverDetected)
 			{
-				((MonoBehaviour)this).StartCoroutine(LoadJoystickAssignmentsDeferred());
+				StartCoroutine(LoadJoystickAssignmentsDeferred());
 			}
 			if (loadJoystickAssignments && !deferredJoystickAssignmentLoadPending)
 			{
@@ -465,9 +459,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	protected override void OnControllerPreDisconnect(ControllerStatusChangedEventArgs args)
 	{
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0010: Invalid comparison between Unknown and I4
-		if (isEnabled && (int)args.controllerType == 2)
+		if (isEnabled && args.controllerType == ControllerType.Joystick)
 		{
 			SaveJoystickData(args.controllerId);
 		}
@@ -495,7 +487,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	public override ControllerMap LoadControllerMap(int playerId, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId)
 	{
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
 		Player player = ReInput.players.GetPlayer(playerId);
 		if (player == null)
 		{
@@ -532,11 +523,11 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		}
 		int num = 0;
 		num += LoadInputBehaviors(player.id);
-		num += LoadControllerMaps(player.id, (ControllerType)0, 0);
-		num += LoadControllerMaps(player.id, (ControllerType)1, 0);
+		num += LoadControllerMaps(player.id, ControllerType.Keyboard, 0);
+		num += LoadControllerMaps(player.id, ControllerType.Mouse, 0);
 		foreach (Joystick joystick in player.controllers.Joysticks)
 		{
-			num += LoadControllerMaps(player.id, (ControllerType)2, ((Controller)joystick).id);
+			num += LoadControllerMaps(player.id, ControllerType.Joystick, joystick.id);
 		}
 		RefreshLayoutManager(player.id);
 		return num;
@@ -559,7 +550,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		{
 			return 0;
 		}
-		if (!((ControllerWithAxes)joystick).ImportCalibrationMapFromXmlString(GetJoystickCalibrationMapXml(joystick)))
+		if (!joystick.ImportCalibrationMapFromXmlString(GetJoystickCalibrationMapXml(joystick)))
 		{
 			return 0;
 		}
@@ -577,11 +568,11 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		IList<Player> allPlayers = ReInput.players.AllPlayers;
 		for (int i = 0; i < allPlayers.Count; i++)
 		{
-			Player val = allPlayers[i];
-			if (val.controllers.ContainsController((ControllerType)2, joystickId))
+			Player player = allPlayers[i];
+			if (player.controllers.ContainsController(ControllerType.Joystick, joystickId))
 			{
-				num += LoadControllerMaps(val.id, (ControllerType)2, joystickId);
-				RefreshLayoutManager(val.id);
+				num += LoadControllerMaps(player.id, ControllerType.Joystick, joystickId);
+				RefreshLayoutManager(player.id);
 			}
 		}
 		return num + LoadJoystickCalibrationData(joystickId);
@@ -589,8 +580,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private int LoadControllerDataNow(int playerId, ControllerType controllerType, int controllerId)
 	{
-		//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
 		int num = 0 + LoadControllerMaps(playerId, controllerType, controllerId);
 		RefreshLayoutManager(playerId);
 		return num + LoadControllerDataNow(controllerType, controllerId);
@@ -598,10 +587,8 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private int LoadControllerDataNow(ControllerType controllerType, int controllerId)
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0004: Invalid comparison between Unknown and I4
 		int num = 0;
-		if ((int)controllerType == 2)
+		if (controllerType == ControllerType.Joystick)
 		{
 			num += LoadJoystickCalibrationData(controllerId);
 		}
@@ -610,9 +597,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private int LoadControllerMaps(int playerId, ControllerType controllerType, int controllerId)
 	{
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0051: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0070: Unknown result type (might be due to invalid IL or missing references)
 		int num = 0;
 		Player player = ReInput.players.GetPlayer(playerId);
 		if (player == null)
@@ -627,19 +611,19 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		IList<InputMapCategory> mapCategories = ReInput.mapping.MapCategories;
 		for (int i = 0; i < mapCategories.Count; i++)
 		{
-			InputMapCategory val = mapCategories[i];
-			if (!((InputCategory)val).userAssignable)
+			InputMapCategory inputMapCategory = mapCategories[i];
+			if (!inputMapCategory.userAssignable)
 			{
 				continue;
 			}
 			IList<InputLayout> list = ReInput.mapping.MapLayouts(controller.type);
 			for (int j = 0; j < list.Count; j++)
 			{
-				InputLayout val2 = list[j];
-				ControllerMap val3 = LoadControllerMap(player, controller.identifier, ((InputCategory)val).id, val2.id);
-				if (val3 != null)
+				InputLayout inputLayout = list[j];
+				ControllerMap controllerMap = LoadControllerMap(player, controller.identifier, inputMapCategory.id, inputLayout.id);
+				if (controllerMap != null)
 				{
-					player.controllers.maps.AddMap(controller, val3);
+					player.controllers.maps.AddMap(controller, controllerMap);
 					num++;
 				}
 			}
@@ -649,10 +633,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private ControllerMap LoadControllerMap(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId)
 	{
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003b: Unknown result type (might be due to invalid IL or missing references)
 		if (player == null)
 		{
 			return null;
@@ -662,14 +642,14 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		{
 			return null;
 		}
-		ControllerMap val = ControllerMap.CreateFromXml(((ControllerIdentifier)(ref controllerIdentifier)).controllerType, controllerMapXml);
-		if (val == null)
+		ControllerMap controllerMap = ControllerMap.CreateFromXml(controllerIdentifier.controllerType, controllerMapXml);
+		if (controllerMap == null)
 		{
 			return null;
 		}
 		List<int> controllerMapKnownActionIds = GetControllerMapKnownActionIds(player, controllerIdentifier, categoryId, layoutId);
-		AddDefaultMappingsForNewActions(controllerIdentifier, val, controllerMapKnownActionIds);
-		return val;
+		AddDefaultMappingsForNewActions(controllerIdentifier, controllerMap, controllerMapKnownActionIds);
+		return controllerMap;
 	}
 
 	private int LoadInputBehaviors(int playerId)
@@ -789,7 +769,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 			}
 			foreach (Player allPlayer in ReInput.players.AllPlayers)
 			{
-				allPlayer.controllers.ClearControllersOfType((ControllerType)2);
+				allPlayer.controllers.ClearControllersOfType(ControllerType.Joystick);
 			}
 			List<JoystickAssignmentHistoryInfo> list = (loadJoystickAssignments ? new List<JoystickAssignmentHistoryInfo>() : null);
 			foreach (Player allPlayer2 in ReInput.players.AllPlayers)
@@ -813,7 +793,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 						{
 							list.Add(new JoystickAssignmentHistoryInfo(joystick, joystickInfo.id));
 						}
-						allPlayer2.controllers.AddController((Controller)(object)joystick, false);
+						allPlayer2.controllers.AddController(joystick, removeFromOtherPlayers: false);
 					}
 				}
 			}
@@ -833,11 +813,11 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 						{
 							continue;
 						}
-						Joystick val = null;
+						Joystick joystick2 = null;
 						int num2 = list.FindIndex((JoystickAssignmentHistoryInfo x) => x.oldJoystickId == joystickInfo2.id);
 						if (num2 >= 0)
 						{
-							val = list[num2].joystick;
+							joystick2 = list[num2].joystick;
 						}
 						else
 						{
@@ -849,17 +829,17 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 							{
 								if (list.Find((JoystickAssignmentHistoryInfo x) => x.joystick == match) == null)
 								{
-									val = match;
+									joystick2 = match;
 									break;
 								}
 							}
-							if (val == null)
+							if (joystick2 == null)
 							{
 								continue;
 							}
-							list.Add(new JoystickAssignmentHistoryInfo(val, joystickInfo2.id));
+							list.Add(new JoystickAssignmentHistoryInfo(joystick2, joystickInfo2.id));
 						}
-						allPlayer3.controllers.AddController((Controller)(object)val, false);
+						allPlayer3.controllers.AddController(joystick2, removeFromOtherPlayers: false);
 					}
 				}
 			}
@@ -903,7 +883,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	private IEnumerator LoadJoystickAssignmentsDeferred()
 	{
 		deferredJoystickAssignmentLoadPending = true;
-		yield return (object)new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
 		if (ReInput.isReady)
 		{
 			LoadJoystickAssignmentsNow(null);
@@ -935,13 +915,9 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private void SavePlayerDataNow(Player player)
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
 		if (player != null)
 		{
-			PlayerSaveData saveData = player.GetSaveData(true);
+			PlayerSaveData saveData = player.GetSaveData(userAssignableMapsOnly: true);
 			SaveInputBehaviors(player, saveData);
 			SaveControllerMaps(player, saveData);
 		}
@@ -966,7 +942,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		if (joystick != null)
 		{
 			JoystickCalibrationMapSaveData calibrationMapSaveData = joystick.GetCalibrationMapSaveData();
-			PlayerPrefs.SetString(GetJoystickCalibrationMapPlayerPrefsKey(joystick), ((CalibrationMapSaveData)calibrationMapSaveData).map.ToXmlString());
+			PlayerPrefs.SetString(GetJoystickCalibrationMapPlayerPrefsKey(joystick), calibrationMapSaveData.map.ToXmlString());
 		}
 	}
 
@@ -975,10 +951,10 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		IList<Player> allPlayers = ReInput.players.AllPlayers;
 		for (int i = 0; i < allPlayers.Count; i++)
 		{
-			Player val = allPlayers[i];
-			if (val.controllers.ContainsController((ControllerType)2, joystickId))
+			Player player = allPlayers[i];
+			if (player.controllers.ContainsController(ControllerType.Joystick, joystickId))
 			{
-				SaveControllerMaps(val.id, (ControllerType)2, joystickId);
+				SaveControllerMaps(player.id, ControllerType.Joystick, joystickId);
 			}
 		}
 		SaveJoystickCalibrationData(joystickId);
@@ -986,8 +962,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private void SaveControllerDataNow(int playerId, ControllerType controllerType, int controllerId)
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000a: Unknown result type (might be due to invalid IL or missing references)
 		SaveControllerMaps(playerId, controllerType, controllerId);
 		SaveControllerDataNow(controllerType, controllerId);
 		PlayerPrefs.Save();
@@ -995,9 +969,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private void SaveControllerDataNow(ControllerType controllerType, int controllerId)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0002: Invalid comparison between Unknown and I4
-		if ((int)controllerType == 2)
+		if (controllerType == ControllerType.Joystick)
 		{
 			SaveJoystickCalibrationData(controllerId);
 		}
@@ -1006,7 +978,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private void SaveControllerMaps(Player player, PlayerSaveData playerSaveData)
 	{
-		foreach (ControllerMapSaveData allControllerMapSaveDatum in ((PlayerSaveData)(ref playerSaveData)).AllControllerMapSaveData)
+		foreach (ControllerMapSaveData allControllerMapSaveDatum in playerSaveData.AllControllerMapSaveData)
 		{
 			SaveControllerMap(player, allControllerMapSaveDatum.map);
 		}
@@ -1014,14 +986,12 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private void SaveControllerMaps(int playerId, ControllerType controllerType, int controllerId)
 	{
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002b: Unknown result type (might be due to invalid IL or missing references)
 		Player player = ReInput.players.GetPlayer(playerId);
 		if (player == null || !player.controllers.ContainsController(controllerType, controllerId))
 		{
 			return;
 		}
-		ControllerMapSaveData[] mapSaveData = player.controllers.maps.GetMapSaveData(controllerType, controllerId, true);
+		ControllerMapSaveData[] mapSaveData = player.controllers.maps.GetMapSaveData(controllerType, controllerId, userAssignableMapsOnly: true);
 		if (mapSaveData != null)
 		{
 			for (int i = 0; i < mapSaveData.Length; i++)
@@ -1033,8 +1003,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private void SaveControllerMap(Player player, ControllerMap controllerMap)
 	{
-		//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0032: Unknown result type (might be due to invalid IL or missing references)
 		PlayerPrefs.SetString(GetControllerMapPlayerPrefsKey(player, controllerMap.controller.identifier, controllerMap.categoryId, controllerMap.layoutId, 2), controllerMap.ToXmlString());
 		PlayerPrefs.SetString(GetControllerMapKnownActionIdsPlayerPrefsKey(player, controllerMap.controller.identifier, controllerMap.categoryId, controllerMap.layoutId, 2), allActionIdsString);
 	}
@@ -1043,7 +1011,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 	{
 		if (player != null)
 		{
-			InputBehavior[] inputBehaviors = ((PlayerSaveData)(ref playerSaveData)).inputBehaviors;
+			InputBehavior[] inputBehaviors = playerSaveData.inputBehaviors;
 			for (int i = 0; i < inputBehaviors.Length; i++)
 			{
 				SaveInputBehaviorNow(player, inputBehaviors[i]);
@@ -1080,24 +1048,24 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 			ControllerAssignmentSaveInfo controllerAssignmentSaveInfo = new ControllerAssignmentSaveInfo(ReInput.players.allPlayerCount);
 			for (int i = 0; i < ReInput.players.allPlayerCount; i++)
 			{
-				Player val = ReInput.players.AllPlayers[i];
+				Player player = ReInput.players.AllPlayers[i];
 				ControllerAssignmentSaveInfo.PlayerInfo playerInfo = new ControllerAssignmentSaveInfo.PlayerInfo();
 				controllerAssignmentSaveInfo.players[i] = playerInfo;
-				playerInfo.id = val.id;
-				playerInfo.hasKeyboard = val.controllers.hasKeyboard;
-				playerInfo.hasMouse = val.controllers.hasMouse;
-				ControllerAssignmentSaveInfo.JoystickInfo[] array = (playerInfo.joysticks = new ControllerAssignmentSaveInfo.JoystickInfo[val.controllers.joystickCount]);
-				for (int j = 0; j < val.controllers.joystickCount; j++)
+				playerInfo.id = player.id;
+				playerInfo.hasKeyboard = player.controllers.hasKeyboard;
+				playerInfo.hasMouse = player.controllers.hasMouse;
+				ControllerAssignmentSaveInfo.JoystickInfo[] array = (playerInfo.joysticks = new ControllerAssignmentSaveInfo.JoystickInfo[player.controllers.joystickCount]);
+				for (int j = 0; j < player.controllers.joystickCount; j++)
 				{
-					Joystick val2 = val.controllers.Joysticks[j];
+					Joystick joystick = player.controllers.Joysticks[j];
 					ControllerAssignmentSaveInfo.JoystickInfo joystickInfo = new ControllerAssignmentSaveInfo.JoystickInfo();
-					joystickInfo.instanceGuid = ((Controller)val2).deviceInstanceGuid;
-					joystickInfo.id = ((Controller)val2).id;
-					joystickInfo.hardwareIdentifier = ((Controller)val2).hardwareIdentifier;
+					joystickInfo.instanceGuid = joystick.deviceInstanceGuid;
+					joystickInfo.id = joystick.id;
+					joystickInfo.hardwareIdentifier = joystick.hardwareIdentifier;
 					array[j] = joystickInfo;
 				}
 			}
-			PlayerPrefs.SetString(playerPrefsKey_controllerAssignments, JsonWriter.ToJson((object)controllerAssignmentSaveInfo));
+			PlayerPrefs.SetString(playerPrefsKey_controllerAssignments, JsonWriter.ToJson(controllerAssignmentSaveInfo));
 			PlayerPrefs.Save();
 		}
 		catch
@@ -1126,50 +1094,41 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private string GetControllerMapPlayerPrefsKey(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId, int ppKeyVersion)
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
 		return string.Concat(GetBasePlayerPrefsKey(player) + "|dataType=ControllerMap", GetControllerMapPlayerPrefsKeyCommonSuffix(player, controllerIdentifier, categoryId, layoutId, ppKeyVersion));
 	}
 
 	private string GetControllerMapKnownActionIdsPlayerPrefsKey(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId, int ppKeyVersion)
 	{
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
 		return string.Concat(GetBasePlayerPrefsKey(player) + "|dataType=ControllerMap_KnownActionIds", GetControllerMapPlayerPrefsKeyCommonSuffix(player, controllerIdentifier, categoryId, layoutId, ppKeyVersion));
 	}
 
 	private static string GetControllerMapPlayerPrefsKeyCommonSuffix(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId, int ppKeyVersion)
 	{
-		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fd: Invalid comparison between Unknown and I4
-		//IL_00bd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c3: Invalid comparison between Unknown and I4
-		//IL_012c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00cc: Unknown result type (might be due to invalid IL or missing references)
 		string text = "";
 		if (ppKeyVersion >= 2)
 		{
 			text = text + "|kv=" + ppKeyVersion;
 		}
-		text = text + "|controllerMapType=" + GetControllerMapType(((ControllerIdentifier)(ref controllerIdentifier)).controllerType).Name;
+		text = text + "|controllerMapType=" + GetControllerMapType(controllerIdentifier.controllerType).Name;
 		text = text + "|categoryId=" + categoryId + "|layoutId=" + layoutId;
 		if (ppKeyVersion >= 2)
 		{
-			text = text + "|hardwareGuid=" + ((ControllerIdentifier)(ref controllerIdentifier)).hardwareTypeGuid;
-			if (((ControllerIdentifier)(ref controllerIdentifier)).hardwareTypeGuid == Guid.Empty)
+			text = text + "|hardwareGuid=" + controllerIdentifier.hardwareTypeGuid.ToString();
+			if (controllerIdentifier.hardwareTypeGuid == Guid.Empty)
 			{
-				text = text + "|hardwareIdentifier=" + ((ControllerIdentifier)(ref controllerIdentifier)).hardwareIdentifier;
+				text = text + "|hardwareIdentifier=" + controllerIdentifier.hardwareIdentifier;
 			}
-			if ((int)((ControllerIdentifier)(ref controllerIdentifier)).controllerType == 2)
+			if (controllerIdentifier.controllerType == ControllerType.Joystick)
 			{
 				text = text + "|duplicate=" + GetDuplicateIndex(player, controllerIdentifier);
 			}
 		}
 		else
 		{
-			text = text + "|hardwareIdentifier=" + ((ControllerIdentifier)(ref controllerIdentifier)).hardwareIdentifier;
-			if ((int)((ControllerIdentifier)(ref controllerIdentifier)).controllerType == 2)
+			text = text + "|hardwareIdentifier=" + controllerIdentifier.hardwareIdentifier;
+			if (controllerIdentifier.controllerType == ControllerType.Joystick)
 			{
-				text = text + "|hardwareGuid=" + ((ControllerIdentifier)(ref controllerIdentifier)).hardwareTypeGuid;
+				text = text + "|hardwareGuid=" + controllerIdentifier.hardwareTypeGuid.ToString();
 				if (ppKeyVersion >= 1)
 				{
 					text = text + "|duplicate=" + GetDuplicateIndex(player, controllerIdentifier);
@@ -1181,9 +1140,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private string GetJoystickCalibrationMapPlayerPrefsKey(Joystick joystick)
 	{
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		return string.Concat(string.Concat(string.Concat(playerPrefsKeyPrefix + "|dataType=CalibrationMap", "|controllerType=", ((object)((Controller)joystick).type/*cast due to constrained. prefix*/).ToString()), "|hardwareIdentifier=", ((Controller)joystick).hardwareIdentifier), "|hardwareGuid=", ((Controller)joystick).hardwareTypeGuid.ToString());
+		return string.Concat(string.Concat(string.Concat(playerPrefsKeyPrefix + "|dataType=CalibrationMap", "|controllerType=", joystick.type.ToString()), "|hardwareIdentifier=", joystick.hardwareIdentifier), "|hardwareGuid=", joystick.hardwareTypeGuid.ToString());
 	}
 
 	private string GetInputBehaviorPlayerPrefsKey(Player player, int inputBehaviorId)
@@ -1193,7 +1150,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private string GetControllerMapXml(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId)
 	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
 		for (int num = 2; num >= 0; num--)
 		{
 			string controllerMapPlayerPrefsKey = GetControllerMapPlayerPrefsKey(player, controllerIdentifier, categoryId, layoutId, num);
@@ -1207,14 +1163,13 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private List<int> GetControllerMapKnownActionIds(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId)
 	{
-		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
 		List<int> list = new List<int>();
-		string text = null;
+		string key = null;
 		bool flag = false;
 		for (int num = 2; num >= 0; num--)
 		{
-			text = GetControllerMapKnownActionIdsPlayerPrefsKey(player, controllerIdentifier, categoryId, layoutId, num);
-			if (PlayerPrefs.HasKey(text))
+			key = GetControllerMapKnownActionIdsPlayerPrefsKey(player, controllerIdentifier, categoryId, layoutId, num);
+			if (PlayerPrefs.HasKey(key))
 			{
 				flag = true;
 				break;
@@ -1224,12 +1179,12 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		{
 			return list;
 		}
-		string text2 = PlayerPrefs.GetString(text);
-		if (string.IsNullOrEmpty(text2))
+		string text = PlayerPrefs.GetString(key);
+		if (string.IsNullOrEmpty(text))
 		{
 			return list;
 		}
-		string[] array = text2.Split(',');
+		string[] array = text.Split(',');
 		for (int i = 0; i < array.Length; i++)
 		{
 			if (!string.IsNullOrEmpty(array[i]) && int.TryParse(array[i], out var result))
@@ -1262,14 +1217,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private void AddDefaultMappingsForNewActions(ControllerIdentifier controllerIdentifier, ControllerMap controllerMap, List<int> knownActionIds)
 	{
-		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00cd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00d4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00e2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00f4: Unknown result type (might be due to invalid IL or missing references)
 		if (controllerMap == null || knownActionIds == null || knownActionIds == null || knownActionIds.Count == 0)
 		{
 			return;
@@ -1291,13 +1238,12 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		{
 			return;
 		}
-		ElementAssignment val = default(ElementAssignment);
 		foreach (ActionElementMap allMap in controllerMapInstance.AllMaps)
 		{
 			if (list.Contains(allMap.actionId) && !controllerMap.DoesElementAssignmentConflict(allMap))
 			{
-				((ElementAssignment)(ref val))._002Ector(controllerMap.controllerType, allMap.elementType, allMap.elementIdentifierId, allMap.axisRange, allMap.keyCode, allMap.modifierKeyFlags, allMap.actionId, allMap.axisContribution, allMap.invert);
-				controllerMap.CreateElementMap(val);
+				ElementAssignment elementAssignment = new ElementAssignment(controllerMap.controllerType, allMap.elementType, allMap.elementIdentifierId, allMap.axisRange, allMap.keyCode, allMap.modifierKeyFlags, allMap.actionId, allMap.axisContribution, allMap.invert);
+				controllerMap.CreateElementMap(elementAssignment);
 			}
 		}
 	}
@@ -1315,7 +1261,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		IList<Joystick> joysticks = ReInput.controllers.Joysticks;
 		for (int i = 0; i < joysticks.Count; i++)
 		{
-			if (((Controller)joysticks[i]).deviceInstanceGuid == joystickInfo.instanceGuid)
+			if (joysticks[i].deviceInstanceGuid == joystickInfo.instanceGuid)
 			{
 				return joysticks[i];
 			}
@@ -1337,7 +1283,7 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 		IList<Joystick> joysticks = ReInput.controllers.Joysticks;
 		for (int i = 0; i < joysticks.Count; i++)
 		{
-			if (string.Equals(((Controller)joysticks[i]).hardwareIdentifier, joystickInfo.hardwareIdentifier, StringComparison.OrdinalIgnoreCase))
+			if (string.Equals(joysticks[i].hardwareIdentifier, joystickInfo.hardwareIdentifier, StringComparison.OrdinalIgnoreCase))
 			{
 				if (matches == null)
 				{
@@ -1351,11 +1297,6 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private static int GetDuplicateIndex(Player player, ControllerIdentifier controllerIdentifier)
 	{
-		//IL_0005: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0045: Invalid comparison between Unknown and I4
 		Controller controller = ReInput.controllers.GetController(controllerIdentifier);
 		if (controller == null)
 		{
@@ -1369,9 +1310,9 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 				continue;
 			}
 			bool flag = false;
-			if ((int)controller.type == 2)
+			if (controller.type == ControllerType.Joystick)
 			{
-				if (((controller2 is Joystick) ? controller2 : null).hardwareTypeGuid != controller.hardwareTypeGuid)
+				if ((controller2 as Joystick).hardwareTypeGuid != controller.hardwareTypeGuid)
 				{
 					continue;
 				}
@@ -1394,34 +1335,24 @@ public class UserDataStore_PlayerPrefs : UserDataStore
 
 	private void RefreshLayoutManager(int playerId)
 	{
-		Player player = ReInput.players.GetPlayer(playerId);
-		if (player != null)
-		{
-			player.controllers.maps.layoutManager.Apply();
-		}
+		ReInput.players.GetPlayer(playerId)?.controllers.maps.layoutManager.Apply();
 	}
 
-	private unsafe static Type GetControllerMapType(ControllerType controllerType)
+	private static Type GetControllerMapType(ControllerType controllerType)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0012: Expected I4, but got Unknown
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0015: Invalid comparison between Unknown and I4
-		switch ((int)controllerType)
+		switch (controllerType)
 		{
-		default:
-			if ((int)controllerType == 20)
-			{
-				return typeof(CustomControllerMap);
-			}
-			Debug.LogWarning((object)("Rewired: Unknown ControllerType " + ((object)(*(ControllerType*)(&controllerType))/*cast due to constrained. prefix*/).ToString()));
-			return null;
-		case 2:
+		case ControllerType.Custom:
+			return typeof(CustomControllerMap);
+		case ControllerType.Joystick:
 			return typeof(JoystickMap);
-		case 0:
+		case ControllerType.Keyboard:
 			return typeof(KeyboardMap);
-		case 1:
+		case ControllerType.Mouse:
 			return typeof(MouseMap);
+		default:
+			Debug.LogWarning("Rewired: Unknown ControllerType " + controllerType);
+			return null;
 		}
 	}
 }

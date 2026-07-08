@@ -8,11 +8,11 @@ public static class LoadStatusData
 
 	public static StatusTypeToData ReadstatusContent(StatusType statusType)
 	{
-		if ((Object)(object)statusData == (Object)null)
+		if (statusData == null)
 		{
 			statusData = Resources.Load<StatusTypeToDataAsset>("statuses");
 		}
-		if (Object.op_Implicit((Object)(object)statusData))
+		if ((bool)statusData)
 		{
 			return statusData.StatusList.Find((StatusTypeToData status) => status.StatusType == statusType);
 		}

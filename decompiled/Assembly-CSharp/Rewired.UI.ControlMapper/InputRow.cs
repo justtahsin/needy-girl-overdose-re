@@ -20,7 +20,7 @@ public class InputRow : MonoBehaviour
 		this.rowIndex = rowIndex;
 		this.label.text = label;
 		this.inputFieldActivatedCallback = inputFieldActivatedCallback;
-		buttons = ((Component)((Component)this).transform).GetComponentsInChildren<ButtonInfo>(true);
+		buttons = base.transform.GetComponentsInChildren<ButtonInfo>(includeInactive: true);
 	}
 
 	public void OnButtonActivated(ButtonInfo buttonInfo)

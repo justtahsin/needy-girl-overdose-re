@@ -1,7 +1,5 @@
 using System;
 using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -64,7 +62,7 @@ public class NetaChipAlpha : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 		{
 			if (isDiscovered)
 			{
-				return ((Selectable)button).interactable;
+				return button.interactable;
 			}
 			return false;
 		}
@@ -94,7 +92,7 @@ public class NetaChipAlpha : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 		isDiscovered = alphaLevel != 0;
 		_tooltip.isShowTooltip = !isDiscovered;
 		Show(isUsed);
-		((Selectable)button).interactable = !isUsed;
+		button.interactable = !isUsed;
 		SetChooseable();
 	}
 
@@ -107,31 +105,26 @@ public class NetaChipAlpha : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 	{
 		if (isDiscovered && type != AlphaType.none && alphaLevel != 0)
 		{
-			Chooser = ((Component)((Component)((Component)((Component)this).gameObject.transform.parent).transform.parent).transform.parent).GetComponent<NetachipChooser>();
+			Chooser = base.gameObject.transform.parent.transform.parent.transform.parent.GetComponent<NetachipChooser>();
 			_tooltip.isShowTooltip = true;
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(button), (Action<Unit>)delegate
+			button.OnClickAsObservable().Subscribe(delegate
 			{
 				_tooltip.Hide();
 				Chooser.Choosed(type, alphaLevel);
-			}), (Component)(object)button);
+			}).AddTo(button);
 		}
 	}
 
 	private void Show(bool isUsed = false)
 	{
-		//IL_00f4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0110: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0033: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0081: Unknown result type (might be due to invalid IL or missing references)
 		if (isDiscovered)
 		{
 			bg.sprite = GetLevelSprite(alphaLevel, type == AlphaType.Angel);
-			TweenExtensions.Play<TweenerCore<Color, Color, ColorOptions>>(ShortcutExtensionsTMPText.DOColor(genre, BlueBlack, 0.2f));
-			TweenExtensions.Play<TweenerCore<Color, Color, ColorOptions>>(ShortcutExtensionsTMPText.DOColor(label, BlueBlack, 0.2f));
+			genre.DOColor(BlueBlack, 0.2f).Play();
+			label.DOColor(BlueBlack, 0.2f).Play();
 			if (isUsed)
 			{
-				((Graphic)bg).color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
+				bg.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
 			}
 			AlphaTypeToData alphaTypeToData = LoadNetaData.ReadNetaContent(type, alphaLevel);
 			LanguageType value = SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value;
@@ -141,8 +134,8 @@ public class NetaChipAlpha : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 		else
 		{
 			bg.sprite = graybg;
-			TweenExtensions.Play<TweenerCore<Color, Color, ColorOptions>>(ShortcutExtensionsTMPText.DOColor(genre, Gray, 0.2f));
-			TweenExtensions.Play<TweenerCore<Color, Color, ColorOptions>>(ShortcutExtensionsTMPText.DOColor(label, Gray, 0.2f));
+			genre.DOColor(Gray, 0.2f).Play();
+			label.DOColor(Gray, 0.2f).Play();
 			genre.text = "";
 			label.text = "???";
 		}
@@ -154,7 +147,7 @@ public class NetaChipAlpha : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 		{
 			return _l5;
 		}
-		return (Sprite)(level switch
+		return level switch
 		{
 			1 => _l1, 
 			2 => _l2, 
@@ -162,7 +155,7 @@ public class NetaChipAlpha : MonoBehaviour, IPointerEnterHandler, IEventSystemHa
 			4 => _l4, 
 			5 => _l5, 
 			_ => _l1, 
-		});
+		};
 	}
 
 	public void OnPointerEnter(PointerEventData e)

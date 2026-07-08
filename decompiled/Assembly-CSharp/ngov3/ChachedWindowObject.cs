@@ -27,13 +27,13 @@ public class ChachedWindowObject : MonoBehaviour, IOpenable, IClosable
 	public void Close()
 	{
 		window.Close();
-		((Component)this).gameObject.SetActive(false);
+		base.gameObject.SetActive(value: false);
 		isOpend = false;
 	}
 
 	public void Open()
 	{
-		((Component)this).gameObject.SetActive(true);
+		base.gameObject.SetActive(value: true);
 		window.Open();
 		window.SetCachedApp(LoadAppData.ReadAppContent(appType));
 		window.OnLanguageUpdated();

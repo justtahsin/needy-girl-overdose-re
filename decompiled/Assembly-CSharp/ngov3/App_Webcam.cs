@@ -1,15 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using DG.Tweening;
 using NGO;
 using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,249 +10,6 @@ namespace ngov3;
 
 public class App_Webcam : MonoBehaviour
 {
-	[Serializable]
-	[CompilerGenerated]
-	private sealed class _003C_003Ec
-	{
-		public static readonly _003C_003Ec _003C_003E9 = new _003C_003Ec();
-
-		public static Func<KeyValuePair<string, int>, bool> _003C_003E9__26_2;
-
-		public static TweenCallback _003C_003E9__32_1;
-
-		internal bool _003CAwake_003Eb__26_2(KeyValuePair<string, int> anim)
-		{
-			if (!(anim.Key != "stream_ame_h_heart"))
-			{
-				return anim.Key != "stream_ame_out_e";
-			}
-			return true;
-		}
-
-		internal void _003CYusayusa_003Eb__32_1()
-		{
-			AudioManager.Instance.PlaySeByType(SoundType.SE_piyo);
-			SingletonMonoBehaviour<VibrationInputManager>.Instance.Vibrate(0.1f, 0.5f, 25f, 0.25f, 50f);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CPlayAnim_003Ed__33 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public string name;
-
-		public App_Webcam _003C_003E4__this;
-
-		private string _003CcurrentClipName_003E5__2;
-
-		private string _003CoverrideClipName_003E5__3;
-
-		private Awaiter<AnimationClip> _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_00ed: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00fa: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0047: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00af: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00bd: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d4: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			App_Webcam app_Webcam = _003C_003E4__this;
-			try
-			{
-				Awaiter<AnimationClip> val;
-				if (num == 0)
-				{
-					val = _003C_003Eu__1;
-					_003C_003Eu__1 = default(Awaiter<AnimationClip>);
-					num = (_003C_003E1__state = -1);
-					goto IL_0109;
-				}
-				if (name != null && name.Length > 1)
-				{
-					app_Webcam._currentAnim = name;
-					AnimatorStateInfo currentAnimatorStateInfo = app_Webcam._animator.GetCurrentAnimatorStateInfo(0);
-					_003CcurrentClipName_003E5__2 = "";
-					_003CoverrideClipName_003E5__3 = "";
-					if (((AnimatorStateInfo)(ref currentAnimatorStateInfo)).IsName(app_Webcam.overrideClipName_1))
-					{
-						_003CcurrentClipName_003E5__2 = app_Webcam.overrideClipName_1;
-						_003CoverrideClipName_003E5__3 = app_Webcam.overrideClipName_0;
-					}
-					else
-					{
-						_003CcurrentClipName_003E5__2 = app_Webcam.overrideClipName_0;
-						_003CoverrideClipName_003E5__3 = app_Webcam.overrideClipName_1;
-					}
-					val = LoadWebcamData.LoadAnimation(name + ".anim").GetAwaiter();
-					if (!val.IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter<AnimationClip>, _003CPlayAnim_003Ed__33>(ref val, ref this);
-						return;
-					}
-					goto IL_0109;
-				}
-				goto end_IL_000e;
-				IL_0109:
-				AnimationClip result = val.GetResult();
-				if (!((Motion)result).isLooping || !((Object)(object)app_Webcam.overrideController[_003CcurrentClipName_003E5__2] == (Object)(object)result))
-				{
-					app_Webcam.overrideController[_003CoverrideClipName_003E5__3] = result;
-					if ((Object)(object)app_Webcam._animator != (Object)null)
-					{
-						Animator animator = app_Webcam._animator;
-						if (animator != null)
-						{
-							animator.Play(_003CoverrideClipName_003E5__3, 0, 0f);
-						}
-					}
-				}
-				end_IL_000e:;
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				_003CcurrentClipName_003E5__2 = null;
-				_003CoverrideClipName_003E5__3 = null;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			_003CcurrentClipName_003E5__2 = null;
-			_003CoverrideClipName_003E5__3 = null;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
-	[StructLayout(LayoutKind.Auto)]
-	[CompilerGenerated]
-	private struct _003CYusayusa_003Ed__32 : IAsyncStateMachine
-	{
-		public int _003C_003E1__state;
-
-		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
-
-		public App_Webcam _003C_003E4__this;
-
-		private TweenAwaiter _003C_003Eu__1;
-
-		private void MoveNext()
-		{
-			//IL_00db: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0041: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004b: Expected O, but got Unknown
-			//IL_00ab: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0075: Unknown result type (might be due to invalid IL or missing references)
-			//IL_007a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0080: Expected O, but got Unknown
-			//IL_00c4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c5: Unknown result type (might be due to invalid IL or missing references)
-			int num = _003C_003E1__state;
-			App_Webcam CS_0024_003C_003E8__locals3 = _003C_003E4__this;
-			try
-			{
-				TweenAwaiter val3;
-				if (num != 0)
-				{
-					CS_0024_003C_003E8__locals3._currentAnim = "";
-					Transform transform = ((Component)CS_0024_003C_003E8__locals3._backGround).gameObject.transform;
-					RectTransform val = (RectTransform)(object)((transform is RectTransform) ? transform : null);
-					Sequence obj = TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendCallback(DOTween.Sequence(), (TweenCallback)delegate
-					{
-						//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-						CS_0024_003C_003E8__locals3.PlayAnim("stream_ame_h_heart");
-					}), (Tween)(object)DOTweenModuleUI.DOAnchorPosY(val, -10f, 0.19999999f, true));
-					object obj2 = _003C_003Ec._003C_003E9__32_1;
-					if (obj2 == null)
-					{
-						TweenCallback val2 = delegate
-						{
-							AudioManager.Instance.PlaySeByType(SoundType.SE_piyo);
-							SingletonMonoBehaviour<VibrationInputManager>.Instance.Vibrate(0.1f, 0.5f, 25f, 0.25f, 50f);
-						};
-						_003C_003Ec._003C_003E9__32_1 = val2;
-						obj2 = (object)val2;
-					}
-					val3 = DOTweenAsyncExtensions.GetAwaiter((Tween)(object)TweenExtensions.Play<Sequence>(TweenSettingsExtensions.SetLoops<Sequence>(TweenSettingsExtensions.SetRelative<Sequence>(TweenSettingsExtensions.Append(TweenSettingsExtensions.AppendCallback(obj, (TweenCallback)obj2), (Tween)(object)DOTweenModuleUI.DOAnchorPosY(val, 10f, 0.19999999f, true))), 8)));
-					if (!((TweenAwaiter)(ref val3)).IsCompleted)
-					{
-						num = (_003C_003E1__state = 0);
-						_003C_003Eu__1 = val3;
-						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<TweenAwaiter, _003CYusayusa_003Ed__32>(ref val3, ref this);
-						return;
-					}
-				}
-				else
-				{
-					val3 = _003C_003Eu__1;
-					_003C_003Eu__1 = default(TweenAwaiter);
-					num = (_003C_003E1__state = -1);
-				}
-				((TweenAwaiter)(ref val3)).GetResult();
-			}
-			catch (Exception exception)
-			{
-				_003C_003E1__state = -2;
-				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
-				return;
-			}
-			_003C_003E1__state = -2;
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
-		}
-
-		void IAsyncStateMachine.MoveNext()
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
-			this.MoveNext();
-		}
-
-		[DebuggerHidden]
-		private void SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
-		}
-
-		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
-		{
-			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
-			this.SetStateMachine(stateMachine);
-		}
-	}
-
 	[SerializeField]
 	private Animator _animator;
 
@@ -329,44 +79,40 @@ public class App_Webcam : MonoBehaviour
 	private void Awake()
 	{
 		_needyBehavior = _animator.GetBehaviour<NeedyGirlAnimatorBehavior>();
-		_button = ((Component)this).GetComponent<Button>();
-		_view = ((Component)this).GetComponent<Image>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<bool>((IObservable<bool>)SingletonMonoBehaviour<WebCamManager>.Instance.hidegirl, (Action<bool>)delegate(bool isHide)
+		_button = GetComponent<Button>();
+		_view = GetComponent<Image>();
+		SingletonMonoBehaviour<WebCamManager>.Instance.hidegirl.Subscribe(delegate(bool isHide)
 		{
 			HideGirl(isHide);
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<string>((IObservable<string>)SingletonMonoBehaviour<WebCamManager>.Instance._currentAnim, (Action<string>)delegate(string anim)
+		}).AddTo(base.gameObject);
+		SingletonMonoBehaviour<WebCamManager>.Instance._currentAnim.Subscribe(delegate(string anim)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
 			PlayAnim(anim);
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Pair<KeyValuePair<string, int>>>(Observable.Pairwise<KeyValuePair<string, int>>(Observable.Where<KeyValuePair<string, int>>((IObservable<KeyValuePair<string, int>>)OnAnimOneShot, (Func<KeyValuePair<string, int>, bool>)((KeyValuePair<string, int> anim) => anim.Key != "stream_ame_h_heart" || anim.Key != "stream_ame_out_e"))), (Action<Pair<KeyValuePair<string, int>>>)async delegate(Pair<KeyValuePair<string, int>> anim)
+		}).AddTo(base.gameObject);
+		OnAnimOneShot.Where((KeyValuePair<string, int> anim) => anim.Key != "stream_ame_h_heart" || anim.Key != "stream_ame_out_e").Pairwise().Subscribe(async delegate(Pair<KeyValuePair<string, int>> anim)
 		{
-			//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0017: Unknown result type (might be due to invalid IL or missing references)
 			string pre = _currentAnim;
 			KeyValuePair<string, int> current = anim.Current;
 			PlayAnimOneShot(current.Key);
-			await UniTask.Delay(current.Value, false, (PlayerLoopTiming)8, default(CancellationToken), false);
+			await UniTask.Delay(current.Value);
 			PlayAnim(pre);
-		}), ((Component)this).gameObject);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<OnStateInfo>(((ObservableStateMachineTrigger)_needyBehavior).OnStateExitAsObservable(), (Action<OnStateInfo>)delegate
+		})
+			.AddTo(base.gameObject);
+		_needyBehavior.OnStateExitAsObservable().Subscribe(delegate
 		{
 			OnExittedAnim(CurrentAnim);
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void Start()
 	{
-		//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0033: Expected O, but got Unknown
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<int>((IObservable<int>)SingletonMonoBehaviour<StatusManager>.Instance.GetStatusObservable(StatusType.DayIndex), (Action<int>)delegate
+		SingletonMonoBehaviour<StatusManager>.Instance.GetStatusObservable(StatusType.DayIndex).Subscribe(delegate
 		{
 			bgView();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 		overrideController = new AnimatorOverrideController();
 		overrideController.runtimeAnimatorController = _animator.runtimeAnimatorController;
-		_animator.runtimeAnimatorController = (RuntimeAnimatorController)(object)overrideController;
+		_animator.runtimeAnimatorController = overrideController;
 	}
 
 	private void bgView()
@@ -411,7 +157,6 @@ public class App_Webcam : MonoBehaviour
 
 	private void OnExittedAnim(string animName)
 	{
-		//IL_0021: Unknown result type (might be due to invalid IL or missing references)
 		if (!(animName == "stream_ame_h_heart") && animName == "stream_ame_handspinner1")
 		{
 			PlayAnim("stream_ame_handspinner2");
@@ -420,36 +165,56 @@ public class App_Webcam : MonoBehaviour
 
 	private void OnExittedOneShot(AnimatorStateInfo state)
 	{
-		((AnimatorStateInfo)(ref state)).IsName("stream_ame_h_heart");
+		state.IsName("stream_ame_h_heart");
 	}
 
-	[AsyncStateMachine(typeof(_003CYusayusa_003Ed__32))]
-	public UniTask Yusayusa()
+	public async UniTask Yusayusa()
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		_003CYusayusa_003Ed__32 _003CYusayusa_003Ed__33 = default(_003CYusayusa_003Ed__32);
-		_003CYusayusa_003Ed__33._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CYusayusa_003Ed__33._003C_003E4__this = this;
-		_003CYusayusa_003Ed__33._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CYusayusa_003Ed__33._003C_003Et__builder)).Start<_003CYusayusa_003Ed__32>(ref _003CYusayusa_003Ed__33);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CYusayusa_003Ed__33._003C_003Et__builder)).Task;
+		_currentAnim = "";
+		RectTransform target = _backGround.gameObject.transform as RectTransform;
+		await DOTween.Sequence().AppendCallback(delegate
+		{
+			PlayAnim("stream_ame_h_heart");
+		}).Append(target.DOAnchorPosY(-10f, 0.19999999f, snapping: true))
+			.AppendCallback(delegate
+			{
+				AudioManager.Instance.PlaySeByType(SoundType.SE_piyo);
+				SingletonMonoBehaviour<VibrationInputManager>.Instance.Vibrate(0.1f, 0.5f, 25f, 0.25f, 50f);
+			})
+			.Append(target.DOAnchorPosY(10f, 0.19999999f, snapping: true))
+			.SetRelative()
+			.SetLoops(8)
+			.Play();
 	}
 
-	[AsyncStateMachine(typeof(_003CPlayAnim_003Ed__33))]
-	public UniTask PlayAnim(string name)
+	public async UniTask PlayAnim(string name)
 	{
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0039: Unknown result type (might be due to invalid IL or missing references)
-		_003CPlayAnim_003Ed__33 _003CPlayAnim_003Ed__34 = default(_003CPlayAnim_003Ed__33);
-		_003CPlayAnim_003Ed__34._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
-		_003CPlayAnim_003Ed__34._003C_003E4__this = this;
-		_003CPlayAnim_003Ed__34.name = name;
-		_003CPlayAnim_003Ed__34._003C_003E1__state = -1;
-		((AsyncUniTaskMethodBuilder)(ref _003CPlayAnim_003Ed__34._003C_003Et__builder)).Start<_003CPlayAnim_003Ed__33>(ref _003CPlayAnim_003Ed__34);
-		return ((AsyncUniTaskMethodBuilder)(ref _003CPlayAnim_003Ed__34._003C_003Et__builder)).Task;
+		if (name == null || name.Length <= 1)
+		{
+			return;
+		}
+		_currentAnim = name;
+		string currentClipName;
+		string overrideClipName;
+		if (_animator.GetCurrentAnimatorStateInfo(0).IsName(overrideClipName_1))
+		{
+			currentClipName = overrideClipName_1;
+			overrideClipName = overrideClipName_0;
+		}
+		else
+		{
+			currentClipName = overrideClipName_0;
+			overrideClipName = overrideClipName_1;
+		}
+		AnimationClip animationClip = await LoadWebcamData.LoadAnimation(name + ".anim");
+		if (!animationClip.isLooping || !(overrideController[currentClipName] == animationClip))
+		{
+			overrideController[overrideClipName] = animationClip;
+			if (_animator != null)
+			{
+				_animator?.Play(overrideClipName, 0, 0f);
+			}
+		}
 	}
 
 	public void PlayAnimOneShot(string name)
@@ -459,7 +224,7 @@ public class App_Webcam : MonoBehaviour
 
 	public void HideGirl(bool onoff)
 	{
-		if (!((Object)(object)_Ame == (Object)null))
+		if (!(_Ame == null))
 		{
 			_Ame.SetActive(!onoff);
 		}

@@ -37,7 +37,7 @@ public struct KusoRepDrawable
 		KRepMaster.Param param = TweetFetcher.ConvertTypeToKusorep(t);
 		if (param == null)
 		{
-			Debug.LogError((object)(t.ToString() + "has error"));
+			Debug.LogError(t.ToString() + "has error");
 		}
 		UserId = param.UserId;
 		UserIconId = param.IconId;

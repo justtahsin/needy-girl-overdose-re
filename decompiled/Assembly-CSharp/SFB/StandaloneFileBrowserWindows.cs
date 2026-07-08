@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -14,28 +13,24 @@ public class StandaloneFileBrowserWindows : IStandaloneFileBrowser
 
 	public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Expected O, but got Unknown
-		//IL_0057: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005d: Invalid comparison between Unknown and I4
-		VistaOpenFileDialog val = new VistaOpenFileDialog();
-		((VistaFileDialog)val).Title = title;
+		VistaOpenFileDialog vistaOpenFileDialog = new VistaOpenFileDialog();
+		vistaOpenFileDialog.Title = title;
 		if (extensions != null)
 		{
-			((VistaFileDialog)val).Filter = GetFilterFromFileExtensionList(extensions);
-			((VistaFileDialog)val).FilterIndex = 1;
+			vistaOpenFileDialog.Filter = GetFilterFromFileExtensionList(extensions);
+			vistaOpenFileDialog.FilterIndex = 1;
 		}
 		else
 		{
-			((VistaFileDialog)val).Filter = string.Empty;
+			vistaOpenFileDialog.Filter = string.Empty;
 		}
-		val.Multiselect = multiselect;
+		vistaOpenFileDialog.Multiselect = multiselect;
 		if (!string.IsNullOrEmpty(directory))
 		{
-			((VistaFileDialog)val).FileName = GetDirectoryPath(directory);
+			vistaOpenFileDialog.FileName = GetDirectoryPath(directory);
 		}
-		string[] result = (((int)((CommonDialog)val).ShowDialog((IWin32Window)(object)new WindowWrapper(GetActiveWindow())) == 1) ? ((VistaFileDialog)val).FileNames : new string[0]);
-		((Component)(object)val).Dispose();
+		string[] result = ((vistaOpenFileDialog.ShowDialog(new WindowWrapper(GetActiveWindow())) == DialogResult.OK) ? vistaOpenFileDialog.FileNames : new string[0]);
+		vistaOpenFileDialog.Dispose();
 		return result;
 	}
 
@@ -46,18 +41,14 @@ public class StandaloneFileBrowserWindows : IStandaloneFileBrowser
 
 	public string[] OpenFolderPanel(string title, string directory, bool multiselect)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Expected O, but got Unknown
-		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0032: Invalid comparison between Unknown and I4
-		VistaFolderBrowserDialog val = new VistaFolderBrowserDialog();
-		val.Description = title;
+		VistaFolderBrowserDialog vistaFolderBrowserDialog = new VistaFolderBrowserDialog();
+		vistaFolderBrowserDialog.Description = title;
 		if (!string.IsNullOrEmpty(directory))
 		{
-			val.SelectedPath = GetDirectoryPath(directory);
+			vistaFolderBrowserDialog.SelectedPath = GetDirectoryPath(directory);
 		}
-		string[] result = (((int)((CommonDialog)val).ShowDialog((IWin32Window)(object)new WindowWrapper(GetActiveWindow())) != 1) ? new string[0] : new string[1] { val.SelectedPath });
-		((Component)(object)val).Dispose();
+		string[] result = ((vistaFolderBrowserDialog.ShowDialog(new WindowWrapper(GetActiveWindow())) != DialogResult.OK) ? new string[0] : new string[1] { vistaFolderBrowserDialog.SelectedPath });
+		vistaFolderBrowserDialog.Dispose();
 		return result;
 	}
 
@@ -68,12 +59,8 @@ public class StandaloneFileBrowserWindows : IStandaloneFileBrowser
 
 	public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
 	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0006: Expected O, but got Unknown
-		//IL_0097: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009d: Invalid comparison between Unknown and I4
-		VistaSaveFileDialog val = new VistaSaveFileDialog();
-		((VistaFileDialog)val).Title = title;
+		VistaSaveFileDialog vistaSaveFileDialog = new VistaSaveFileDialog();
+		vistaSaveFileDialog.Title = title;
 		string text = "";
 		if (!string.IsNullOrEmpty(directory))
 		{
@@ -83,22 +70,22 @@ public class StandaloneFileBrowserWindows : IStandaloneFileBrowser
 		{
 			text += defaultName;
 		}
-		((VistaFileDialog)val).FileName = text;
+		vistaSaveFileDialog.FileName = text;
 		if (extensions != null)
 		{
-			((VistaFileDialog)val).Filter = GetFilterFromFileExtensionList(extensions);
-			((VistaFileDialog)val).FilterIndex = 1;
-			((VistaFileDialog)val).DefaultExt = extensions[0].Extensions[0];
-			((VistaFileDialog)val).AddExtension = true;
+			vistaSaveFileDialog.Filter = GetFilterFromFileExtensionList(extensions);
+			vistaSaveFileDialog.FilterIndex = 1;
+			vistaSaveFileDialog.DefaultExt = extensions[0].Extensions[0];
+			vistaSaveFileDialog.AddExtension = true;
 		}
 		else
 		{
-			((VistaFileDialog)val).DefaultExt = string.Empty;
-			((VistaFileDialog)val).Filter = string.Empty;
-			((VistaFileDialog)val).AddExtension = false;
+			vistaSaveFileDialog.DefaultExt = string.Empty;
+			vistaSaveFileDialog.Filter = string.Empty;
+			vistaSaveFileDialog.AddExtension = false;
 		}
-		string result = (((int)((CommonDialog)val).ShowDialog((IWin32Window)(object)new WindowWrapper(GetActiveWindow())) == 1) ? ((VistaFileDialog)val).FileName : "");
-		((Component)(object)val).Dispose();
+		string result = ((vistaSaveFileDialog.ShowDialog(new WindowWrapper(GetActiveWindow())) == DialogResult.OK) ? vistaSaveFileDialog.FileName : "");
+		vistaSaveFileDialog.Dispose();
 		return result;
 	}
 
@@ -142,7 +129,7 @@ public class StandaloneFileBrowserWindows : IStandaloneFileBrowser
 		{
 			return directory;
 		}
-		string? directoryName = Path.GetDirectoryName(text);
+		string directoryName = Path.GetDirectoryName(text);
 		char directorySeparatorChar = Path.DirectorySeparatorChar;
 		return directoryName + directorySeparatorChar;
 	}

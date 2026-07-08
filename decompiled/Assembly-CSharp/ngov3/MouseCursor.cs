@@ -18,15 +18,11 @@ public class MouseCursor : MonoBehaviour, IPointerEnterHandler, IEventSystemHand
 
 	public void OnPointerEnter(PointerEventData e)
 	{
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0012: Unknown result type (might be due to invalid IL or missing references)
 		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(_changed, hotSpot, cursorMode);
 	}
 
 	public void OnPointerExit(PointerEventData e)
 	{
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000d: Unknown result type (might be due to invalid IL or missing references)
 		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(null, hotSpot, cursorMode);
 	}
 }

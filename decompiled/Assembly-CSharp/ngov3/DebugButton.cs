@@ -8,7 +8,7 @@ public class DebugButton : MonoBehaviour
 	{
 		if (!DebugMode.IsDebugMode)
 		{
-			Object.Destroy((Object)(object)((Component)this).gameObject);
+			Object.Destroy(base.gameObject);
 		}
 	}
 }

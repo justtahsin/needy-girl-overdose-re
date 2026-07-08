@@ -26,7 +26,7 @@ public class NetView : MonoBehaviour
 
 	public void UpdateContents(int num = 1)
 	{
-		if ((Object)(object)_suretai == (Object)null)
+		if (_suretai == null)
 		{
 			return;
 		}
@@ -38,7 +38,7 @@ public class NetView : MonoBehaviour
 		{
 			if (!item.Id.EndsWith("0"))
 			{
-				Object.Instantiate<KitsuneResView>(_kituneResPrefabView, (Transform)(object)_content).SetData(NgoEx.SystemTextFromType(SystemTextType.Kitsune_Handle, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value), item.ResNumber, NgoEx.KituneFromType(item.Id, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value));
+				UnityEngine.Object.Instantiate(_kituneResPrefabView, _content).SetData(NgoEx.SystemTextFromType(SystemTextType.Kitsune_Handle, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value), item.ResNumber, NgoEx.KituneFromType(item.Id, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value));
 			}
 		}
 	}

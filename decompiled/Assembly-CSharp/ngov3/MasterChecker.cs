@@ -16,7 +16,7 @@ public class MasterChecker
 		{
 			if (param.FirstOrDefault((SystemTextMaster.Param x) => x.Id == value) == null)
 			{
-				Debug.LogError((object)("Resources/Master/SystemText:のmaster中に" + value + "の値が存在しません"));
+				Debug.LogError("Resources/Master/SystemText:のmaster中に" + value + "の値が存在しません");
 			}
 		}
 	}
@@ -28,7 +28,7 @@ public class MasterChecker
 		{
 			if (param.FirstOrDefault((EndingMaster.Param x) => x.Id == value.ToString()) == null)
 			{
-				Debug.LogError((object)("Resources/Master/Ending:のmaster中に" + value.ToString() + "の値が存在しません"));
+				Debug.LogError("Resources/Master/Ending:のmaster中に" + value.ToString() + "の値が存在しません");
 			}
 		}
 	}

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -63,10 +62,6 @@ public class FallbackJoystickIdentificationDemo : MonoBehaviour
 
 	private void OnGUI()
 	{
-		//IL_005b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0063: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0077: Expected O, but got Unknown
-		//IL_0072: Unknown result type (might be due to invalid IL or missing references)
 		if (!identifyRequired)
 		{
 			return;
@@ -76,11 +71,10 @@ public class FallbackJoystickIdentificationDemo : MonoBehaviour
 			Reset();
 			return;
 		}
-		Rect val = default(Rect);
-		((Rect)(ref val))._002Ector((float)Screen.width * 0.5f - 125f, (float)Screen.height * 0.5f - 125f, 250f, 250f);
-		GUILayout.Window(0, val, new WindowFunction(DrawDialogWindow), "Joystick Identification Required", Array.Empty<GUILayoutOption>());
+		Rect screenRect = new Rect((float)Screen.width * 0.5f - 125f, (float)Screen.height * 0.5f - 125f, 250f, 250f);
+		GUILayout.Window(0, screenRect, DrawDialogWindow, "Joystick Identification Required");
 		GUI.FocusWindow(0);
-		if (!(Time.time < nextInputAllowedTime) && ReInput.controllers.SetUnityJoystickIdFromAnyButtonOrAxisPress(((Controller)joysticksToIdentify.Peek()).id, 0.8f, false))
+		if (!(Time.time < nextInputAllowedTime) && ReInput.controllers.SetUnityJoystickIdFromAnyButtonOrAxisPress(joysticksToIdentify.Peek().id, 0.8f, positiveAxesOnly: false))
 		{
 			joysticksToIdentify.Dequeue();
 			SetInputDelay();
@@ -93,8 +87,6 @@ public class FallbackJoystickIdentificationDemo : MonoBehaviour
 
 	private void DrawDialogWindow(int windowId)
 	{
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0026: Expected O, but got Unknown
 		if (identifyRequired)
 		{
 			if (style == null)
@@ -103,11 +95,11 @@ public class FallbackJoystickIdentificationDemo : MonoBehaviour
 				style.wordWrap = true;
 			}
 			GUILayout.Space(15f);
-			GUILayout.Label("A joystick has been attached or removed. You will need to identify each joystick by pressing a button on the controller listed below:", style, Array.Empty<GUILayoutOption>());
-			Joystick val = joysticksToIdentify.Peek();
-			GUILayout.Label("Press any button on \"" + ((Controller)val).name + "\" now.", style, Array.Empty<GUILayoutOption>());
+			GUILayout.Label("A joystick has been attached or removed. You will need to identify each joystick by pressing a button on the controller listed below:", style);
+			Joystick joystick = joysticksToIdentify.Peek();
+			GUILayout.Label("Press any button on \"" + joystick.name + "\" now.", style);
 			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Skip", Array.Empty<GUILayoutOption>()))
+			if (GUILayout.Button("Skip"))
 			{
 				joysticksToIdentify.Dequeue();
 			}

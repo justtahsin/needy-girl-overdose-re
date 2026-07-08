@@ -28,7 +28,7 @@ public class EightPlayersExample_Player : MonoBehaviour
 
 	private void Awake()
 	{
-		cc = ((Component)this).GetComponent<CharacterController>();
+		cc = GetComponent<CharacterController>();
 	}
 
 	private void Initialize()
@@ -59,23 +59,13 @@ public class EightPlayersExample_Player : MonoBehaviour
 
 	private void ProcessInput()
 	{
-		//IL_002b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0036: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0040: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009a: Unknown result type (might be due to invalid IL or missing references)
 		if (moveVector.x != 0f || moveVector.y != 0f)
 		{
 			cc.Move(moveVector * moveSpeed * Time.deltaTime);
 		}
 		if (fire)
 		{
-			Object.Instantiate<GameObject>(bulletPrefab, ((Component)this).transform.position + ((Component)this).transform.right, ((Component)this).transform.rotation).GetComponent<Rigidbody>().AddForce(((Component)this).transform.right * bulletSpeed, (ForceMode)2);
+			UnityEngine.Object.Instantiate(bulletPrefab, base.transform.position + base.transform.right, base.transform.rotation).GetComponent<Rigidbody>().AddForce(base.transform.right * bulletSpeed, ForceMode.VelocityChange);
 		}
 	}
 }

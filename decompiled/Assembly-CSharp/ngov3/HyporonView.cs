@@ -1,4 +1,3 @@
-using UniRx;
 using UnityEngine;
 
 namespace ngov3;
@@ -19,7 +18,7 @@ public class HyporonView : SheetView
 	public override void OnDose()
 	{
 		base.OnDose();
-		if (((ReactiveProperty<int>)(object)_currentDoseCount).Value == 1 && _hintObj.activeInHierarchy != _subHintObj.activeInHierarchy)
+		if (_currentDoseCount.Value == 1 && _hintObj.activeInHierarchy != _subHintObj.activeInHierarchy)
 		{
 			_subHintObj.SetActive(_hintObj.activeInHierarchy);
 		}

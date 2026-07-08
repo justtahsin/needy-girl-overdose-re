@@ -1,4 +1,3 @@
-using System;
 using NGO;
 using TMPro;
 using UniRx;
@@ -15,16 +14,16 @@ public class LabelLangChanger : MonoBehaviour
 
 	public void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			AddLabel();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 		AddLabel();
 	}
 
 	private void AddLabel()
 	{
-		if (!((Object)(object)label == (Object)null))
+		if (!(label == null))
 		{
 			label.text = NgoEx.SystemTextFromType(type, SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Value);
 		}

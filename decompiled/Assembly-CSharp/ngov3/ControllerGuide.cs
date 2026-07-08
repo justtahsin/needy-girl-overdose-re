@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using NGO;
@@ -73,26 +72,26 @@ public class ControllerGuide : MonoBehaviour
 
 	public bool IsShowing => _isShowing;
 
-	public Vector3 CloseButtonPos => ((Component)_closeButton).transform.position;
+	public Vector3 CloseButtonPos => _closeButton.transform.position;
 
 	private void Awake()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_closeButton), (Action<Unit>)delegate
+		_closeButton.OnClickAsObservable().Subscribe(delegate
 		{
 			CloseGuide();
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_desktopTabButton), (Action<Unit>)delegate
+		}).AddTo(this);
+		_desktopTabButton.OnClickAsObservable().Subscribe(delegate
 		{
 			SetTab(TabType.Desktop);
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_liveTabButton), (Action<Unit>)delegate
+		}).AddTo(this);
+		_liveTabButton.OnClickAsObservable().Subscribe(delegate
 		{
 			SetTab(TabType.Live);
-		}), (Component)(object)this);
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_loginTabButton), (Action<Unit>)delegate
+		}).AddTo(this);
+		_loginTabButton.OnClickAsObservable().Subscribe(delegate
 		{
 			SetTab(TabType.Login);
-		}), (Component)(object)this);
+		}).AddTo(this);
 		CloseGuideImmediate();
 	}
 
@@ -110,26 +109,24 @@ public class ControllerGuide : MonoBehaviour
 
 	private void ShowGuide(TabType tab)
 	{
-		//IL_003d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0047: Expected O, but got Unknown
-		//IL_0068: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0072: Expected O, but got Unknown
 		SetTab(tab);
 		SetHaishinPause(pause: true);
 		ChangeControllerModeOnLive(ShortcutInputManager.ControllerMode.Desktop);
 		_isShowing = true;
 		AudioManager.Instance.PlaySeByType(SoundType.SE_pop_tutorial);
 		StopSequence();
-		_showCloseSequence = TweenExtensions.Play<Sequence>(TweenSettingsExtensions.AppendCallback(TweenSettingsExtensions.Append(TweenSettingsExtensions.OnStart<Sequence>(DOTween.Sequence(), (TweenCallback)delegate
+		_showCloseSequence = DOTween.Sequence().OnStart(delegate
 		{
 			_group.alpha = 0f;
 			_group.interactable = false;
 			_group.blocksRaycasts = true;
-		}), (Tween)(object)DOTweenModuleUI.DOFade(_group, 1f, 0.4f)), (TweenCallback)delegate
-		{
-			_group.interactable = true;
-			_showCloseSequence = null;
-		}));
+		}).Append(_group.DOFade(1f, 0.4f))
+			.AppendCallback(delegate
+			{
+				_group.interactable = true;
+				_showCloseSequence = null;
+			})
+			.Play();
 	}
 
 	private void SetTab(TabType tab)
@@ -137,27 +134,27 @@ public class ControllerGuide : MonoBehaviour
 		switch (tab)
 		{
 		case TabType.Desktop:
-			_desktopContent.SetActive(true);
-			_liveContent.SetActive(false);
-			_loginContent.SetActive(false);
+			_desktopContent.SetActive(value: true);
+			_liveContent.SetActive(value: false);
+			_loginContent.SetActive(value: false);
 			_desktopTab.SetAsLastSibling();
 			break;
 		case TabType.Live:
-			_desktopContent.SetActive(false);
-			_liveContent.SetActive(true);
-			_loginContent.SetActive(false);
+			_desktopContent.SetActive(value: false);
+			_liveContent.SetActive(value: true);
+			_loginContent.SetActive(value: false);
 			_liveTab.SetAsLastSibling();
 			break;
 		case TabType.Login:
-			_desktopContent.SetActive(false);
-			_liveContent.SetActive(false);
-			_loginContent.SetActive(true);
+			_desktopContent.SetActive(value: false);
+			_liveContent.SetActive(value: false);
+			_loginContent.SetActive(value: true);
 			_loginTab.SetAsLastSibling();
 			break;
 		default:
-			_desktopContent.SetActive(true);
-			_liveContent.SetActive(false);
-			_loginContent.SetActive(false);
+			_desktopContent.SetActive(value: true);
+			_liveContent.SetActive(value: false);
+			_loginContent.SetActive(value: false);
 			_desktopTab.SetAsLastSibling();
 			break;
 		}
@@ -170,23 +167,22 @@ public class ControllerGuide : MonoBehaviour
 
 	private void CloseGuide()
 	{
-		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0024: Expected O, but got Unknown
-		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004f: Expected O, but got Unknown
 		_isShowing = false;
 		StopSequence();
-		_showCloseSequence = TweenExtensions.Play<Sequence>(TweenSettingsExtensions.SetAutoKill<Sequence>(TweenSettingsExtensions.OnComplete<Sequence>(TweenSettingsExtensions.Append(TweenSettingsExtensions.OnStart<Sequence>(DOTween.Sequence(), (TweenCallback)delegate
+		_showCloseSequence = DOTween.Sequence().OnStart(delegate
 		{
 			_group.interactable = false;
 			_group.blocksRaycasts = true;
-		}), (Tween)(object)DOTweenModuleUI.DOFade(_group, 0f, 0.2f)), (TweenCallback)delegate
-		{
-			_group.blocksRaycasts = false;
-			SetHaishinPause(pause: false);
-			ChangeControllerModeOnLive(ShortcutInputManager.ControllerMode.Haishin);
-			_showCloseSequence = null;
-		}), false));
+		}).Append(_group.DOFade(0f, 0.2f))
+			.OnComplete(delegate
+			{
+				_group.blocksRaycasts = false;
+				SetHaishinPause(pause: false);
+				ChangeControllerModeOnLive(ShortcutInputManager.ControllerMode.Haishin);
+				_showCloseSequence = null;
+			})
+			.SetAutoKill(autoKillOnCompletion: false)
+			.Play();
 	}
 
 	public void CloseGuideImmediate()
@@ -204,14 +200,14 @@ public class ControllerGuide : MonoBehaviour
 	{
 		if (_showCloseSequence != null)
 		{
-			TweenExtensions.Kill((Tween)(object)_showCloseSequence, false);
+			_showCloseSequence.Kill();
 			_showCloseSequence = null;
 		}
 	}
 
 	private void SetHaishinPause(bool pause)
 	{
-		if ((Object)(object)_activeLiveApp != (Object)null)
+		if (_activeLiveApp != null)
 		{
 			_activeLiveApp.NowPlaying.isPause = pause;
 		}
@@ -219,7 +215,7 @@ public class ControllerGuide : MonoBehaviour
 
 	private void ChangeControllerModeOnLive(ShortcutInputManager.ControllerMode mode)
 	{
-		if (Object.op_Implicit((Object)(object)_activeLiveApp))
+		if ((bool)_activeLiveApp)
 		{
 			SingletonMonoBehaviour<ShortcutInputManager>.Instance.ChangeControllerMode(mode);
 		}
@@ -227,12 +223,7 @@ public class ControllerGuide : MonoBehaviour
 
 	public List<GameObject> GetSelectableObject()
 	{
-		return new List<GameObject>
-		{
-			((Component)_desktopTabButton).gameObject,
-			((Component)_liveTabButton).gameObject,
-			((Component)_loginTabButton).gameObject
-		};
+		return new List<GameObject> { _desktopTabButton.gameObject, _liveTabButton.gameObject, _loginTabButton.gameObject };
 	}
 
 	public void ChangeTabNext()

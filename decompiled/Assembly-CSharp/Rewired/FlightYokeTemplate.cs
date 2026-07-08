@@ -160,103 +160,103 @@ public sealed class FlightYokeTemplate : ControllerTemplate, IFlightYokeTemplate
 
 	public const int elementId_rightGripHat = 76;
 
-	IControllerTemplateButton IFlightYokeTemplate.leftPaddle => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(59);
+	IControllerTemplateButton IFlightYokeTemplate.leftPaddle => GetElement<IControllerTemplateButton>(59);
 
-	IControllerTemplateButton IFlightYokeTemplate.rightPaddle => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(60);
+	IControllerTemplateButton IFlightYokeTemplate.rightPaddle => GetElement<IControllerTemplateButton>(60);
 
-	IControllerTemplateButton IFlightYokeTemplate.leftGripButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(7);
+	IControllerTemplateButton IFlightYokeTemplate.leftGripButton1 => GetElement<IControllerTemplateButton>(7);
 
-	IControllerTemplateButton IFlightYokeTemplate.leftGripButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(8);
+	IControllerTemplateButton IFlightYokeTemplate.leftGripButton2 => GetElement<IControllerTemplateButton>(8);
 
-	IControllerTemplateButton IFlightYokeTemplate.leftGripButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(9);
+	IControllerTemplateButton IFlightYokeTemplate.leftGripButton3 => GetElement<IControllerTemplateButton>(9);
 
-	IControllerTemplateButton IFlightYokeTemplate.leftGripButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(10);
+	IControllerTemplateButton IFlightYokeTemplate.leftGripButton4 => GetElement<IControllerTemplateButton>(10);
 
-	IControllerTemplateButton IFlightYokeTemplate.leftGripButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(11);
+	IControllerTemplateButton IFlightYokeTemplate.leftGripButton5 => GetElement<IControllerTemplateButton>(11);
 
-	IControllerTemplateButton IFlightYokeTemplate.leftGripButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(12);
+	IControllerTemplateButton IFlightYokeTemplate.leftGripButton6 => GetElement<IControllerTemplateButton>(12);
 
-	IControllerTemplateButton IFlightYokeTemplate.rightGripButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(13);
+	IControllerTemplateButton IFlightYokeTemplate.rightGripButton1 => GetElement<IControllerTemplateButton>(13);
 
-	IControllerTemplateButton IFlightYokeTemplate.rightGripButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(14);
+	IControllerTemplateButton IFlightYokeTemplate.rightGripButton2 => GetElement<IControllerTemplateButton>(14);
 
-	IControllerTemplateButton IFlightYokeTemplate.rightGripButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(15);
+	IControllerTemplateButton IFlightYokeTemplate.rightGripButton3 => GetElement<IControllerTemplateButton>(15);
 
-	IControllerTemplateButton IFlightYokeTemplate.rightGripButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(16);
+	IControllerTemplateButton IFlightYokeTemplate.rightGripButton4 => GetElement<IControllerTemplateButton>(16);
 
-	IControllerTemplateButton IFlightYokeTemplate.rightGripButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(17);
+	IControllerTemplateButton IFlightYokeTemplate.rightGripButton5 => GetElement<IControllerTemplateButton>(17);
 
-	IControllerTemplateButton IFlightYokeTemplate.rightGripButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(18);
+	IControllerTemplateButton IFlightYokeTemplate.rightGripButton6 => GetElement<IControllerTemplateButton>(18);
 
-	IControllerTemplateButton IFlightYokeTemplate.centerButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(19);
+	IControllerTemplateButton IFlightYokeTemplate.centerButton1 => GetElement<IControllerTemplateButton>(19);
 
-	IControllerTemplateButton IFlightYokeTemplate.centerButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(20);
+	IControllerTemplateButton IFlightYokeTemplate.centerButton2 => GetElement<IControllerTemplateButton>(20);
 
-	IControllerTemplateButton IFlightYokeTemplate.centerButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(21);
+	IControllerTemplateButton IFlightYokeTemplate.centerButton3 => GetElement<IControllerTemplateButton>(21);
 
-	IControllerTemplateButton IFlightYokeTemplate.centerButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(22);
+	IControllerTemplateButton IFlightYokeTemplate.centerButton4 => GetElement<IControllerTemplateButton>(22);
 
-	IControllerTemplateButton IFlightYokeTemplate.centerButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(23);
+	IControllerTemplateButton IFlightYokeTemplate.centerButton5 => GetElement<IControllerTemplateButton>(23);
 
-	IControllerTemplateButton IFlightYokeTemplate.centerButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(24);
+	IControllerTemplateButton IFlightYokeTemplate.centerButton6 => GetElement<IControllerTemplateButton>(24);
 
-	IControllerTemplateButton IFlightYokeTemplate.centerButton7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(25);
+	IControllerTemplateButton IFlightYokeTemplate.centerButton7 => GetElement<IControllerTemplateButton>(25);
 
-	IControllerTemplateButton IFlightYokeTemplate.centerButton8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(26);
+	IControllerTemplateButton IFlightYokeTemplate.centerButton8 => GetElement<IControllerTemplateButton>(26);
 
-	IControllerTemplateButton IFlightYokeTemplate.wheel1Up => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(53);
+	IControllerTemplateButton IFlightYokeTemplate.wheel1Up => GetElement<IControllerTemplateButton>(53);
 
-	IControllerTemplateButton IFlightYokeTemplate.wheel1Down => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(54);
+	IControllerTemplateButton IFlightYokeTemplate.wheel1Down => GetElement<IControllerTemplateButton>(54);
 
-	IControllerTemplateButton IFlightYokeTemplate.wheel1Press => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(55);
+	IControllerTemplateButton IFlightYokeTemplate.wheel1Press => GetElement<IControllerTemplateButton>(55);
 
-	IControllerTemplateButton IFlightYokeTemplate.wheel2Up => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(56);
+	IControllerTemplateButton IFlightYokeTemplate.wheel2Up => GetElement<IControllerTemplateButton>(56);
 
-	IControllerTemplateButton IFlightYokeTemplate.wheel2Down => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(57);
+	IControllerTemplateButton IFlightYokeTemplate.wheel2Down => GetElement<IControllerTemplateButton>(57);
 
-	IControllerTemplateButton IFlightYokeTemplate.wheel2Press => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(58);
+	IControllerTemplateButton IFlightYokeTemplate.wheel2Press => GetElement<IControllerTemplateButton>(58);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(43);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton1 => GetElement<IControllerTemplateButton>(43);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(44);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton2 => GetElement<IControllerTemplateButton>(44);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(45);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton3 => GetElement<IControllerTemplateButton>(45);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(46);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton4 => GetElement<IControllerTemplateButton>(46);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(47);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton5 => GetElement<IControllerTemplateButton>(47);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(48);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton6 => GetElement<IControllerTemplateButton>(48);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(49);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton7 => GetElement<IControllerTemplateButton>(49);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(50);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton8 => GetElement<IControllerTemplateButton>(50);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton9 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(51);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton9 => GetElement<IControllerTemplateButton>(51);
 
-	IControllerTemplateButton IFlightYokeTemplate.consoleButton10 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(52);
+	IControllerTemplateButton IFlightYokeTemplate.consoleButton10 => GetElement<IControllerTemplateButton>(52);
 
-	IControllerTemplateButton IFlightYokeTemplate.mode1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(61);
+	IControllerTemplateButton IFlightYokeTemplate.mode1 => GetElement<IControllerTemplateButton>(61);
 
-	IControllerTemplateButton IFlightYokeTemplate.mode2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(62);
+	IControllerTemplateButton IFlightYokeTemplate.mode2 => GetElement<IControllerTemplateButton>(62);
 
-	IControllerTemplateButton IFlightYokeTemplate.mode3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(63);
+	IControllerTemplateButton IFlightYokeTemplate.mode3 => GetElement<IControllerTemplateButton>(63);
 
-	IControllerTemplateYoke IFlightYokeTemplate.yoke => ((ControllerTemplate)this).GetElement<IControllerTemplateYoke>(69);
+	IControllerTemplateYoke IFlightYokeTemplate.yoke => GetElement<IControllerTemplateYoke>(69);
 
-	IControllerTemplateThrottle IFlightYokeTemplate.lever1 => ((ControllerTemplate)this).GetElement<IControllerTemplateThrottle>(70);
+	IControllerTemplateThrottle IFlightYokeTemplate.lever1 => GetElement<IControllerTemplateThrottle>(70);
 
-	IControllerTemplateThrottle IFlightYokeTemplate.lever2 => ((ControllerTemplate)this).GetElement<IControllerTemplateThrottle>(71);
+	IControllerTemplateThrottle IFlightYokeTemplate.lever2 => GetElement<IControllerTemplateThrottle>(71);
 
-	IControllerTemplateThrottle IFlightYokeTemplate.lever3 => ((ControllerTemplate)this).GetElement<IControllerTemplateThrottle>(72);
+	IControllerTemplateThrottle IFlightYokeTemplate.lever3 => GetElement<IControllerTemplateThrottle>(72);
 
-	IControllerTemplateThrottle IFlightYokeTemplate.lever4 => ((ControllerTemplate)this).GetElement<IControllerTemplateThrottle>(73);
+	IControllerTemplateThrottle IFlightYokeTemplate.lever4 => GetElement<IControllerTemplateThrottle>(73);
 
-	IControllerTemplateThrottle IFlightYokeTemplate.lever5 => ((ControllerTemplate)this).GetElement<IControllerTemplateThrottle>(74);
+	IControllerTemplateThrottle IFlightYokeTemplate.lever5 => GetElement<IControllerTemplateThrottle>(74);
 
-	IControllerTemplateHat IFlightYokeTemplate.leftGripHat => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(75);
+	IControllerTemplateHat IFlightYokeTemplate.leftGripHat => GetElement<IControllerTemplateHat>(75);
 
-	IControllerTemplateHat IFlightYokeTemplate.rightGripHat => ((ControllerTemplate)this).GetElement<IControllerTemplateHat>(76);
+	IControllerTemplateHat IFlightYokeTemplate.rightGripHat => GetElement<IControllerTemplateHat>(76);
 
 	public FlightYokeTemplate(object payload)
 		: base(payload)

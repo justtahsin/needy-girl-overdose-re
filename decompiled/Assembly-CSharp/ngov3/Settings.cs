@@ -45,17 +45,17 @@ public class Settings : SingletonMonoBehaviour<Settings>
 
 	public IEnumerable<string> NotDuplicateAnimationKeyHistory => animationKeyHistory.Distinct();
 
-	public IObservable<Unit> OnLoadObservable => (IObservable<Unit>)onLoadSubject;
+	public IObservable<Unit> OnLoadObservable => onLoadSubject;
 
 	private new void Awake()
 	{
 		if (CheckInstance())
 		{
-			Object.DontDestroyOnLoad((Object)(object)((Component)this).gameObject);
+			UnityEngine.Object.DontDestroyOnLoad(base.gameObject);
 		}
 		else
 		{
-			Object.Destroy((Object)(object)((Component)this).gameObject);
+			UnityEngine.Object.Destroy(base.gameObject);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class Settings : SingletonMonoBehaviour<Settings>
 			resolution = Resolution.Value,
 			vibrationType = VibrationType.Value
 		});
-		Debug.Log((object)"設定データのセーブが完了しました");
+		Debug.Log("設定データのセーブが完了しました");
 	}
 
 	public bool checkAllZipUnlocked()
@@ -102,7 +102,6 @@ public class Settings : SingletonMonoBehaviour<Settings>
 
 	public void Load()
 	{
-		//IL_0099: Unknown result type (might be due to invalid IL or missing references)
 		SettingData settingData = SaveRelayer.LoadSettings();
 		CurrentLanguage.Value = settingData.languageType;
 		BgmVolume = settingData.bgmVolume;
@@ -117,7 +116,7 @@ public class Settings : SingletonMonoBehaviour<Settings>
 		SetResolution();
 		onLoadSubject.OnNext(Unit.Default);
 		onLoadSubject.OnCompleted();
-		Debug.Log((object)"設定データのロードが完了しました");
+		Debug.Log("設定データのロードが完了しました");
 	}
 
 	public void AddAnimationKeyHistory(string animationKeyId)
@@ -158,18 +157,18 @@ public class Settings : SingletonMonoBehaviour<Settings>
 		case ResolutionType.FullScreen:
 			if (Screen.width / Screen.height > 1)
 			{
-				Screen.SetResolution(1920, 1080, (FullScreenMode)1);
+				Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
 			}
 			else
 			{
-				Screen.SetResolution(1920, 1080, (FullScreenMode)0);
+				Screen.SetResolution(1920, 1080, FullScreenMode.ExclusiveFullScreen);
 			}
 			break;
 		case ResolutionType.Toubai:
-			Screen.SetResolution(960, 540, (FullScreenMode)3);
+			Screen.SetResolution(960, 540, FullScreenMode.Windowed);
 			break;
 		case ResolutionType.Window:
-			Screen.SetResolution(1920, 1080, (FullScreenMode)3);
+			Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
 			break;
 		}
 	}

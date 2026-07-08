@@ -1,4 +1,3 @@
-using System;
 using NGO;
 using TMPro;
 using UniRx;
@@ -26,11 +25,11 @@ public class DataPrefab : MonoBehaviour
 		this.DataNum = DataNum;
 		_datapath = $"Data{DataNum}_Day{day}";
 		_label.text = _datapath;
-		_button = ((Component)this).GetComponent<Button>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_button), (Action<Unit>)delegate
+		_button = GetComponent<Button>();
+		_button.OnClickAsObservable().Subscribe(delegate
 		{
 			Resume();
-		}), ((Component)this).gameObject);
+		}).AddTo(base.gameObject);
 	}
 
 	private void Resume()

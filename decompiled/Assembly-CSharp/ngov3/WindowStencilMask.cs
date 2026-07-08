@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -21,23 +20,21 @@ public class WindowStencilMask : MonoBehaviour
 
 	private void Awake()
 	{
-		//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002a: Expected O, but got Unknown
-		_rend = ((Component)this).GetComponent<SpriteRenderer>();
+		_rend = GetComponent<SpriteRenderer>();
 		_matInstance = new Material(_stencilMaskMaterial);
-		((Renderer)_rend).material = _matInstance;
+		_rend.material = _matInstance;
 		SetStencilID(_stencilId);
-		RectTransform rectTr = ((Component)this).GetComponent<RectTransform>();
-		ObservableExtensions.Subscribe<Rect>(Observable.DistinctUntilChanged<Rect>(Observable.Select<Unit, Rect>(ObservableTriggerExtensions.UpdateAsObservable((Component)(object)this), (Func<Unit, Rect>)((Unit _) => rectTr.rect))), (Action<Rect>)delegate(Rect rect)
+		RectTransform rectTr = GetComponent<RectTransform>();
+		(from _ in this.UpdateAsObservable()
+			select rectTr.rect).DistinctUntilChanged().Subscribe(delegate(Rect rect)
 		{
-			//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-			_rend.size = new Vector2(((Rect)(ref rect)).width, ((Rect)(ref rect)).height);
+			_rend.size = new Vector2(rect.width, rect.height);
 		});
 	}
 
 	public void SetStencilID(int id)
 	{
 		_stencilId = id;
-		((Renderer)_rend).material.SetFloat("_Stencil", (float)_stencilId);
+		_rend.material.SetFloat("_Stencil", _stencilId);
 	}
 }

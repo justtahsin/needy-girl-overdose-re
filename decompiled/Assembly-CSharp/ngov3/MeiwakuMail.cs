@@ -1,4 +1,3 @@
-using System;
 using NGO;
 using TMPro;
 using UniRx;
@@ -21,15 +20,15 @@ public class MeiwakuMail : MonoBehaviour
 
 	public void Start()
 	{
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<LanguageType>((IObservable<LanguageType>)SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage, (Action<LanguageType>)delegate
+		SingletonMonoBehaviour<Settings>.Instance.CurrentLanguage.Subscribe(delegate
 		{
 			OnLanguageChanged();
-		}), (Component)(object)this);
+		}).AddTo(this);
 		OnLanguageChanged();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_openButton), (Action<Unit>)delegate
+		_openButton.OnClickAsObservable().Subscribe(delegate
 		{
 			OnSubmit();
-		}), (Component)(object)this);
+		}).AddTo(this);
 	}
 
 	private void OnSubmit()

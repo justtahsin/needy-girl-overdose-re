@@ -98,89 +98,89 @@ public sealed class RacingWheelTemplate : ControllerTemplate, IRacingWheelTempla
 
 	public const int elementId_dPad = 45;
 
-	IControllerTemplateAxis IRacingWheelTemplate.wheel => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(0);
+	IControllerTemplateAxis IRacingWheelTemplate.wheel => GetElement<IControllerTemplateAxis>(0);
 
-	IControllerTemplateAxis IRacingWheelTemplate.accelerator => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(1);
+	IControllerTemplateAxis IRacingWheelTemplate.accelerator => GetElement<IControllerTemplateAxis>(1);
 
-	IControllerTemplateAxis IRacingWheelTemplate.brake => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(2);
+	IControllerTemplateAxis IRacingWheelTemplate.brake => GetElement<IControllerTemplateAxis>(2);
 
-	IControllerTemplateAxis IRacingWheelTemplate.clutch => ((ControllerTemplate)this).GetElement<IControllerTemplateAxis>(3);
+	IControllerTemplateAxis IRacingWheelTemplate.clutch => GetElement<IControllerTemplateAxis>(3);
 
-	IControllerTemplateButton IRacingWheelTemplate.shiftDown => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(4);
+	IControllerTemplateButton IRacingWheelTemplate.shiftDown => GetElement<IControllerTemplateButton>(4);
 
-	IControllerTemplateButton IRacingWheelTemplate.shiftUp => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(5);
+	IControllerTemplateButton IRacingWheelTemplate.shiftUp => GetElement<IControllerTemplateButton>(5);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(6);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton1 => GetElement<IControllerTemplateButton>(6);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(7);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton2 => GetElement<IControllerTemplateButton>(7);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(8);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton3 => GetElement<IControllerTemplateButton>(8);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(9);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton4 => GetElement<IControllerTemplateButton>(9);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(10);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton5 => GetElement<IControllerTemplateButton>(10);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(11);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton6 => GetElement<IControllerTemplateButton>(11);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(12);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton7 => GetElement<IControllerTemplateButton>(12);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(13);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton8 => GetElement<IControllerTemplateButton>(13);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton9 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(14);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton9 => GetElement<IControllerTemplateButton>(14);
 
-	IControllerTemplateButton IRacingWheelTemplate.wheelButton10 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(15);
+	IControllerTemplateButton IRacingWheelTemplate.wheelButton10 => GetElement<IControllerTemplateButton>(15);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(16);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton1 => GetElement<IControllerTemplateButton>(16);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(17);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton2 => GetElement<IControllerTemplateButton>(17);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(18);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton3 => GetElement<IControllerTemplateButton>(18);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(19);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton4 => GetElement<IControllerTemplateButton>(19);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(20);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton5 => GetElement<IControllerTemplateButton>(20);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(21);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton6 => GetElement<IControllerTemplateButton>(21);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(22);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton7 => GetElement<IControllerTemplateButton>(22);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(23);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton8 => GetElement<IControllerTemplateButton>(23);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton9 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(24);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton9 => GetElement<IControllerTemplateButton>(24);
 
-	IControllerTemplateButton IRacingWheelTemplate.consoleButton10 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(25);
+	IControllerTemplateButton IRacingWheelTemplate.consoleButton10 => GetElement<IControllerTemplateButton>(25);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter1 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(26);
+	IControllerTemplateButton IRacingWheelTemplate.shifter1 => GetElement<IControllerTemplateButton>(26);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter2 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(27);
+	IControllerTemplateButton IRacingWheelTemplate.shifter2 => GetElement<IControllerTemplateButton>(27);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter3 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(28);
+	IControllerTemplateButton IRacingWheelTemplate.shifter3 => GetElement<IControllerTemplateButton>(28);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter4 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(29);
+	IControllerTemplateButton IRacingWheelTemplate.shifter4 => GetElement<IControllerTemplateButton>(29);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter5 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(30);
+	IControllerTemplateButton IRacingWheelTemplate.shifter5 => GetElement<IControllerTemplateButton>(30);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter6 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(31);
+	IControllerTemplateButton IRacingWheelTemplate.shifter6 => GetElement<IControllerTemplateButton>(31);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter7 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(32);
+	IControllerTemplateButton IRacingWheelTemplate.shifter7 => GetElement<IControllerTemplateButton>(32);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter8 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(33);
+	IControllerTemplateButton IRacingWheelTemplate.shifter8 => GetElement<IControllerTemplateButton>(33);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter9 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(34);
+	IControllerTemplateButton IRacingWheelTemplate.shifter9 => GetElement<IControllerTemplateButton>(34);
 
-	IControllerTemplateButton IRacingWheelTemplate.shifter10 => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(35);
+	IControllerTemplateButton IRacingWheelTemplate.shifter10 => GetElement<IControllerTemplateButton>(35);
 
-	IControllerTemplateButton IRacingWheelTemplate.reverseGear => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(44);
+	IControllerTemplateButton IRacingWheelTemplate.reverseGear => GetElement<IControllerTemplateButton>(44);
 
-	IControllerTemplateButton IRacingWheelTemplate.select => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(36);
+	IControllerTemplateButton IRacingWheelTemplate.select => GetElement<IControllerTemplateButton>(36);
 
-	IControllerTemplateButton IRacingWheelTemplate.start => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(37);
+	IControllerTemplateButton IRacingWheelTemplate.start => GetElement<IControllerTemplateButton>(37);
 
-	IControllerTemplateButton IRacingWheelTemplate.systemButton => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(38);
+	IControllerTemplateButton IRacingWheelTemplate.systemButton => GetElement<IControllerTemplateButton>(38);
 
-	IControllerTemplateButton IRacingWheelTemplate.horn => ((ControllerTemplate)this).GetElement<IControllerTemplateButton>(43);
+	IControllerTemplateButton IRacingWheelTemplate.horn => GetElement<IControllerTemplateButton>(43);
 
-	IControllerTemplateDPad IRacingWheelTemplate.dPad => ((ControllerTemplate)this).GetElement<IControllerTemplateDPad>(45);
+	IControllerTemplateDPad IRacingWheelTemplate.dPad => GetElement<IControllerTemplateDPad>(45);
 
 	public RacingWheelTemplate(object payload)
 		: base(payload)

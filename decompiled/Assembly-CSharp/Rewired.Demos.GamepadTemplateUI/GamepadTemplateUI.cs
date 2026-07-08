@@ -19,11 +19,7 @@ public class GamepadTemplateUI : MonoBehaviour
 		{
 			get
 			{
-				//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-				//IL_0025: Unknown result type (might be due to invalid IL or missing references)
-				//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-				if (!((Object)(object)_transform != (Object)null))
+				if (!(_transform != null))
 				{
 					return Vector2.zero;
 				}
@@ -31,10 +27,7 @@ public class GamepadTemplateUI : MonoBehaviour
 			}
 			set
 			{
-				//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-				//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-				if (!((Object)(object)_transform == (Object)null))
+				if (!(_transform == null))
 				{
 					_transform.anchoredPosition = _origPosition + value;
 				}
@@ -43,9 +36,7 @@ public class GamepadTemplateUI : MonoBehaviour
 
 		public Stick(RectTransform transform, int xAxisElementId, int yAxisElementId)
 		{
-			//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-			if (!((Object)(object)transform == (Object)null))
+			if (!(transform == null))
 			{
 				_transform = transform;
 				_origPosition = _transform.anchoredPosition;
@@ -56,8 +47,7 @@ public class GamepadTemplateUI : MonoBehaviour
 
 		public void Reset()
 		{
-			//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-			if (!((Object)(object)_transform == (Object)null))
+			if (!(_transform == null))
 			{
 				_transform.anchoredPosition = _origPosition;
 			}
@@ -65,7 +55,7 @@ public class GamepadTemplateUI : MonoBehaviour
 
 		public bool ContainsElement(int elementId)
 		{
-			if ((Object)(object)_transform == (Object)null)
+			if (_transform == null)
 			{
 				return false;
 			}
@@ -78,21 +68,18 @@ public class GamepadTemplateUI : MonoBehaviour
 
 		public void SetAxisPosition(int elementId, float value)
 		{
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-			if (!((Object)(object)_transform == (Object)null))
+			if (!(_transform == null))
 			{
-				Vector2 val = position;
+				Vector2 vector = position;
 				if (elementId == _xAxisElementId)
 				{
-					val.x = value;
+					vector.x = value;
 				}
 				else if (elementId == _yAxisElementId)
 				{
-					val.y = value;
+					vector.y = value;
 				}
-				position = val;
+				position = vector;
 			}
 		}
 	}
@@ -281,14 +268,6 @@ public class GamepadTemplateUI : MonoBehaviour
 
 	private void ActivateElements(Player player, int actionId)
 	{
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0027: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0046: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0067: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a6: Invalid comparison between Unknown and I4
 		float axis = player.GetAxis(actionId);
 		if (axis == 0f)
 		{
@@ -297,23 +276,23 @@ public class GamepadTemplateUI : MonoBehaviour
 		IList<InputActionSourceData> currentInputSources = player.GetCurrentInputSources(actionId);
 		for (int i = 0; i < currentInputSources.Count; i++)
 		{
-			InputActionSourceData val = currentInputSources[i];
-			IGamepadTemplate template = ((InputActionSourceData)(ref val)).controller.GetTemplate<IGamepadTemplate>();
+			InputActionSourceData inputActionSourceData = currentInputSources[i];
+			IGamepadTemplate template = inputActionSourceData.controller.GetTemplate<IGamepadTemplate>();
 			if (template == null)
 			{
 				continue;
 			}
-			((IControllerTemplate)template).GetElementTargets(ControllerElementTarget.op_Implicit(((InputActionSourceData)(ref val)).actionElementMap), _tempTargetList);
+			template.GetElementTargets(inputActionSourceData.actionElementMap, _tempTargetList);
 			for (int j = 0; j < _tempTargetList.Count; j++)
 			{
-				ControllerTemplateElementTarget val2 = _tempTargetList[j];
-				int id = ((ControllerTemplateElementTarget)(ref val2)).element.id;
+				ControllerTemplateElementTarget controllerTemplateElementTarget = _tempTargetList[j];
+				int id = controllerTemplateElementTarget.element.id;
 				ControllerUIElement controllerUIElement = _uiElements[id];
-				if ((int)((ControllerTemplateElementTarget)(ref val2)).elementType == 0)
+				if (controllerTemplateElementTarget.elementType == ControllerTemplateElementType.Axis)
 				{
 					controllerUIElement.Activate(axis);
 				}
-				else if ((int)((ControllerTemplateElementTarget)(ref val2)).elementType == 1 && (player.GetButton(actionId) || player.GetNegativeButton(actionId)))
+				else if (controllerTemplateElementTarget.elementType == ControllerTemplateElementType.Button && (player.GetButton(actionId) || player.GetNegativeButton(actionId)))
 				{
 					controllerUIElement.Activate(1f);
 				}
@@ -350,72 +329,66 @@ public class GamepadTemplateUI : MonoBehaviour
 			{
 				ControllerUIElement element = _uiElementsArray[i].element;
 				int id = _uiElementsArray[i].id;
-				IControllerTemplateElement element2 = ((IControllerTemplate)template).GetElement(id);
-				DrawLabel(element, action, map, (IControllerTemplate)template, element2);
+				IControllerTemplateElement element2 = template.GetElement(id);
+				DrawLabel(element, action, map, template, element2);
 			}
 		}
 	}
 
 	private void DrawLabel(ControllerUIElement uiElement, InputAction action, ControllerMap controllerMap, IControllerTemplate template, IControllerTemplateElement element)
 	{
-		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0111: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0117: Invalid comparison between Unknown and I4
-		//IL_00b7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00eb: Unknown result type (might be due to invalid IL or missing references)
 		if (element.source == null)
 		{
 			return;
 		}
-		if ((int)element.source.type == 0)
+		if (element.source.type == ControllerTemplateElementSourceType.Axis)
 		{
-			IControllerTemplateElementSource source = element.source;
-			IControllerTemplateAxisSource val = (IControllerTemplateAxisSource)(object)((source is IControllerTemplateAxisSource) ? source : null);
+			IControllerTemplateAxisSource controllerTemplateAxisSource = element.source as IControllerTemplateAxisSource;
 			ActionElementMap firstElementMapWithElementTarget;
-			if (val.splitAxis)
+			if (controllerTemplateAxisSource.splitAxis)
 			{
-				firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(val.positiveTarget, action.id, true);
+				firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(controllerTemplateAxisSource.positiveTarget, action.id, skipDisabledMaps: true);
 				if (firstElementMapWithElementTarget != null)
 				{
-					uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, (AxisRange)1);
+					uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, AxisRange.Positive);
 				}
-				firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(val.negativeTarget, action.id, true);
+				firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(controllerTemplateAxisSource.negativeTarget, action.id, skipDisabledMaps: true);
 				if (firstElementMapWithElementTarget != null)
 				{
-					uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, (AxisRange)2);
+					uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, AxisRange.Negative);
 				}
 				return;
 			}
-			firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(val.fullTarget, action.id, true);
+			firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(controllerTemplateAxisSource.fullTarget, action.id, skipDisabledMaps: true);
 			if (firstElementMapWithElementTarget != null)
 			{
-				uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, (AxisRange)0);
+				uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, AxisRange.Full);
 				return;
 			}
-			ControllerElementTarget val2 = default(ControllerElementTarget);
-			((ControllerElementTarget)(ref val2))._002Ector(val.fullTarget);
-			((ControllerElementTarget)(ref val2)).axisRange = (AxisRange)1;
-			firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(val2, action.id, true);
+			firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(new ControllerElementTarget(controllerTemplateAxisSource.fullTarget)
+			{
+				axisRange = AxisRange.Positive
+			}, action.id, skipDisabledMaps: true);
 			if (firstElementMapWithElementTarget != null)
 			{
-				uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, (AxisRange)1);
+				uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, AxisRange.Positive);
 			}
-			((ControllerElementTarget)(ref val2))._002Ector(val.fullTarget);
-			((ControllerElementTarget)(ref val2)).axisRange = (AxisRange)2;
-			firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(val2, action.id, true);
+			firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(new ControllerElementTarget(controllerTemplateAxisSource.fullTarget)
+			{
+				axisRange = AxisRange.Negative
+			}, action.id, skipDisabledMaps: true);
 			if (firstElementMapWithElementTarget != null)
 			{
-				uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, (AxisRange)2);
+				uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, AxisRange.Negative);
 			}
 		}
-		else if ((int)element.source.type == 1)
+		else if (element.source.type == ControllerTemplateElementSourceType.Button)
 		{
-			IControllerTemplateElementSource source2 = element.source;
-			IControllerTemplateButtonSource val3 = (IControllerTemplateButtonSource)(object)((source2 is IControllerTemplateButtonSource) ? source2 : null);
-			ActionElementMap firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(val3.target, action.id, true);
+			IControllerTemplateButtonSource controllerTemplateButtonSource = element.source as IControllerTemplateButtonSource;
+			ActionElementMap firstElementMapWithElementTarget = controllerMap.GetFirstElementMapWithElementTarget(controllerTemplateButtonSource.target, action.id, skipDisabledMaps: true);
 			if (firstElementMapWithElementTarget != null)
 			{
-				uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, (AxisRange)0);
+				uiElement.SetLabel(firstElementMapWithElementTarget.actionDescriptiveName, AxisRange.Full);
 			}
 		}
 	}

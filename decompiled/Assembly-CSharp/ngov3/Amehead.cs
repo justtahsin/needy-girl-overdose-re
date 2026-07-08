@@ -1,4 +1,3 @@
-using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,40 +19,31 @@ public class Amehead : MonoBehaviour, IPointerEnterHandler, IEventSystemHandler,
 
 	private void Awake()
 	{
-		//IL_0071: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0076: Unknown result type (might be due to invalid IL or missing references)
-		_button = ((Component)this).GetComponent<Button>();
-		DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<Unit>(UnityUIComponentExtensions.OnClickAsObservable(_button), (Action<Unit>)delegate
+		_button = GetComponent<Button>();
+		_button.OnClickAsObservable().Subscribe(delegate
 		{
-			((Component)((Component)this).gameObject.transform.parent.parent).GetComponent<App_Webcam>().Nade();
-			ReactiveProperty<int> nadeCount = NadeCount;
-			int value = nadeCount.Value;
-			nadeCount.Value = value + 1;
-		}), ((Component)this).gameObject);
-		ameImageScale = ((Component)((Component)this).transform.parent).GetComponent<SetImageScale>();
-		if ((Object)(object)ameImageScale != (Object)null)
+			base.gameObject.transform.parent.parent.GetComponent<App_Webcam>().Nade();
+			NadeCount.Value++;
+		}).AddTo(base.gameObject);
+		ameImageScale = base.transform.parent.GetComponent<SetImageScale>();
+		if (ameImageScale != null)
 		{
-			RectTransform rectTr = ((Component)this).GetComponent<RectTransform>();
+			RectTransform rectTr = GetComponent<RectTransform>();
 			Vector2 nativeSize = rectTr.sizeDelta;
-			DisposableExtensions.AddTo<IDisposable>(ObservableExtensions.Subscribe<float>(ObserveExtensions.ObserveEveryValueChanged<Amehead, float>(this, (Func<Amehead, float>)((Amehead _) => ameImageScale.Scale), (FrameCountType)0, false), (Action<float>)delegate(float scale)
+			this.ObserveEveryValueChanged((Amehead _) => ameImageScale.Scale).Subscribe(delegate(float scale)
 			{
-				//IL_0020: Unknown result type (might be due to invalid IL or missing references)
 				rectTr.sizeDelta = new Vector2(nativeSize.x * scale, nativeSize.y * scale);
-			}), (Component)(object)this);
+			}).AddTo(this);
 		}
 	}
 
 	public void OnPointerEnter(PointerEventData e)
 	{
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
 		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(SingletonMonoBehaviour<EventManager>.Instance.handCursor, hotSpot, cursorMode);
 	}
 
 	public void OnPointerExit(PointerEventData e)
 	{
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000d: Unknown result type (might be due to invalid IL or missing references)
 		SingletonMonoBehaviour<CursorManager>.Instance.SetCursor(null, hotSpot, cursorMode);
 	}
 }

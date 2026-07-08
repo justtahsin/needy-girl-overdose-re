@@ -22,13 +22,7 @@ public class UpdateTaiki : MonoBehaviour
 	private void UpdateDetail()
 	{
 		watcher += Random.Range(-1, 2);
-		haisinDetail.text = string.Format("{0} {1} ・ {2} {3}", new object[4]
-		{
-			watcher,
-			NgoEx.SystemTextFromType(SystemTextType.Haisin_Watching_Number, _lang),
-			NgoEx.SystemTextFromType(SystemTextType.Haisin_Started_Day, _lang),
-			NgoEx.DayText(SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.DayIndex), _lang)
-		});
+		haisinDetail.text = $"{watcher} {NgoEx.SystemTextFromType(SystemTextType.Haisin_Watching_Number, _lang)} ・ {NgoEx.SystemTextFromType(SystemTextType.Haisin_Started_Day, _lang)} {NgoEx.DayText(SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.DayIndex), _lang)}";
 		if (SingletonMonoBehaviour<EventManager>.Instance.nowEnding == EndingType.Ending_Meta)
 		{
 			haisinDetail.text = "0 " + NgoEx.SystemTextFromType(SystemTextType.Haisin_Watching_Number, _lang) + " ・ " + NgoEx.SystemTextFromType(SystemTextType.Haisin_Started_Day, _lang) + " " + NgoEx.DayText(SingletonMonoBehaviour<StatusManager>.Instance.GetStatus(StatusType.DayIndex), _lang);

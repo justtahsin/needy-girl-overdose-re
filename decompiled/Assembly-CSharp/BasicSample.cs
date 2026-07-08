@@ -1,4 +1,3 @@
-using System;
 using SFB;
 using UnityEngine;
 
@@ -8,23 +7,17 @@ public class BasicSample : MonoBehaviour
 
 	private void OnGUI()
 	{
-		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-		Vector3 val = default(Vector3);
-		((Vector3)(ref val))._002Ector((float)Screen.width / 800f, (float)Screen.height / 600f, 1f);
-		GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, val);
+		GUI.matrix = Matrix4x4.TRS(s: new Vector3((float)Screen.width / 800f, (float)Screen.height / 600f, 1f), pos: Vector3.zero, q: Quaternion.identity);
 		GUILayout.Space(20f);
-		GUILayout.BeginHorizontal(Array.Empty<GUILayoutOption>());
+		GUILayout.BeginHorizontal();
 		GUILayout.Space(20f);
-		GUILayout.BeginVertical(Array.Empty<GUILayoutOption>());
-		if (GUILayout.Button("Open File", Array.Empty<GUILayoutOption>()))
+		GUILayout.BeginVertical();
+		if (GUILayout.Button("Open File"))
 		{
 			WriteResult(StandaloneFileBrowser.OpenFilePanel("Open File", "", "", multiselect: false));
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Open File Async", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Open File Async"))
 		{
 			StandaloneFileBrowser.OpenFilePanelAsync("Open File", "", "", multiselect: false, delegate(string[] paths3)
 			{
@@ -32,22 +25,22 @@ public class BasicSample : MonoBehaviour
 			});
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Open File Multiple", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Open File Multiple"))
 		{
 			WriteResult(StandaloneFileBrowser.OpenFilePanel("Open File", "", "", multiselect: true));
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Open File Extension", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Open File Extension"))
 		{
 			WriteResult(StandaloneFileBrowser.OpenFilePanel("Open File", "", "txt", multiselect: true));
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Open File Directory", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Open File Directory"))
 		{
 			WriteResult(StandaloneFileBrowser.OpenFilePanel("Open File", Application.dataPath, "", multiselect: true));
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Open File Filter", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Open File Filter"))
 		{
 			ExtensionFilter[] extensions = new ExtensionFilter[3]
 			{
@@ -58,13 +51,13 @@ public class BasicSample : MonoBehaviour
 			WriteResult(StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, multiselect: true));
 		}
 		GUILayout.Space(15f);
-		if (GUILayout.Button("Open Folder", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Open Folder"))
 		{
 			string[] paths = StandaloneFileBrowser.OpenFolderPanel("Select Folder", "", multiselect: true);
 			WriteResult(paths);
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Open Folder Async", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Open Folder Async"))
 		{
 			StandaloneFileBrowser.OpenFolderPanelAsync("Select Folder", "", multiselect: true, delegate(string[] paths3)
 			{
@@ -72,18 +65,18 @@ public class BasicSample : MonoBehaviour
 			});
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Open Folder Directory", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Open Folder Directory"))
 		{
 			string[] paths2 = StandaloneFileBrowser.OpenFolderPanel("Select Folder", Application.dataPath, multiselect: true);
 			WriteResult(paths2);
 		}
 		GUILayout.Space(15f);
-		if (GUILayout.Button("Save File", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Save File"))
 		{
 			_path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "");
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Save File Async", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Save File Async"))
 		{
 			StandaloneFileBrowser.SaveFilePanelAsync("Save File", "", "", "", delegate(string path)
 			{
@@ -91,22 +84,22 @@ public class BasicSample : MonoBehaviour
 			});
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Save File Default Name", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Save File Default Name"))
 		{
 			_path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "MySaveFile", "");
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Save File Default Name Ext", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Save File Default Name Ext"))
 		{
 			_path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "MySaveFile", "dat");
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Save File Directory", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Save File Directory"))
 		{
 			_path = StandaloneFileBrowser.SaveFilePanel("Save File", Application.dataPath, "", "");
 		}
 		GUILayout.Space(5f);
-		if (GUILayout.Button("Save File Filter", Array.Empty<GUILayoutOption>()))
+		if (GUILayout.Button("Save File Filter"))
 		{
 			ExtensionFilter[] extensions2 = new ExtensionFilter[2]
 			{
@@ -117,7 +110,7 @@ public class BasicSample : MonoBehaviour
 		}
 		GUILayout.EndVertical();
 		GUILayout.Space(20f);
-		GUILayout.Label(_path, Array.Empty<GUILayoutOption>());
+		GUILayout.Label(_path);
 		GUILayout.EndHorizontal();
 	}
 
