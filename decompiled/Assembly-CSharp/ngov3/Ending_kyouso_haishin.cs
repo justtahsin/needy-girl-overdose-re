@@ -1,0 +1,370 @@
+using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.CompilerServices;
+using NGO;
+
+namespace ngov3;
+
+public class Ending_kyouso_haishin : LiveScenario
+{
+	[StructLayout(LayoutKind.Auto)]
+	[CompilerGenerated]
+	private struct _003CStartScenario_003Ed__1 : IAsyncStateMachine
+	{
+		public int _003C_003E1__state;
+
+		public AsyncUniTaskMethodBuilder _003C_003Et__builder;
+
+		public Ending_kyouso_haishin _003C_003E4__this;
+
+		private Awaiter _003C_003Eu__1;
+
+		private void MoveNext()
+		{
+			//IL_0094: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0099: Unknown result type (might be due to invalid IL or missing references)
+			//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0103: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0108: Unknown result type (might be due to invalid IL or missing references)
+			//IL_010f: Unknown result type (might be due to invalid IL or missing references)
+			//IL_01d8: Unknown result type (might be due to invalid IL or missing references)
+			//IL_01dd: Unknown result type (might be due to invalid IL or missing references)
+			//IL_01e4: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0239: Unknown result type (might be due to invalid IL or missing references)
+			//IL_023e: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0245: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0059: Unknown result type (might be due to invalid IL or missing references)
+			//IL_005e: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0061: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0066: Unknown result type (might be due to invalid IL or missing references)
+			//IL_00c8: Unknown result type (might be due to invalid IL or missing references)
+			//IL_00cd: Unknown result type (might be due to invalid IL or missing references)
+			//IL_00d0: Unknown result type (might be due to invalid IL or missing references)
+			//IL_00d5: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0201: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0206: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0209: Unknown result type (might be due to invalid IL or missing references)
+			//IL_020e: Unknown result type (might be due to invalid IL or missing references)
+			//IL_007a: Unknown result type (might be due to invalid IL or missing references)
+			//IL_007b: Unknown result type (might be due to invalid IL or missing references)
+			//IL_00e9: Unknown result type (might be due to invalid IL or missing references)
+			//IL_00ea: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0153: Unknown result type (might be due to invalid IL or missing references)
+			//IL_019d: Unknown result type (might be due to invalid IL or missing references)
+			//IL_01a2: Unknown result type (might be due to invalid IL or missing references)
+			//IL_01a5: Unknown result type (might be due to invalid IL or missing references)
+			//IL_01aa: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0222: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0223: Unknown result type (might be due to invalid IL or missing references)
+			//IL_01be: Unknown result type (might be due to invalid IL or missing references)
+			//IL_01bf: Unknown result type (might be due to invalid IL or missing references)
+			int num = _003C_003E1__state;
+			Ending_kyouso_haishin ending_kyouso_haishin = _003C_003E4__this;
+			try
+			{
+				UniTask val2;
+				Awaiter val;
+				switch (num)
+				{
+				default:
+					PostEffectManager.Instance.SetShader(EffectType.Kakusei);
+					PostEffectManager.Instance.SetShaderWeight(1f);
+					SingletonMonoBehaviour<EventManager>.Instance.ObiActive(onoff: false);
+					AudioManager.Instance.PlayBgmByType(SoundType.BGM_event_emo, isLoop: true);
+					val2 = ((LiveScenario)ending_kyouso_haishin).StartScenario();
+					val = ((UniTask)(ref val2)).GetAwaiter();
+					if (!((Awaiter)(ref val)).IsCompleted)
+					{
+						num = (_003C_003E1__state = 0);
+						_003C_003Eu__1 = val;
+						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__1>(ref val, ref this);
+						return;
+					}
+					goto IL_00af;
+				case 0:
+					val = _003C_003Eu__1;
+					_003C_003Eu__1 = default(Awaiter);
+					num = (_003C_003E1__state = -1);
+					goto IL_00af;
+				case 1:
+					val = _003C_003Eu__1;
+					_003C_003Eu__1 = default(Awaiter);
+					num = (_003C_003E1__state = -1);
+					goto IL_011e;
+				case 2:
+					val = _003C_003Eu__1;
+					_003C_003Eu__1 = default(Awaiter);
+					num = (_003C_003E1__state = -1);
+					goto IL_01f3;
+				case 3:
+					{
+						val = _003C_003Eu__1;
+						_003C_003Eu__1 = default(Awaiter);
+						num = (_003C_003E1__state = -1);
+						break;
+					}
+					IL_011e:
+					((Awaiter)(ref val)).GetResult();
+					ImageViewerHelper.OpenImageViewer(ImageViewerHelper.LoadResourcesList().Find((ResourceLocal r) => r.FileName == "kyouso_ending").FileName);
+					SingletonMonoBehaviour<Settings>.Instance.addImage("kyouso_ending");
+					SingletonMonoBehaviour<WindowManager>.Instance.GetWindowFromApp(AppType.ImageViewer).Maximize();
+					SingletonMonoBehaviour<WindowManager>.Instance.GetWindowFromApp(AppType.ImageViewer).UnMovable();
+					val2 = UniTask.Delay(Constants.SLOW, false, (PlayerLoopTiming)8, default(CancellationToken), false);
+					val = ((UniTask)(ref val2)).GetAwaiter();
+					if (!((Awaiter)(ref val)).IsCompleted)
+					{
+						num = (_003C_003E1__state = 2);
+						_003C_003Eu__1 = val;
+						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__1>(ref val, ref this);
+						return;
+					}
+					goto IL_01f3;
+					IL_00af:
+					((Awaiter)(ref val)).GetResult();
+					val2 = UniTask.Delay(Constants.MIDDLE, false, (PlayerLoopTiming)8, default(CancellationToken), false);
+					val = ((UniTask)(ref val2)).GetAwaiter();
+					if (!((Awaiter)(ref val)).IsCompleted)
+					{
+						num = (_003C_003E1__state = 1);
+						_003C_003Eu__1 = val;
+						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__1>(ref val, ref this);
+						return;
+					}
+					goto IL_011e;
+					IL_01f3:
+					((Awaiter)(ref val)).GetResult();
+					val2 = NgoEvent.DelaySkippable(Constants.SLOW * 5);
+					val = ((UniTask)(ref val2)).GetAwaiter();
+					if (!((Awaiter)(ref val)).IsCompleted)
+					{
+						num = (_003C_003E1__state = 3);
+						_003C_003Eu__1 = val;
+						((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).AwaitUnsafeOnCompleted<Awaiter, _003CStartScenario_003Ed__1>(ref val, ref this);
+						return;
+					}
+					break;
+				}
+				((Awaiter)(ref val)).GetResult();
+				SingletonMonoBehaviour<NotificationManager>.Instance.osimai();
+				AchievementStatsUpdater.UpdateStats("Ending_Kyouso");
+			}
+			catch (Exception exception)
+			{
+				_003C_003E1__state = -2;
+				((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetException(exception);
+				return;
+			}
+			_003C_003E1__state = -2;
+			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetResult();
+		}
+
+		void IAsyncStateMachine.MoveNext()
+		{
+			//ILSpy generated this explicit interface implementation from .override directive in MoveNext
+			this.MoveNext();
+		}
+
+		[DebuggerHidden]
+		private void SetStateMachine(IAsyncStateMachine stateMachine)
+		{
+			((AsyncUniTaskMethodBuilder)(ref _003C_003Et__builder)).SetStateMachine(stateMachine);
+		}
+
+		void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
+		{
+			//ILSpy generated this explicit interface implementation from .override directive in SetStateMachine
+			this.SetStateMachine(stateMachine);
+		}
+	}
+
+	protected override void Awake()
+	{
+		base.Awake();
+		title = NgoEx.TenTalk("Ending_Kyouso_Chou000", _lang);
+		_Live.isUncontrollable = true;
+		defaultEffectType = EffectType.Kakusei;
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou001", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso1"));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso001", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso002", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso003", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso004", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso005", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou002", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso2", isLoopAnim: false));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso006", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso007", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso008", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso009", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso010", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso011", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou003", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso2", isLoopAnim: false));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso012", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso013", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso014", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso015", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso016", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso017", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso018", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso019", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso020", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso021", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso022", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso023", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso024", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso025", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso026", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou004", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso2", isLoopAnim: false));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso027", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso028", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso029", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso030", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso031", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso032", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso033", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso034", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso035", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso036", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso037", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso038", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso039", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso040", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso041", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso042", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso043", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso044", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso045", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso046", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso047", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso048", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso049", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso050", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso051", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso052", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso053", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso054", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso055", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso056", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso057", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso058", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso059", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso060", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso061", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso062", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso063", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso064", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso065", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso066", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso067", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso068", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou005", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso1"));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso069", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso070", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso071", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso072", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso073", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso074", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso075", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso076", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso077", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou006", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso3", isLoopAnim: false));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou007", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso078", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso079", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso080", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso081", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso082", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso083", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso084", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso085", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso086", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou008", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso2", isLoopAnim: false));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso087", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso088", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso089", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso090", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso091", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso092", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso093", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso094", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso095", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou009", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso2", isLoopAnim: false));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso096", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso097", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso098", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso099", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso100", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso101", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso102", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso103", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso104", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso105", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso106", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso107", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso108", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso109", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou010", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso4"));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso110", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso111", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso112", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso113", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso114", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso115", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso116", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso117", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso118", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou011", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso119", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso120", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso121", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso122", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso123", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso124", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso125", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso126", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso127", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou012", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso3", isLoopAnim: false));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso128", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso129", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso130", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso131", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso132", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso133", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso134", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso135", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso136", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso137", _lang)));
+		playing.Add(new Playing(isJimaku: true, NgoEx.TenTalk("Ending_Kyouso_Chou013", _lang), StatusType.Tension, 1, 0, "", "", "stream_cho_kyouso5", isLoopAnim: false));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso138", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso139", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso140", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso141", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso142", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso143", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso144", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso145", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso146", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso147", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso148", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso149", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso150", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso151", _lang)));
+		playing.Add(new Playing(isJimaku: false, NgoEx.Kome("Ending_Kyouso_Kuso152", _lang)));
+	}
+
+	[AsyncStateMachine(typeof(_003CStartScenario_003Ed__1))]
+	public override UniTask StartScenario()
+	{
+		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
+		_003CStartScenario_003Ed__1 _003CStartScenario_003Ed__2 = default(_003CStartScenario_003Ed__1);
+		_003CStartScenario_003Ed__2._003C_003Et__builder = AsyncUniTaskMethodBuilder.Create();
+		_003CStartScenario_003Ed__2._003C_003E4__this = this;
+		_003CStartScenario_003Ed__2._003C_003E1__state = -1;
+		((AsyncUniTaskMethodBuilder)(ref _003CStartScenario_003Ed__2._003C_003Et__builder)).Start<_003CStartScenario_003Ed__1>(ref _003CStartScenario_003Ed__2);
+		return ((AsyncUniTaskMethodBuilder)(ref _003CStartScenario_003Ed__2._003C_003Et__builder)).Task;
+	}
+}

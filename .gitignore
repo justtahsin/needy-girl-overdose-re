@@ -1,0 +1,6 @@
+*
+!decompiled/
+!decompiled/Assembly-CSharp/
+!decompiled/Assembly-CSharp/**
+!.gitignore
+!README.md

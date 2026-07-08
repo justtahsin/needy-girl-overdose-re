@@ -1,0 +1,38 @@
+namespace NGO;
+
+public enum EventTaikenType
+{
+	Tooltip_Taikenbann,
+	EventTaiken_Day7_TweetUraTuisin5,
+	EventTaiken_Day7_TweetUraTuisin4,
+	EventTaiken_Day7_TweetUraTuisin3,
+	EventTaiken_Day7_TweetUraTuisin2,
+	EventTaiken_Day7_TweetUraTuisin1,
+	EventTaiken_Day7_TweetUraOrei,
+	EventTaiken_Day7_TweetUra,
+	EventTaiken_Day7_TweetOmote,
+	EventTaiken_Day7_Tooltip,
+	EventTaiken_Day5_SpamWindow003,
+	EventTaiken_Day5_SpamWindow002,
+	EventTaiken_Day5_SpamWindow001,
+	EventTaiken_Day5_SpamWindow000,
+	EventTaiken_Day4_JINE_Respond_002,
+	EventTaiken_Day4_JINE_Respond_001,
+	EventTaiken_Day4_JINE_Respond_000,
+	EventTaiken_Day4_JINE_Option_002,
+	EventTaiken_Day4_JINE_Option_001,
+	EventTaiken_Day4_JINE_Option_000,
+	EventTaiken_Day4_JINE_000,
+	EventTaiken_Day3_JINE_000,
+	EventTaiken_Day0_Tooltip002,
+	EventTaiken_Day0_Tooltip001,
+	EventTaiken_Day0_Tooltip000,
+	EventTaiken_Day0_LoginWindow_000,
+	EventTaiken_Day0_JINE_002,
+	EventTaiken_Day0_JINE_001,
+	EventTaiken_Day0_JINE_000,
+	EventTaiken_Day0_Dialog_000,
+	Ending_Kenjou_TweetOmote002,
+	Ending_Kenjou_TweetOmote001,
+	Ending_Kenjou_TweetOmote000
+}
